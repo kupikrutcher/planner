@@ -10,28 +10,28 @@
 <!-- Tailwind CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          accent: {
-            DEFAULT: 'rgb(var(--accent-rgb) / <alpha-value>)',
-            soft: 'var(--accent-soft)',
-            bg: 'var(--accent-bg)',
-          },
-          paper: '#FAFAFA',
-          'paper-soft': '#FAFAFA',
-          line: '#E8E8E8',
-          'line-soft': '#F2F2F2',
-        },
-        fontFamily: {
-          display: ['Fraunces', 'Georgia', 'serif'],
-          sans: ['Inter Tight', '-apple-system', 'sans-serif'],
-          mono: ['JetBrains Mono', 'monospace'],
-        },
-      }
-    }
-  };
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          accent: {
+            DEFAULT: 'rgb(var(--accent-rgb) / <alpha-value>)',
+            soft: 'var(--accent-soft)',
+            bg: 'var(--accent-bg)',
+          },
+          paper: '#FAFAFA',
+          'paper-soft': '#FAFAFA',
+          line: '#E8E8E8',
+          'line-soft': '#F2F2F2',
+        },
+        fontFamily: {
+          display: ['Fraunces', 'Georgia', 'serif'],
+          sans: ['Inter Tight', '-apple-system', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        },
+      }
+    }
+  };
 </script>
 
 <!-- React + ReactDOM + PropTypes + Recharts + Babel via CDN (pinned versions) -->
@@ -42,66 +42,66 @@
 <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-  
-  :root {
-    --paper: #FFFFFF;
-    --paper-soft: #FAFAFA;
-    --ink: #1C1C1C;
-    --muted: #78716C;
-    --line: #E8E8E8;
-    --line-soft: #F2F2F2;
-    /* accent as rgb channels for opacity variants */
-    --accent-rgb: 168 91 61;
-    --accent-soft: #F4E5DA;
-    --accent-bg: #FBF2EA;
-  }
-  
-  html, body { background: var(--paper); }
-  * { font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
-  .font-display { font-family: 'Fraunces', Georgia, serif; font-feature-settings: 'ss01' on; font-variation-settings: 'opsz' 96; }
-  .font-display-italic { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-feature-settings: 'ss01' on; font-variation-settings: 'opsz' 96; }
-  .font-mono, .tabular-nums { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
-  
-  .bg-paper { background-color: var(--paper); }
-  .bg-paper-soft { background-color: var(--paper-soft); }
-  .border-line { border-color: var(--line); }
-  .border-line-soft { border-color: var(--line-soft); }
-  
-  @keyframes fade-up {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  @keyframes scale-in {
-    from { opacity: 0; transform: scale(0.97); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  .animate-fade-up {
-    opacity: 0;
-    animation: fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  .animate-fade-in { animation: fade-in 0.4s ease-out; }
-  .animate-scale-in { animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-  .animate-spin-slow { animation: spin 1s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  
-  .hide-scroll::-webkit-scrollbar { display: none; }
-  .hide-scroll { scrollbar-width: none; -ms-overflow-style: none; }
-  
-  input[type="date"]::-webkit-calendar-picker-indicator {
-    opacity: 0.5; cursor: pointer;
-  }
-  input[type="range"] { height: 4px; accent-color: rgb(var(--accent-rgb)); }
-  select {
-    -webkit-appearance: none; appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238c8c8c' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
-    background-repeat: no-repeat; background-position: right 0.5rem center;
-    background-size: 14px; padding-right: 1.75rem;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  
+  :root {
+    --paper: #FFFFFF;
+    --paper-soft: #FAFAFA;
+    --ink: #1C1C1C;
+    --muted: #78716C;
+    --line: #E8E8E8;
+    --line-soft: #F2F2F2;
+    /* accent as rgb channels for opacity variants */
+    --accent-rgb: 168 91 61;
+    --accent-soft: #F4E5DA;
+    --accent-bg: #FBF2EA;
+  }
+  
+  html, body { background: var(--paper); }
+  * { font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
+  .font-display { font-family: 'Fraunces', Georgia, serif; font-feature-settings: 'ss01' on; font-variation-settings: 'opsz' 96; }
+  .font-display-italic { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-feature-settings: 'ss01' on; font-variation-settings: 'opsz' 96; }
+  .font-mono, .tabular-nums { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+  
+  .bg-paper { background-color: var(--paper); }
+  .bg-paper-soft { background-color: var(--paper-soft); }
+  .border-line { border-color: var(--line); }
+  .border-line-soft { border-color: var(--line-soft); }
+  
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .animate-fade-up {
+    opacity: 0;
+    animation: fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .animate-fade-in { animation: fade-in 0.4s ease-out; }
+  .animate-scale-in { animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .animate-spin-slow { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  
+  .hide-scroll::-webkit-scrollbar { display: none; }
+  .hide-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+  
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.5; cursor: pointer;
+  }
+  input[type="range"] { height: 4px; accent-color: rgb(var(--accent-rgb)); }
+  select {
+    -webkit-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238c8c8c' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+    background-repeat: no-repeat; background-position: right 0.5rem center;
+    background-size: 14px; padding-right: 1.75rem;
+  }
 </style>
 </head>
 
@@ -111,18 +111,18 @@
 
 <script>
 window.addEventListener('error', (e) => {
-  const el = document.getElementById('err');
-  if (el) {
-    el.style.display = 'block';
-    el.textContent = 'Ошибка: ' + e.message + '\n\n' + (e.error && e.error.stack ? e.error.stack : '');
-  }
+  const el = document.getElementById('err');
+  if (el) {
+    el.style.display = 'block';
+    el.textContent = 'Ошибка: ' + e.message + '\n\n' + (e.error && e.error.stack ? e.error.stack : '');
+  }
 });
 window.addEventListener('unhandledrejection', (e) => {
-  const el = document.getElementById('err');
-  if (el) {
-    el.style.display = 'block';
-    el.textContent = 'Promise rejection: ' + (e.reason && e.reason.message ? e.reason.message : e.reason);
-  }
+  const el = document.getElementById('err');
+  if (el) {
+    el.style.display = 'block';
+    el.textContent = 'Promise rejection: ' + (e.reason && e.reason.message ? e.reason.message : e.reason);
+  }
 });
 </script>
 
@@ -134,45 +134,45 @@ if (typeof Recharts === 'undefined') throw new Error('Recharts не загруз
 
 const { useState, useEffect, useMemo, useRef, useCallback } = React;
 const {
-  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
+  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } = Recharts;
 
 // ───────────────────────────────────────────────────────────
 // Icons (inline SVG, lucide-style)
 // ───────────────────────────────────────────────────────────
 const ICONS = {
-  'chevron-left': '<polyline points="15 18 9 12 15 6"/>',
-  'chevron-right': '<polyline points="9 18 15 12 9 6"/>',
-  'plus': '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
-  'x': '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
-  'trash': '<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>',
-  'check': '<polyline points="20 6 9 17 4 12"/>',
-  'arrow-up': '<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>',
-  'arrow-down': '<line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>',
-  'minus': '<line x1="5" y1="12" x2="19" y2="12"/>',
-  'calendar': '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
-  'target': '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
-  'repeat': '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
-  'list-checks': '<line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/>',
-  'wallet': '<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
-  'trending-up': '<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
-  'bar-chart': '<path d="M3 3v18h18"/><path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-3"/>',
-  'settings': '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
-  'layout': '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
-  'file': '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
-  'loader': '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>',
+  'chevron-left': '<polyline points="15 18 9 12 15 6"/>',
+  'chevron-right': '<polyline points="9 18 15 12 9 6"/>',
+  'plus': '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  'x': '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+  'trash': '<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>',
+  'check': '<polyline points="20 6 9 17 4 12"/>',
+  'arrow-up': '<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>',
+  'arrow-down': '<line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>',
+  'minus': '<line x1="5" y1="12" x2="19" y2="12"/>',
+  'calendar': '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+  'target': '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  'repeat': '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+  'list-checks': '<line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/>',
+  'wallet': '<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
+  'trending-up': '<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+  'bar-chart': '<path d="M3 3v18h18"/><path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-3"/>',
+  'settings': '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+  'layout': '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+  'file': '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+  'loader': '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>',
 };
 
 const Icon = ({ name, className = '', strokeWidth = 2 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24" height="24" viewBox="0 0 24 24"
-    fill="none" stroke="currentColor"
-    strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
-    className={className}
-    dangerouslySetInnerHTML={{ __html: ICONS[name] || '' }}
-  />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24"
+    fill="none" stroke="currentColor"
+    strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
+    className={className}
+    dangerouslySetInnerHTML={{ __html: ICONS[name] || '' }}
+  />
 );
 
 // ───────────────────────────────────────────────────────────
@@ -180,36 +180,36 @@ const Icon = ({ name, className = '', strokeWidth = 2 }) => (
 // ───────────────────────────────────────────────────────────
 const uid = () => Math.random().toString(36).slice(2, 10);
 const fmtMoney = (n) =>
-  (n || 0).toLocaleString('ru-RU', { maximumFractionDigits: 0 }) + ' ₽';
+  (n || 0).toLocaleString('ru-RU', { maximumFractionDigits: 0 }) + ' ₽';
 const fmtPct = (n) => Math.round((n || 0) * 100) + '%';
 
 const MONTHS_RU = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
 const DOW_SHORT = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
 const DOW_LONG = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
 
 const currentYM = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 };
 const parseYM = (ym) => ym.split('-').map(Number);
 const ymLabel = (ym) => {
-  const [y, m] = parseYM(ym);
-  return `${MONTHS_RU[m - 1]} ${y}`;
+  const [y, m] = parseYM(ym);
+  return `${MONTHS_RU[m - 1]} ${y}`;
 };
 const shiftYM = (ym, delta) => {
-  const [y, m] = parseYM(ym);
-  const d = new Date(y, m - 1 + delta, 1);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  const [y, m] = parseYM(ym);
+  const d = new Date(y, m - 1 + delta, 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 };
 const daysInMonth = (ym) => {
-  const [y, m] = parseYM(ym);
-  return new Date(y, m, 0).getDate();
+  const [y, m] = parseYM(ym);
+  return new Date(y, m, 0).getDate();
 };
 const dowOfDay = (ym, day) => {
-  const [y, m] = parseYM(ym);
-  const d = new Date(y, m - 1, day);
-  return (d.getDay() + 6) % 7;
+  const [y, m] = parseYM(ym);
+  const d = new Date(y, m - 1, day);
+  return (d.getDay() + 6) % 7;
 };
 const todayYM = () => currentYM();
 const todayDay = () => new Date().getDate();
@@ -218,167 +218,167 @@ const todayDay = () => new Date().getDate();
 // Storage (localStorage wrapper)
 // ───────────────────────────────────────────────────────────
 const storage = {
-  async get(key) {
-    try {
-      const v = localStorage.getItem('planner:' + key);
-      return v ? JSON.parse(v) : null;
-    } catch { return null; }
-  },
-  async set(key, val) {
-    try {
-      localStorage.setItem('planner:' + key, JSON.stringify(val));
-      return true;
-    } catch { return false; }
-  },
+  async get(key) {
+    try {
+      const v = localStorage.getItem('planner:' + key);
+      return v ? JSON.parse(v) : null;
+    } catch { return null; }
+  },
+  async set(key, val) {
+    try {
+      localStorage.setItem('planner:' + key, JSON.stringify(val));
+      return true;
+    } catch { return false; }
+  },
 };
 
 // ───────────────────────────────────────────────────────────
 // Defaults
 // ───────────────────────────────────────────────────────────
 const DEFAULT_CATEGORIES = [
-  { id: uid(), name: 'Еда и продукты', budget: 25000 },
-  { id: uid(), name: 'Транспорт', budget: 8000 },
-  { id: uid(), name: 'Жильё и счета', budget: 35000 },
-  { id: uid(), name: 'Одежда', budget: 5000 },
-  { id: uid(), name: 'Развлечения', budget: 7000 },
-  { id: uid(), name: 'Учёба и книги', budget: 4000 },
-  { id: uid(), name: 'Здоровье', budget: 5000 },
-  { id: uid(), name: 'Подарки', budget: 3000 },
-  { id: uid(), name: 'Путешествия', budget: 10000 },
-  { id: uid(), name: 'Прочее', budget: 5000 },
+  { id: uid(), name: 'Еда и продукты', budget: 25000 },
+  { id: uid(), name: 'Транспорт', budget: 8000 },
+  { id: uid(), name: 'Жильё и счета', budget: 35000 },
+  { id: uid(), name: 'Одежда', budget: 5000 },
+  { id: uid(), name: 'Развлечения', budget: 7000 },
+  { id: uid(), name: 'Учёба и книги', budget: 4000 },
+  { id: uid(), name: 'Здоровье', budget: 5000 },
+  { id: uid(), name: 'Подарки', budget: 3000 },
+  { id: uid(), name: 'Путешествия', budget: 10000 },
+  { id: uid(), name: 'Прочее', budget: 5000 },
 ];
 const DEFAULT_INCOME_SOURCES = [
-  { id: uid(), name: 'Зарплата', plan: 150000 },
-  { id: uid(), name: 'Подработка', plan: 20000 },
-  { id: uid(), name: 'Инвестиции', plan: 5000 },
-  { id: uid(), name: 'Прочее', plan: 0 },
+  { id: uid(), name: 'Зарплата', plan: 150000 },
+  { id: uid(), name: 'Подработка', plan: 20000 },
+  { id: uid(), name: 'Инвестиции', plan: 5000 },
+  { id: uid(), name: 'Прочее', plan: 0 },
 ];
 const DEFAULT_HABITS = () => [
-  { id: uid(), name: 'Вода 2 л' },
-  { id: uid(), name: 'Зарядка 15 мин' },
-  { id: uid(), name: 'Чтение 30 мин' },
-  { id: uid(), name: 'Медитация' },
-  { id: uid(), name: '10 000 шагов' },
+  { id: uid(), name: 'Вода 2 л' },
+  { id: uid(), name: 'Зарядка 15 мин' },
+  { id: uid(), name: 'Чтение 30 мин' },
+  { id: uid(), name: 'Медитация' },
+  { id: uid(), name: '10 000 шагов' },
 ];
 const DEFAULT_CHECKLISTS = [
-  { id: uid(), name: 'Утро', items: ['Стакан воды', 'Зарядка 10 мин', 'Душ', 'Завтрак', 'План на день'] },
-  { id: uid(), name: 'Вечер', items: ['Итог дня', '3 хороших момента', 'План на завтра', 'Чтение 20 мин'] },
-  { id: uid(), name: 'Воскресный обзор', items: ['Обзор недели', 'План недели', 'Финансы', 'Уборка', 'Готовка'] },
+  { id: uid(), name: 'Утро', items: ['Стакан воды', 'Зарядка 10 мин', 'Душ', 'Завтрак', 'План на день'] },
+  { id: uid(), name: 'Вечер', items: ['Итог дня', '3 хороших момента', 'План на завтра', 'Чтение 20 мин'] },
+  { id: uid(), name: 'Воскресный обзор', items: ['Обзор недели', 'План недели', 'Финансы', 'Уборка', 'Готовка'] },
 ];
 const PAYMENT_METHODS = ['Карта', 'Наличные', 'СБП', 'Онлайн'];
 const STATUSES = ['Готово', 'В работе', 'Отложено', 'Отменено'];
 const PRIORITIES = ['Высокий', 'Средний', 'Низкий'];
 
 const emptyMonth = () => ({
-  goals: [], habits: DEFAULT_HABITS(), habitChecks: {},
-  dailyTasks: {}, weeklyTasks: {}, expenses: [], income: [],
+  goals: [], habits: DEFAULT_HABITS(), habitChecks: {},
+  dailyTasks: {}, weeklyTasks: {}, expenses: [], income: [],
 });
 
 const statusColor = (s) => {
-  if (s === 'Готово') return 'text-emerald-700 bg-emerald-50 border-emerald-100';
-  if (s === 'В работе') return 'text-amber-700 bg-amber-50 border-amber-100';
-  if (s === 'Отложено') return 'text-neutral-500 bg-neutral-100 border-line';
-  if (s === 'Отменено') return 'text-rose-700 bg-rose-50 border-rose-100';
-  return 'text-neutral-400 bg-white border-line';
+  if (s === 'Готово') return 'text-emerald-700 bg-emerald-50 border-emerald-100';
+  if (s === 'В работе') return 'text-amber-700 bg-amber-50 border-amber-100';
+  if (s === 'Отложено') return 'text-neutral-500 bg-neutral-100 border-line';
+  if (s === 'Отменено') return 'text-rose-700 bg-rose-50 border-rose-100';
+  return 'text-neutral-400 bg-white border-line';
 };
 const priorityColor = (p) => {
-  if (p === 'Высокий') return 'text-rose-700';
-  if (p === 'Средний') return 'text-amber-700';
-  if (p === 'Низкий') return 'text-neutral-500';
-  return 'text-neutral-400';
+  if (p === 'Высокий') return 'text-rose-700';
+  if (p === 'Средний') return 'text-amber-700';
+  if (p === 'Низкий') return 'text-neutral-500';
+  return 'text-neutral-400';
 };
 
 // ───────────────────────────────────────────────────────────
 // Reusable UI
 // ───────────────────────────────────────────────────────────
 const SectionTitle = ({ children, delay = 0 }) => (
-  <h2
-    className="text-xs font-semibold tracking-[0.14em] text-neutral-600 uppercase mb-4 pb-2 border-b border-line animate-fade-up"
-    style={{ animationDelay: `${delay}ms` }}
-  >{children}</h2>
+  <h2
+    className="text-xs font-semibold tracking-[0.14em] text-neutral-600 uppercase mb-4 pb-2 border-b border-line animate-fade-up"
+    style={{ animationDelay: `${delay}ms` }}
+  >{children}</h2>
 );
 
 const Card = ({ children, className = '', delay = 0 }) => (
-  <div
-    className={`bg-white border border-line rounded-2xl p-6 animate-fade-up ${className}`}
-    style={{ animationDelay: `${delay}ms` }}
-  >{children}</div>
+  <div
+    className={`bg-white border border-line rounded-2xl p-6 animate-fade-up ${className}`}
+    style={{ animationDelay: `${delay}ms` }}
+  >{children}</div>
 );
 
 const KpiCard = ({ label, value, sublabel, delta, accent, delay = 0, prefix = '' }) => {
-  const isPositive = delta != null && delta > 0;
-  const isNegative = delta != null && delta < 0;
-  return (
-    <div
-      className="bg-white border border-line rounded-2xl p-5 sm:p-6 animate-fade-up transition-all duration-300 hover:border-neutral-300 hover:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)]"
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      <div className="text-[10px] font-semibold tracking-[0.18em] text-neutral-500 uppercase mb-3">
-        {label}
-      </div>
-      <div className={`text-3xl sm:text-4xl lg:text-[42px] font-display font-light tracking-tight leading-none ${accent || 'text-neutral-900'}`}>
-        {prefix}{value}
-      </div>
-      {sublabel && (
-        <div className="text-xs text-neutral-500 mt-3 flex items-center gap-2 flex-wrap">
-          {delta != null && (
-            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11px] font-medium ${
-              isPositive ? 'text-emerald-700 bg-emerald-50' :
-              isNegative ? 'text-rose-700 bg-rose-50' :
-              'text-neutral-500 bg-neutral-100'
-            }`}>
-              {isPositive && <Icon name="arrow-up" className="w-3 h-3" />}
-              {isNegative && <Icon name="arrow-down" className="w-3 h-3" />}
-              {delta === 0 && <Icon name="minus" className="w-3 h-3" />}
-              {Math.abs(Math.round(delta * 100))}%
-            </span>
-          )}
-          {sublabel}
-        </div>
-      )}
-    </div>
-  );
+  const isPositive = delta != null && delta > 0;
+  const isNegative = delta != null && delta < 0;
+  return (
+    <div
+      className="bg-white border border-line rounded-2xl p-5 sm:p-6 animate-fade-up transition-all duration-300 hover:border-neutral-300 hover:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)]"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <div className="text-[10px] font-semibold tracking-[0.18em] text-neutral-500 uppercase mb-3">
+        {label}
+      </div>
+      <div className={`text-3xl sm:text-4xl lg:text-[42px] font-display font-light tracking-tight leading-none ${accent || 'text-neutral-900'}`}>
+        {prefix}{value}
+      </div>
+      {sublabel && (
+        <div className="text-xs text-neutral-500 mt-3 flex items-center gap-2 flex-wrap">
+          {delta != null && (
+            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11px] font-medium ${
+              isPositive ? 'text-emerald-700 bg-emerald-50' :
+              isNegative ? 'text-rose-700 bg-rose-50' :
+              'text-neutral-500 bg-neutral-100'
+            }`}>
+              {isPositive && <Icon name="arrow-up" className="w-3 h-3" />}
+              {isNegative && <Icon name="arrow-down" className="w-3 h-3" />}
+              {delta === 0 && <Icon name="minus" className="w-3 h-3" />}
+              {Math.abs(Math.round(delta * 100))}%
+            </span>
+          )}
+          {sublabel}
+        </div>
+      )}
+    </div>
+  );
 };
 
 const Pill = ({ value, options, onChange, className = '' }) => (
-  <select
-    value={value || ''}
-    onChange={(e) => onChange(e.target.value || null)}
-    className={`text-xs font-medium px-2.5 py-1 rounded-md border outline-none cursor-pointer transition-colors ${statusColor(value)} ${className}`}
-  >
-    <option value="">—</option>
-    {options.map((o) => <option key={o} value={o}>{o}</option>)}
-  </select>
+  <select
+    value={value || ''}
+    onChange={(e) => onChange(e.target.value || null)}
+    className={`text-xs font-medium px-2.5 py-1 rounded-md border outline-none cursor-pointer transition-colors ${statusColor(value)} ${className}`}
+  >
+    <option value="">—</option>
+    {options.map((o) => <option key={o} value={o}>{o}</option>)}
+  </select>
 );
 
 const IconBtn = ({ onClick, children, title, danger = false }) => (
-  <button
-    onClick={onClick} title={title}
-    className={`p-1.5 rounded-md transition-all ${
-      danger ? 'text-neutral-400 hover:text-rose-600 hover:bg-rose-50' : 'text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100'
-    }`}
-  >{children}</button>
+  <button
+    onClick={onClick} title={title}
+    className={`p-1.5 rounded-md transition-all ${
+      danger ? 'text-neutral-400 hover:text-rose-600 hover:bg-rose-50' : 'text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100'
+    }`}
+  >{children}</button>
 );
 
 const TOOLTIP_STYLE = { background: 'white', border: '1px solid #E8E8E8', borderRadius: 8, fontSize: 12, fontFamily: 'inherit' };
 
 const THEMES = {
-  terracotta: { name: 'Терракота', rgb: '168 91 61',   hex: '#A85B3D', soft: '#F4E5DA', bg: '#FBF2EA' },
-  sage:       { name: 'Шалфей',    rgb: '94 124 90',   hex: '#5E7C5A', soft: '#E2EAE0', bg: '#F1F5EF' },
-  ocean:      { name: 'Океан',     rgb: '61 111 143',  hex: '#3D6F8F', soft: '#D6E2EA', bg: '#EAF0F4' },
-  slate:      { name: 'Сланец',    rgb: '74 92 124',   hex: '#4A5C7C', soft: '#DDE3EC', bg: '#EEF1F5' },
-  plum:       { name: 'Слива',     rgb: '124 75 92',   hex: '#7C4B5C', soft: '#EAD8DF', bg: '#F4EAEE' },
-  mocha:      { name: 'Мокко',     rgb: '123 94 63',   hex: '#7B5E3F', soft: '#E8DDCB', bg: '#F3EDE2' },
-  ink:        { name: 'Графит',    rgb: '45 45 45',    hex: '#2D2D2D', soft: '#E5E5E5', bg: '#F2F2F2' },
+  terracotta: { name: 'Терракота', rgb: '168 91 61',   hex: '#A85B3D', soft: '#F4E5DA', bg: '#FBF2EA' },
+  sage:       { name: 'Шалфей',    rgb: '94 124 90',   hex: '#5E7C5A', soft: '#E2EAE0', bg: '#F1F5EF' },
+  ocean:      { name: 'Океан',     rgb: '61 111 143',  hex: '#3D6F8F', soft: '#D6E2EA', bg: '#EAF0F4' },
+  slate:      { name: 'Сланец',    rgb: '74 92 124',   hex: '#4A5C7C', soft: '#DDE3EC', bg: '#EEF1F5' },
+  plum:       { name: 'Слива',     rgb: '124 75 92',   hex: '#7C4B5C', soft: '#EAD8DF', bg: '#F4EAEE' },
+  mocha:      { name: 'Мокко',     rgb: '123 94 63',   hex: '#7B5E3F', soft: '#E8DDCB', bg: '#F3EDE2' },
+  ink:        { name: 'Графит',    rgb: '45 45 45',    hex: '#2D2D2D', soft: '#E5E5E5', bg: '#F2F2F2' },
 };
 const DEFAULT_THEME = 'terracotta';
 
 const applyTheme = (key) => {
-  const t = THEMES[key] || THEMES[DEFAULT_THEME];
-  const root = document.documentElement;
-  root.style.setProperty('--accent-rgb', t.rgb);
-  root.style.setProperty('--accent-soft', t.soft);
-  root.style.setProperty('--accent-bg', t.bg);
+  const t = THEMES[key] || THEMES[DEFAULT_THEME];
+  const root = document.documentElement;
+  root.style.setProperty('--accent-rgb', t.rgb);
+  root.style.setProperty('--accent-soft', t.soft);
+  root.style.setProperty('--accent-bg', t.bg);
 };
 
 // Build per-chart palette around current accent
@@ -388,1139 +388,1139 @@ const buildPieColors = (accent) => [accent, '#1A1A1A', '#525252', '#737373', '#A
 // Dashboard
 // ───────────────────────────────────────────────────────────
 function Dashboard({ data, prevData, settings, ym, accent }) {
-  const pieColors = useMemo(() => buildPieColors(accent), [accent]);
-  const totalExpense = useMemo(() => data.expenses.reduce((s, e) => s + (+e.amount || 0), 0), [data.expenses]);
-  const totalIncome = useMemo(() => data.income.reduce((s, e) => s + (+e.amount || 0), 0), [data.income]);
-  const balance = totalIncome - totalExpense;
-  const totalBudget = useMemo(() => settings.categories.reduce((s, c) => s + (+c.budget || 0), 0), [settings.categories]);
-  const prevExpense = useMemo(() => (prevData?.expenses || []).reduce((s, e) => s + (+e.amount || 0), 0), [prevData]);
-  const prevIncome = useMemo(() => (prevData?.income || []).reduce((s, e) => s + (+e.amount || 0), 0), [prevData]);
-  const prevBalance = prevIncome - prevExpense;
-  const delta = (cur, prev) => prev ? (cur - prev) / Math.abs(prev) : null;
+  const pieColors = useMemo(() => buildPieColors(accent), [accent]);
+  const totalExpense = useMemo(() => data.expenses.reduce((s, e) => s + (+e.amount || 0), 0), [data.expenses]);
+  const totalIncome = useMemo(() => data.income.reduce((s, e) => s + (+e.amount || 0), 0), [data.income]);
+  const balance = totalIncome - totalExpense;
+  const totalBudget = useMemo(() => settings.categories.reduce((s, c) => s + (+c.budget || 0), 0), [settings.categories]);
+  const prevExpense = useMemo(() => (prevData?.expenses || []).reduce((s, e) => s + (+e.amount || 0), 0), [prevData]);
+  const prevIncome = useMemo(() => (prevData?.income || []).reduce((s, e) => s + (+e.amount || 0), 0), [prevData]);
+  const prevBalance = prevIncome - prevExpense;
+  const delta = (cur, prev) => prev ? (cur - prev) / Math.abs(prev) : null;
 
-  const byCategory = useMemo(() => settings.categories.map((c) => {
-    const spent = data.expenses.filter((e) => e.category === c.name).reduce((s, e) => s + (+e.amount || 0), 0);
-    return { name: c.name, spent, budget: c.budget, pct: c.budget ? spent / c.budget : 0 };
-  }).sort((a, b) => b.spent - a.spent), [data.expenses, settings.categories]);
+  const byCategory = useMemo(() => settings.categories.map((c) => {
+    const spent = data.expenses.filter((e) => e.category === c.name).reduce((s, e) => s + (+e.amount || 0), 0);
+    return { name: c.name, spent, budget: c.budget, pct: c.budget ? spent / c.budget : 0 };
+  }).sort((a, b) => b.spent - a.spent), [data.expenses, settings.categories]);
 
-  const habitProgress = useMemo(() => {
-    const days = daysInMonth(ym);
-    const total = data.habits.length * days;
-    if (!total) return 0;
-    let done = 0;
-    data.habits.forEach((h) => {
-      for (let d = 1; d <= days; d++) if (data.habitChecks[`${h.id}-${d}`]) done++;
-    });
-    return done / total;
-  }, [data.habits, data.habitChecks, ym]);
+  const habitProgress = useMemo(() => {
+    const days = daysInMonth(ym);
+    const total = data.habits.length * days;
+    if (!total) return 0;
+    let done = 0;
+    data.habits.forEach((h) => {
+      for (let d = 1; d <= days; d++) if (data.habitChecks[`${h.id}-${d}`]) done++;
+    });
+    return done / total;
+  }, [data.habits, data.habitChecks, ym]);
 
-  const goalsDone = data.goals.filter((g) => g.status === 'Готово').length;
-  const goalsTotal = data.goals.length;
-  const pieData = byCategory.filter((c) => c.spent > 0).slice(0, 8);
+  const goalsDone = data.goals.filter((g) => g.status === 'Готово').length;
+  const goalsTotal = data.goals.length;
+  const pieData = byCategory.filter((c) => c.spent > 0).slice(0, 8);
 
-  return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        <KpiCard label="Доход" value={fmtMoney(totalIncome)} accent="text-emerald-700" delta={delta(totalIncome, prevIncome)} sublabel="к прошл. месяцу" delay={0} />
-        <KpiCard label="Расход" value={fmtMoney(totalExpense)} accent="text-rose-700" delta={delta(totalExpense, prevExpense)} sublabel="к прошл. месяцу" delay={60} />
-        <KpiCard label="Баланс" value={fmtMoney(balance)} delta={delta(balance, prevBalance)} sublabel="к прошл. месяцу" delay={120} />
-        <KpiCard label="Бюджет" value={fmtMoney(totalBudget - totalExpense)} sublabel={`из ${fmtMoney(totalBudget)}`} delay={180} />
-        <KpiCard label="Цели" value={`${goalsDone}/${goalsTotal || 0}`} sublabel="выполнено" delay={240} />
-        <KpiCard label="Привычки" value={fmtPct(habitProgress)} sublabel="среднее" delay={300} />
-      </div>
+  return (
+    <div className="space-y-8">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <KpiCard label="Доход" value={fmtMoney(totalIncome)} accent="text-emerald-700" delta={delta(totalIncome, prevIncome)} sublabel="к прошл. месяцу" delay={0} />
+        <KpiCard label="Расход" value={fmtMoney(totalExpense)} accent="text-rose-700" delta={delta(totalExpense, prevExpense)} sublabel="к прошл. месяцу" delay={60} />
+        <KpiCard label="Баланс" value={fmtMoney(balance)} delta={delta(balance, prevBalance)} sublabel="к прошл. месяцу" delay={120} />
+        <KpiCard label="Бюджет" value={fmtMoney(totalBudget - totalExpense)} sublabel={`из ${fmtMoney(totalBudget)}`} delay={180} />
+        <KpiCard label="Цели" value={`${goalsDone}/${goalsTotal || 0}`} sublabel="выполнено" delay={240} />
+        <KpiCard label="Привычки" value={fmtPct(habitProgress)} sublabel="среднее" delay={300} />
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card delay={360}>
-          <SectionTitle delay={360}>Структура расходов</SectionTitle>
-          {pieData.length === 0 ? (
-            <div className="text-sm text-neutral-400 py-12 text-center">Нет данных</div>
-          ) : (
-            <ResponsiveContainer width="100%" height={260}>
-              <PieChart>
-                <Pie data={pieData} dataKey="spent" nameKey="name" cx="50%" cy="50%" outerRadius={90} innerRadius={50} paddingAngle={1} animationDuration={800}>
-                  {pieData.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
-                </Pie>
-                <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-              </PieChart>
-            </ResponsiveContainer>
-          )}
-        </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Card delay={360}>
+          <SectionTitle delay={360}>Структура расходов</SectionTitle>
+          {pieData.length === 0 ? (
+            <div className="text-sm text-neutral-400 py-12 text-center">Нет данных</div>
+          ) : (
+            <ResponsiveContainer width="100%" height={260}>
+              <PieChart>
+                <Pie data={pieData} dataKey="spent" nameKey="name" cx="50%" cy="50%" outerRadius={90} innerRadius={50} paddingAngle={1} animationDuration={800}>
+                  {pieData.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
+                </Pie>
+                <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
+        </Card>
 
-        <Card delay={420}>
-          <SectionTitle delay={420}>Топ категорий</SectionTitle>
-          <div className="space-y-3">
-            {byCategory.slice(0, 6).map((c, i) => (
-              <div key={c.name} className="animate-fade-up" style={{ animationDelay: `${480 + i * 50}ms` }}>
-                <div className="flex items-center justify-between text-sm mb-1.5">
-                  <span className="text-neutral-700">{c.name}</span>
-                  <span className="font-mono text-neutral-900 tabular-nums">{fmtMoney(c.spent)}</span>
-                </div>
-                <div className="h-1 bg-neutral-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all duration-700"
-                    style={{
-                      width: `${Math.min(c.pct, 1) * 100}%`,
-                      background: c.pct > 1 ? '#9F1239' : c.pct > 0.8 ? '#A16207' : accent,
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
+        <Card delay={420}>
+          <SectionTitle delay={420}>Топ категорий</SectionTitle>
+          <div className="space-y-3">
+            {byCategory.slice(0, 6).map((c, i) => (
+              <div key={c.name} className="animate-fade-up" style={{ animationDelay: `${480 + i * 50}ms` }}>
+                <div className="flex items-center justify-between text-sm mb-1.5">
+                  <span className="text-neutral-700">{c.name}</span>
+                  <span className="font-mono text-neutral-900 tabular-nums">{fmtMoney(c.spent)}</span>
+                </div>
+                <div className="h-1 bg-neutral-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{
+                      width: `${Math.min(c.pct, 1) * 100}%`,
+                      background: c.pct > 1 ? '#9F1239' : c.pct > 0.8 ? '#A16207' : accent,
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
 
-      {prevData && (totalExpense > 0 || prevExpense > 0) && (
-        <Card delay={600}>
-          <SectionTitle delay={600}>Сравнение с прошлым месяцем</SectionTitle>
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={[
-              { name: 'Доход', current: totalIncome, prev: prevIncome },
-              { name: 'Расход', current: totalExpense, prev: prevExpense },
-              { name: 'Баланс', current: balance, prev: prevBalance },
-            ]} barCategoryGap="30%">
-              <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" vertical={false} />
-              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
-              <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-              <Legend wrapperStyle={{ fontSize: 12 }} formatter={(v) => v === 'current' ? ymLabel(ym) : ymLabel(shiftYM(ym, -1))} />
-              <Bar dataKey="prev" fill="#D4D4D4" radius={[4, 4, 0, 0]} animationDuration={800} />
-              <Bar dataKey="current" fill={accent} radius={[4, 4, 0, 0]} animationDuration={800} />
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
-      )}
-    </div>
-  );
+      {prevData && (totalExpense > 0 || prevExpense > 0) && (
+        <Card delay={600}>
+          <SectionTitle delay={600}>Сравнение с прошлым месяцем</SectionTitle>
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={[
+              { name: 'Доход', current: totalIncome, prev: prevIncome },
+              { name: 'Расход', current: totalExpense, prev: prevExpense },
+              { name: 'Баланс', current: balance, prev: prevBalance },
+            ]} barCategoryGap="30%">
+              <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" vertical={false} />
+              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
+              <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
+              <Legend wrapperStyle={{ fontSize: 12 }} formatter={(v) => v === 'current' ? ymLabel(ym) : ymLabel(shiftYM(ym, -1))} />
+              <Bar dataKey="prev" fill="#D4D4D4" radius={[4, 4, 0, 0]} animationDuration={800} />
+              <Bar dataKey="current" fill={accent} radius={[4, 4, 0, 0]} animationDuration={800} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+      )}
+    </div>
+  );
 }
 
 // ───────────────────────────────────────────────────────────
 // План дня
 // ───────────────────────────────────────────────────────────
 function PlanDay({ data, update, ym }) {
-  const days = daysInMonth(ym);
-  const isCurrentMonth = ym === todayYM();
-  const [activeDay, setActiveDay] = useState(isCurrentMonth ? todayDay() : 1);
-  const scrollerRef = useRef(null);
+  const days = daysInMonth(ym);
+  const isCurrentMonth = ym === todayYM();
+  const [activeDay, setActiveDay] = useState(isCurrentMonth ? todayDay() : 1);
+  const scrollerRef = useRef(null);
 
-  useEffect(() => {
-    if (!scrollerRef.current) return;
-    const btn = scrollerRef.current.querySelector(`[data-day="${activeDay}"]`);
-    if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-  }, [activeDay]);
+  useEffect(() => {
+    if (!scrollerRef.current) return;
+    const btn = scrollerRef.current.querySelector(`[data-day="${activeDay}"]`);
+    if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, [activeDay]);
 
-  const tasks = data.dailyTasks[activeDay] || [];
+  const tasks = data.dailyTasks[activeDay] || [];
 
-  const addTask = () => {
-    const t = { id: uid(), title: '', status: null, time: '', note: '' };
-    update((d) => ({ ...d, dailyTasks: { ...d.dailyTasks, [activeDay]: [...(d.dailyTasks[activeDay] || []), t] } }));
-  };
-  const updateTask = (id, patch) => {
-    update((d) => ({ ...d, dailyTasks: { ...d.dailyTasks, [activeDay]: (d.dailyTasks[activeDay] || []).map((t) => t.id === id ? { ...t, ...patch } : t) } }));
-  };
-  const removeTask = (id) => {
-    update((d) => ({ ...d, dailyTasks: { ...d.dailyTasks, [activeDay]: (d.dailyTasks[activeDay] || []).filter((t) => t.id !== id) } }));
-  };
+  const addTask = () => {
+    const t = { id: uid(), title: '', status: null, time: '', note: '' };
+    update((d) => ({ ...d, dailyTasks: { ...d.dailyTasks, [activeDay]: [...(d.dailyTasks[activeDay] || []), t] } }));
+  };
+  const updateTask = (id, patch) => {
+    update((d) => ({ ...d, dailyTasks: { ...d.dailyTasks, [activeDay]: (d.dailyTasks[activeDay] || []).map((t) => t.id === id ? { ...t, ...patch } : t) } }));
+  };
+  const removeTask = (id) => {
+    update((d) => ({ ...d, dailyTasks: { ...d.dailyTasks, [activeDay]: (d.dailyTasks[activeDay] || []).filter((t) => t.id !== id) } }));
+  };
 
-  return (
-    <div className="space-y-6">
-      <div className="overflow-x-auto -mx-4 sm:mx-0 hide-scroll" ref={scrollerRef}>
-        <div className="flex gap-1.5 px-4 sm:px-0 pb-1">
-          {Array.from({ length: days }, (_, i) => i + 1).map((d) => {
-            const dow = dowOfDay(ym, d);
-            const isWeekend = dow >= 5;
-            const isToday = isCurrentMonth && d === todayDay();
-            const isActive = d === activeDay;
-            const hasTasks = (data.dailyTasks[d] || []).length > 0;
-            return (
-              <button
-                key={d} data-day={d}
-                onClick={() => setActiveDay(d)}
-                className={`flex-shrink-0 w-12 h-16 rounded-xl border flex flex-col items-center justify-center gap-0.5 transition-all duration-200 ${
-                  isActive ? 'bg-accent border-accent text-white shadow-md scale-105' : 'bg-white border-line text-neutral-700 hover:border-neutral-400'
-                }`}
-              >
-                <span className={`text-[10px] font-medium ${isActive ? 'text-white/70' : isWeekend ? 'text-neutral-500 italic' : 'text-neutral-400'}`}>
-                  {DOW_SHORT[dow]}
-                </span>
-                <span className="text-lg font-display font-light tabular-nums">{d}</span>
-                {hasTasks && <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-white' : 'bg-accent'}`} />}
-                {isToday && !isActive && <span className="absolute mt-12 w-1 h-1 rounded-full bg-accent" />}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+  return (
+    <div className="space-y-6">
+      <div className="overflow-x-auto -mx-4 sm:mx-0 hide-scroll" ref={scrollerRef}>
+        <div className="flex gap-1.5 px-4 sm:px-0 pb-1">
+          {Array.from({ length: days }, (_, i) => i + 1).map((d) => {
+            const dow = dowOfDay(ym, d);
+            const isWeekend = dow >= 5;
+            const isToday = isCurrentMonth && d === todayDay();
+            const isActive = d === activeDay;
+            const hasTasks = (data.dailyTasks[d] || []).length > 0;
+            return (
+              <button
+                key={d} data-day={d}
+                onClick={() => setActiveDay(d)}
+                className={`flex-shrink-0 w-12 h-16 rounded-xl border flex flex-col items-center justify-center gap-0.5 transition-all duration-200 ${
+                  isActive ? 'bg-accent border-accent text-white shadow-md scale-105' : 'bg-white border-line text-neutral-700 hover:border-neutral-400'
+                }`}
+              >
+                <span className={`text-[10px] font-medium ${isActive ? 'text-white/70' : isWeekend ? 'text-neutral-500 italic' : 'text-neutral-400'}`}>
+                  {DOW_SHORT[dow]}
+                </span>
+                <span className="text-lg font-display font-light tabular-nums">{d}</span>
+                {hasTasks && <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-white' : 'bg-accent'}`} />}
+                {isToday && !isActive && <span className="absolute mt-12 w-1 h-1 rounded-full bg-accent" />}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-      <Card>
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <div className="text-[10px] font-semibold tracking-[0.18em] text-neutral-500 uppercase">
-              {DOW_LONG[dowOfDay(ym, activeDay)]}
-            </div>
-            <div className="text-3xl font-display font-light mt-1 flex items-baseline gap-2">
-              <span className="font-display-italic">{activeDay}</span>
-              <span className="text-neutral-400">{MONTHS_RU[parseYM(ym)[1] - 1].toLowerCase()}</span>
-            </div>
-          </div>
-          <button onClick={addTask} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity">
-            <Icon name="plus" className="w-4 h-4" /> Задача
-          </button>
-        </div>
+      <Card>
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <div className="text-[10px] font-semibold tracking-[0.18em] text-neutral-500 uppercase">
+              {DOW_LONG[dowOfDay(ym, activeDay)]}
+            </div>
+            <div className="text-3xl font-display font-light mt-1 flex items-baseline gap-2">
+              <span className="font-display-italic">{activeDay}</span>
+              <span className="text-neutral-400">{MONTHS_RU[parseYM(ym)[1] - 1].toLowerCase()}</span>
+            </div>
+          </div>
+          <button onClick={addTask} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity">
+            <Icon name="plus" className="w-4 h-4" /> Задача
+          </button>
+        </div>
 
-        {tasks.length === 0 ? (
-          <div className="text-center py-12 text-neutral-400 text-sm">Пусто. Нажми «Задача» чтобы добавить.</div>
-        ) : (
-          <div className="space-y-2">
-            {tasks.map((t, i) => (
-              <div key={t.id} className="group flex items-start gap-2 sm:gap-3 p-3 rounded-xl border border-line hover:border-neutral-300 transition-colors animate-fade-up" style={{ animationDelay: `${i * 40}ms` }}>
-                <input type="text" value={t.title} onChange={(e) => updateTask(t.id, { title: e.target.value })} placeholder="Что нужно сделать" className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300 min-w-0" />
-                <input type="text" value={t.time} onChange={(e) => updateTask(t.id, { time: e.target.value })} placeholder="время" className="w-16 bg-transparent text-xs text-neutral-500 outline-none text-center" />
-                <Pill value={t.status} options={STATUSES} onChange={(v) => updateTask(t.id, { status: v })} />
-                <IconBtn onClick={() => removeTask(t.id)} title="Удалить" danger>
-                  <Icon name="x" className="w-4 h-4" />
-                </IconBtn>
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
-    </div>
-  );
+        {tasks.length === 0 ? (
+          <div className="text-center py-12 text-neutral-400 text-sm">Пусто. Нажми «Задача» чтобы добавить.</div>
+        ) : (
+          <div className="space-y-2">
+            {tasks.map((t, i) => (
+              <div key={t.id} className="group flex items-start gap-2 sm:gap-3 p-3 rounded-xl border border-line hover:border-neutral-300 transition-colors animate-fade-up" style={{ animationDelay: `${i * 40}ms` }}>
+                <input type="text" value={t.title} onChange={(e) => updateTask(t.id, { title: e.target.value })} placeholder="Что нужно сделать" className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300 min-w-0" />
+                <input type="text" value={t.time} onChange={(e) => updateTask(t.id, { time: e.target.value })} placeholder="время" className="w-16 bg-transparent text-xs text-neutral-500 outline-none text-center" />
+                <Pill value={t.status} options={STATUSES} onChange={(v) => updateTask(t.id, { status: v })} />
+                <IconBtn onClick={() => removeTask(t.id)} title="Удалить" danger>
+                  <Icon name="x" className="w-4 h-4" />
+                </IconBtn>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
 }
 
 // ───────────────────────────────────────────────────────────
 // План недели
 // ───────────────────────────────────────────────────────────
 function PlanWeek({ data, update }) {
-  const addTask = (week) => {
-    const t = { id: uid(), category: '', title: '', deadline: '', status: null, note: '' };
-    update((d) => ({ ...d, weeklyTasks: { ...d.weeklyTasks, [week]: [...(d.weeklyTasks[week] || []), t] } }));
-  };
-  const updateTask = (week, id, patch) => {
-    update((d) => ({ ...d, weeklyTasks: { ...d.weeklyTasks, [week]: (d.weeklyTasks[week] || []).map((t) => t.id === id ? { ...t, ...patch } : t) } }));
-  };
-  const removeTask = (week, id) => {
-    update((d) => ({ ...d, weeklyTasks: { ...d.weeklyTasks, [week]: (d.weeklyTasks[week] || []).filter((t) => t.id !== id) } }));
-  };
+  const addTask = (week) => {
+    const t = { id: uid(), category: '', title: '', deadline: '', status: null, note: '' };
+    update((d) => ({ ...d, weeklyTasks: { ...d.weeklyTasks, [week]: [...(d.weeklyTasks[week] || []), t] } }));
+  };
+  const updateTask = (week, id, patch) => {
+    update((d) => ({ ...d, weeklyTasks: { ...d.weeklyTasks, [week]: (d.weeklyTasks[week] || []).map((t) => t.id === id ? { ...t, ...patch } : t) } }));
+  };
+  const removeTask = (week, id) => {
+    update((d) => ({ ...d, weeklyTasks: { ...d.weeklyTasks, [week]: (d.weeklyTasks[week] || []).filter((t) => t.id !== id) } }));
+  };
 
-  return (
-    <div className="space-y-6">
-      {[1, 2, 3, 4, 5].map((w, idx) => {
-        const tasks = data.weeklyTasks[w] || [];
-        return (
-          <Card key={w} delay={idx * 80}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-2xl font-display font-light">Неделя {w}</h3>
-              <button onClick={() => addTask(w)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity">
-                <Icon name="plus" className="w-3.5 h-3.5" /> Задача
-              </button>
-            </div>
-            {tasks.length === 0 ? (
-              <div className="text-sm text-neutral-300 py-4">Нет задач</div>
-            ) : (
-              <div className="space-y-2">
-                {tasks.map((t, i) => (
-                  <div key={t.id} className="group flex items-start gap-2 sm:gap-3 p-3 rounded-xl border border-line hover:border-neutral-300 animate-fade-up" style={{ animationDelay: `${i * 30}ms` }}>
-                    <input type="text" value={t.title} onChange={(e) => updateTask(w, t.id, { title: e.target.value })} placeholder="Задача недели" className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300 min-w-0" />
-                    <input type="date" value={t.deadline} onChange={(e) => updateTask(w, t.id, { deadline: e.target.value })} className="bg-transparent text-xs text-neutral-500 outline-none" />
-                    <Pill value={t.status} options={STATUSES} onChange={(v) => updateTask(w, t.id, { status: v })} />
-                    <IconBtn onClick={() => removeTask(w, t.id)} title="Удалить" danger>
-                      <Icon name="x" className="w-4 h-4" />
-                    </IconBtn>
-                  </div>
-                ))}
-              </div>
-            )}
-          </Card>
-        );
-      })}
-    </div>
-  );
+  return (
+    <div className="space-y-6">
+      {[1, 2, 3, 4, 5].map((w, idx) => {
+        const tasks = data.weeklyTasks[w] || [];
+        return (
+          <Card key={w} delay={idx * 80}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-2xl font-display font-light">Неделя {w}</h3>
+              <button onClick={() => addTask(w)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity">
+                <Icon name="plus" className="w-3.5 h-3.5" /> Задача
+              </button>
+            </div>
+            {tasks.length === 0 ? (
+              <div className="text-sm text-neutral-300 py-4">Нет задач</div>
+            ) : (
+              <div className="space-y-2">
+                {tasks.map((t, i) => (
+                  <div key={t.id} className="group flex items-start gap-2 sm:gap-3 p-3 rounded-xl border border-line hover:border-neutral-300 animate-fade-up" style={{ animationDelay: `${i * 30}ms` }}>
+                    <input type="text" value={t.title} onChange={(e) => updateTask(w, t.id, { title: e.target.value })} placeholder="Задача недели" className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300 min-w-0" />
+                    <input type="date" value={t.deadline} onChange={(e) => updateTask(w, t.id, { deadline: e.target.value })} className="bg-transparent text-xs text-neutral-500 outline-none" />
+                    <Pill value={t.status} options={STATUSES} onChange={(v) => updateTask(w, t.id, { status: v })} />
+                    <IconBtn onClick={() => removeTask(w, t.id)} title="Удалить" danger>
+                      <Icon name="x" className="w-4 h-4" />
+                    </IconBtn>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
+        );
+      })}
+    </div>
+  );
 }
 
 // ───────────────────────────────────────────────────────────
 // Цели
 // ───────────────────────────────────────────────────────────
 function Goals({ data, update }) {
-  const addGoal = () => {
-    const g = { id: uid(), title: '', priority: null, deadline: '', status: null, progress: 0, note: '' };
-    update((d) => ({ ...d, goals: [...d.goals, g] }));
-  };
-  const updateGoal = (id, patch) => {
-    update((d) => ({ ...d, goals: d.goals.map((g) => g.id === id ? { ...g, ...patch } : g) }));
-  };
-  const removeGoal = (id) => {
-    update((d) => ({ ...d, goals: d.goals.filter((g) => g.id !== id) }));
-  };
-  const done = data.goals.filter((g) => g.status === 'Готово').length;
+  const addGoal = () => {
+    const g = { id: uid(), title: '', priority: null, deadline: '', status: null, progress: 0, note: '' };
+    update((d) => ({ ...d, goals: [...d.goals, g] }));
+  };
+  const updateGoal = (id, patch) => {
+    update((d) => ({ ...d, goals: d.goals.map((g) => g.id === id ? { ...g, ...patch } : g) }));
+  };
+  const removeGoal = (id) => {
+    update((d) => ({ ...d, goals: d.goals.filter((g) => g.id !== id) }));
+  };
+  const done = data.goals.filter((g) => g.status === 'Готово').length;
 
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
-        <KpiCard label="Прогресс" value={`${done} из ${data.goals.length || 0}`} delay={0} />
-        <KpiCard label="Доля выполнения" value={fmtPct(data.goals.length ? done / data.goals.length : 0)} delay={60} />
-      </div>
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <KpiCard label="Прогресс" value={`${done} из ${data.goals.length || 0}`} delay={0} />
+        <KpiCard label="Доля выполнения" value={fmtPct(data.goals.length ? done / data.goals.length : 0)} delay={60} />
+      </div>
 
-      <Card delay={120}>
-        <div className="flex items-center justify-between mb-5">
-          <SectionTitle delay={120}>Цели месяца</SectionTitle>
-          <button onClick={addGoal} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity">
-            <Icon name="plus" className="w-3.5 h-3.5" /> Цель
-          </button>
-        </div>
+      <Card delay={120}>
+        <div className="flex items-center justify-between mb-5">
+          <SectionTitle delay={120}>Цели месяца</SectionTitle>
+          <button onClick={addGoal} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity">
+            <Icon name="plus" className="w-3.5 h-3.5" /> Цель
+          </button>
+        </div>
 
-        {data.goals.length === 0 ? (
-          <div className="text-center py-12 text-neutral-400 text-sm">
-            Цели пока не заданы.<br />
-            <span className="text-neutral-300 text-xs">Лучше 3-5 главных, чем 15 размытых.</span>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {data.goals.map((g, i) => (
-              <div key={g.id} className="p-4 rounded-xl border border-line hover:border-neutral-300 transition-colors animate-fade-up" style={{ animationDelay: `${i * 50}ms` }}>
-                <div className="flex items-start gap-3 mb-3">
-                  <input type="text" value={g.title} onChange={(e) => updateGoal(g.id, { title: e.target.value })} placeholder="Цель" className="flex-1 bg-transparent text-base font-medium outline-none placeholder:text-neutral-300" />
-                  <IconBtn onClick={() => removeGoal(g.id)} title="Удалить" danger>
-                    <Icon name="trash" className="w-4 h-4" />
-                  </IconBtn>
-                </div>
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                  <select value={g.priority || ''} onChange={(e) => updateGoal(g.id, { priority: e.target.value || null })} className={`text-xs px-2.5 py-1 rounded-md border outline-none bg-white border-line cursor-pointer ${priorityColor(g.priority)}`}>
-                    <option value="">Приоритет</option>
-                    {PRIORITIES.map((p) => <option key={p} value={p}>{p}</option>)}
-                  </select>
-                  <input type="date" value={g.deadline} onChange={(e) => updateGoal(g.id, { deadline: e.target.value })} className="text-xs px-2.5 py-1 rounded-md border border-line outline-none text-neutral-700 bg-white" />
-                  <Pill value={g.status} options={STATUSES} onChange={(v) => updateGoal(g.id, { status: v })} />
-                  <div className="flex items-center gap-2 ml-auto">
-                    <span className="text-xs text-neutral-500">{Math.round(g.progress * 100)}%</span>
-                    <input type="range" min="0" max="100" value={g.progress * 100} onChange={(e) => updateGoal(g.id, { progress: +e.target.value / 100 })} className="w-24 sm:w-32 accent-neutral-900" />
-                  </div>
-                </div>
-                <input type="text" value={g.note} onChange={(e) => updateGoal(g.id, { note: e.target.value })} placeholder="Заметка" className="w-full mt-3 bg-transparent text-xs text-neutral-500 outline-none placeholder:text-neutral-300" />
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
-    </div>
-  );
+        {data.goals.length === 0 ? (
+          <div className="text-center py-12 text-neutral-400 text-sm">
+            Цели пока не заданы.<br />
+            <span className="text-neutral-300 text-xs">Лучше 3-5 главных, чем 15 размытых.</span>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {data.goals.map((g, i) => (
+              <div key={g.id} className="p-4 rounded-xl border border-line hover:border-neutral-300 transition-colors animate-fade-up" style={{ animationDelay: `${i * 50}ms` }}>
+                <div className="flex items-start gap-3 mb-3">
+                  <input type="text" value={g.title} onChange={(e) => updateGoal(g.id, { title: e.target.value })} placeholder="Цель" className="flex-1 bg-transparent text-base font-medium outline-none placeholder:text-neutral-300" />
+                  <IconBtn onClick={() => removeGoal(g.id)} title="Удалить" danger>
+                    <Icon name="trash" className="w-4 h-4" />
+                  </IconBtn>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  <select value={g.priority || ''} onChange={(e) => updateGoal(g.id, { priority: e.target.value || null })} className={`text-xs px-2.5 py-1 rounded-md border outline-none bg-white border-line cursor-pointer ${priorityColor(g.priority)}`}>
+                    <option value="">Приоритет</option>
+                    {PRIORITIES.map((p) => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                  <input type="date" value={g.deadline} onChange={(e) => updateGoal(g.id, { deadline: e.target.value })} className="text-xs px-2.5 py-1 rounded-md border border-line outline-none text-neutral-700 bg-white" />
+                  <Pill value={g.status} options={STATUSES} onChange={(v) => updateGoal(g.id, { status: v })} />
+                  <div className="flex items-center gap-2 ml-auto">
+                    <span className="text-xs text-neutral-500">{Math.round(g.progress * 100)}%</span>
+                    <input type="range" min="0" max="100" value={g.progress * 100} onChange={(e) => updateGoal(g.id, { progress: +e.target.value / 100 })} className="w-24 sm:w-32 accent-neutral-900" />
+                  </div>
+                </div>
+                <input type="text" value={g.note} onChange={(e) => updateGoal(g.id, { note: e.target.value })} placeholder="Заметка" className="w-full mt-3 bg-transparent text-xs text-neutral-500 outline-none placeholder:text-neutral-300" />
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
 }
 
 // ───────────────────────────────────────────────────────────
 // Привычки
 // ───────────────────────────────────────────────────────────
 function Habits({ data, update, ym }) {
-  const days = daysInMonth(ym);
-  const dayArr = Array.from({ length: days }, (_, i) => i + 1);
+  const days = daysInMonth(ym);
+  const dayArr = Array.from({ length: days }, (_, i) => i + 1);
 
-  const toggle = (habitId, day) => {
-    const key = `${habitId}-${day}`;
-    update((d) => ({ ...d, habitChecks: { ...d.habitChecks, [key]: !d.habitChecks[key] } }));
-  };
-  const addHabit = () => update((d) => ({ ...d, habits: [...d.habits, { id: uid(), name: '' }] }));
-  const updateHabit = (id, name) => update((d) => ({ ...d, habits: d.habits.map((h) => h.id === id ? { ...h, name } : h) }));
-  const removeHabit = (id) => update((d) => {
-    const checks = { ...d.habitChecks };
-    Object.keys(checks).forEach((k) => { if (k.startsWith(id + '-')) delete checks[k]; });
-    return { ...d, habits: d.habits.filter((h) => h.id !== id), habitChecks: checks };
-  });
+  const toggle = (habitId, day) => {
+    const key = `${habitId}-${day}`;
+    update((d) => ({ ...d, habitChecks: { ...d.habitChecks, [key]: !d.habitChecks[key] } }));
+  };
+  const addHabit = () => update((d) => ({ ...d, habits: [...d.habits, { id: uid(), name: '' }] }));
+  const updateHabit = (id, name) => update((d) => ({ ...d, habits: d.habits.map((h) => h.id === id ? { ...h, name } : h) }));
+  const removeHabit = (id) => update((d) => {
+    const checks = { ...d.habitChecks };
+    Object.keys(checks).forEach((k) => { if (k.startsWith(id + '-')) delete checks[k]; });
+    return { ...d, habits: d.habits.filter((h) => h.id !== id), habitChecks: checks };
+  });
 
-  const habitStats = (habit) => {
-    let done = 0;
-    for (let d = 1; d <= days; d++) if (data.habitChecks[`${habit.id}-${d}`]) done++;
-    return { done, pct: done / days };
-  };
+  const habitStats = (habit) => {
+    let done = 0;
+    for (let d = 1; d <= days; d++) if (data.habitChecks[`${habit.id}-${d}`]) done++;
+    return { done, pct: done / days };
+  };
 
-  return (
-    <div className="space-y-6">
-      <Card>
-        <div className="flex items-center justify-between mb-5">
-          <SectionTitle>Трекер</SectionTitle>
-          <button onClick={addHabit} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity">
-            <Icon name="plus" className="w-3.5 h-3.5" /> Привычка
-          </button>
-        </div>
+  return (
+    <div className="space-y-6">
+      <Card>
+        <div className="flex items-center justify-between mb-5">
+          <SectionTitle>Трекер</SectionTitle>
+          <button onClick={addHabit} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity">
+            <Icon name="plus" className="w-3.5 h-3.5" /> Привычка
+          </button>
+        </div>
 
-        {data.habits.length === 0 ? (
-          <div className="text-center py-12 text-neutral-400 text-sm">Нет привычек</div>
-        ) : (
-          <div className="overflow-x-auto -mx-6 px-6 hide-scroll">
-            <div className="min-w-fit">
-              <div className="flex items-center gap-1 mb-2">
-                <div className="w-40 flex-shrink-0 text-[10px] font-semibold tracking-[0.14em] text-neutral-500 uppercase pr-3">Привычка</div>
-                {dayArr.map((d) => {
-                  const dow = dowOfDay(ym, d);
-                  return (
-                    <div key={d} className={`w-6 h-6 flex flex-col items-center justify-center text-[10px] font-medium ${dow >= 5 ? 'text-amber-600' : 'text-neutral-400'}`}>
-                      {d}
-                    </div>
-                  );
-                })}
-                <div className="w-12 flex-shrink-0 text-center text-[10px] font-semibold tracking-[0.14em] text-neutral-500 uppercase pl-2">%</div>
-              </div>
+        {data.habits.length === 0 ? (
+          <div className="text-center py-12 text-neutral-400 text-sm">Нет привычек</div>
+        ) : (
+          <div className="overflow-x-auto -mx-6 px-6 hide-scroll">
+            <div className="min-w-fit">
+              <div className="flex items-center gap-1 mb-2">
+                <div className="w-40 flex-shrink-0 text-[10px] font-semibold tracking-[0.14em] text-neutral-500 uppercase pr-3">Привычка</div>
+                {dayArr.map((d) => {
+                  const dow = dowOfDay(ym, d);
+                  return (
+                    <div key={d} className={`w-6 h-6 flex flex-col items-center justify-center text-[10px] font-medium ${dow >= 5 ? 'text-amber-600' : 'text-neutral-400'}`}>
+                      {d}
+                    </div>
+                  );
+                })}
+                <div className="w-12 flex-shrink-0 text-center text-[10px] font-semibold tracking-[0.14em] text-neutral-500 uppercase pl-2">%</div>
+              </div>
 
-              {data.habits.map((h, hi) => {
-                const stats = habitStats(h);
-                return (
-                  <div key={h.id} className="flex items-center gap-1 py-1 group animate-fade-up" style={{ animationDelay: `${hi * 50}ms` }}>
-                    <div className="w-40 flex-shrink-0 flex items-center gap-1 pr-3">
-                      <input type="text" value={h.name} onChange={(e) => updateHabit(h.id, e.target.value)} placeholder="Привычка" className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300 min-w-0" />
-                      <IconBtn onClick={() => removeHabit(h.id)} title="Удалить" danger>
-                        <Icon name="x" className="w-3.5 h-3.5" />
-                      </IconBtn>
-                    </div>
-                    {dayArr.map((d) => {
-                      const on = !!data.habitChecks[`${h.id}-${d}`];
-                      return (
-                        <button
-                          key={d} onClick={() => toggle(h.id, d)}
-                          className={`w-6 h-6 rounded-md border transition-all duration-150 ${
-                            on ? 'bg-accent border-accent' : 'bg-white border-line hover:border-accent/40 hover:bg-accent-bg'
-                          }`}
-                        />
-                      );
-                    })}
-                    <div className="w-12 flex-shrink-0 text-center text-xs font-mono text-neutral-700 tabular-nums pl-2">
-                      {Math.round(stats.pct * 100)}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </Card>
-    </div>
-  );
+              {data.habits.map((h, hi) => {
+                const stats = habitStats(h);
+                return (
+                  <div key={h.id} className="flex items-center gap-1 py-1 group animate-fade-up" style={{ animationDelay: `${hi * 50}ms` }}>
+                    <div className="w-40 flex-shrink-0 flex items-center gap-1 pr-3">
+                      <input type="text" value={h.name} onChange={(e) => updateHabit(h.id, e.target.value)} placeholder="Привычка" className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300 min-w-0" />
+                      <IconBtn onClick={() => removeHabit(h.id)} title="Удалить" danger>
+                        <Icon name="x" className="w-3.5 h-3.5" />
+                      </IconBtn>
+                    </div>
+                    {dayArr.map((d) => {
+                      const on = !!data.habitChecks[`${h.id}-${d}`];
+                      return (
+                        <button
+                          key={d} onClick={() => toggle(h.id, d)}
+                          className={`w-6 h-6 rounded-md border transition-all duration-150 ${
+                            on ? 'bg-accent border-accent' : 'bg-white border-line hover:border-accent/40 hover:bg-accent-bg'
+                          }`}
+                        />
+                      );
+                    })}
+                    <div className="w-12 flex-shrink-0 text-center text-xs font-mono text-neutral-700 tabular-nums pl-2">
+                      {Math.round(stats.pct * 100)}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </Card>
+    </div>
+  );
 }
 
 // ───────────────────────────────────────────────────────────
 // Чек-листы
 // ───────────────────────────────────────────────────────────
 function Checklists({ checklists, updateChecklists }) {
-  const [checks, setChecks] = useState({});
+  const [checks, setChecks] = useState({});
 
-  const toggleItem = (listId, itemIdx) => {
-    const k = `${listId}-${itemIdx}`;
-    setChecks((c) => ({ ...c, [k]: !c[k] }));
-  };
-  const resetList = (listId) => {
-    setChecks((c) => {
-      const next = { ...c };
-      Object.keys(next).forEach((k) => { if (k.startsWith(listId + '-')) delete next[k]; });
-      return next;
-    });
-  };
-  const addList = () => updateChecklists((cs) => [...cs, { id: uid(), name: 'Новый список', items: [] }]);
-  const renameList = (id, name) => updateChecklists((cs) => cs.map((l) => l.id === id ? { ...l, name } : l));
-  const removeList = (id) => updateChecklists((cs) => cs.filter((l) => l.id !== id));
-  const addItem = (listId) => updateChecklists((cs) => cs.map((l) => l.id === listId ? { ...l, items: [...l.items, ''] } : l));
-  const updateItem = (listId, idx, val) => updateChecklists((cs) => cs.map((l) => {
-    if (l.id !== listId) return l;
-    const items = [...l.items]; items[idx] = val; return { ...l, items };
-  }));
-  const removeItem = (listId, idx) => updateChecklists((cs) => cs.map((l) => {
-    if (l.id !== listId) return l;
-    return { ...l, items: l.items.filter((_, i) => i !== idx) };
-  }));
+  const toggleItem = (listId, itemIdx) => {
+    const k = `${listId}-${itemIdx}`;
+    setChecks((c) => ({ ...c, [k]: !c[k] }));
+  };
+  const resetList = (listId) => {
+    setChecks((c) => {
+      const next = { ...c };
+      Object.keys(next).forEach((k) => { if (k.startsWith(listId + '-')) delete next[k]; });
+      return next;
+    });
+  };
+  const addList = () => updateChecklists((cs) => [...cs, { id: uid(), name: 'Новый список', items: [] }]);
+  const renameList = (id, name) => updateChecklists((cs) => cs.map((l) => l.id === id ? { ...l, name } : l));
+  const removeList = (id) => updateChecklists((cs) => cs.filter((l) => l.id !== id));
+  const addItem = (listId) => updateChecklists((cs) => cs.map((l) => l.id === listId ? { ...l, items: [...l.items, ''] } : l));
+  const updateItem = (listId, idx, val) => updateChecklists((cs) => cs.map((l) => {
+    if (l.id !== listId) return l;
+    const items = [...l.items]; items[idx] = val; return { ...l, items };
+  }));
+  const removeItem = (listId, idx) => updateChecklists((cs) => cs.map((l) => {
+    if (l.id !== listId) return l;
+    return { ...l, items: l.items.filter((_, i) => i !== idx) };
+  }));
 
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-end">
-        <button onClick={addList} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity">
-          <Icon name="plus" className="w-4 h-4" /> Список
-        </button>
-      </div>
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-end">
+        <button onClick={addList} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity">
+          <Icon name="plus" className="w-4 h-4" /> Список
+        </button>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {checklists.map((list, li) => {
-          const total = list.items.length;
-          const done = list.items.reduce((s, _, i) => s + (checks[`${list.id}-${i}`] ? 1 : 0), 0);
-          return (
-            <Card key={list.id} delay={li * 80}>
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1 min-w-0">
-                  <input type="text" value={list.name} onChange={(e) => renameList(list.id, e.target.value)} className="bg-transparent text-lg font-display font-light outline-none w-full" />
-                  <div className="text-[10px] tracking-[0.14em] text-neutral-400 uppercase mt-0.5 font-mono">{done} / {total}</div>
-                </div>
-                <div className="flex">
-                  <IconBtn onClick={() => resetList(list.id)} title="Сброс">
-                    <Icon name="repeat" className="w-4 h-4" />
-                  </IconBtn>
-                  <IconBtn onClick={() => removeList(list.id)} title="Удалить" danger>
-                    <Icon name="trash" className="w-4 h-4" />
-                  </IconBtn>
-                </div>
-              </div>
-              <div className="space-y-1">
-                {list.items.map((item, i) => {
-                  const k = `${list.id}-${i}`;
-                  const on = !!checks[k];
-                  return (
-                    <div key={i} className="group flex items-center gap-2 py-1">
-                      <button onClick={() => toggleItem(list.id, i)} className={`w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 transition-all ${on ? 'bg-emerald-600 border-emerald-600' : 'bg-white border-neutral-300 hover:border-neutral-500'}`}>
-                        {on && <Icon name="check" className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
-                      </button>
-                      <input type="text" value={item} onChange={(e) => updateItem(list.id, i, e.target.value)} className={`flex-1 bg-transparent text-sm outline-none transition-all ${on ? 'line-through text-neutral-400' : 'text-neutral-700'}`} />
-                      <button onClick={() => removeItem(list.id, i)} className="opacity-0 group-hover:opacity-100 text-neutral-300 hover:text-rose-500 transition-opacity">
-                        <Icon name="x" className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  );
-                })}
-                <button onClick={() => addItem(list.id)} className="text-xs text-neutral-400 hover:text-neutral-700 mt-2 inline-flex items-center gap-1 transition-colors">
-                  <Icon name="plus" className="w-3 h-3" /> пункт
-                </button>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-    </div>
-  );
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {checklists.map((list, li) => {
+          const total = list.items.length;
+          const done = list.items.reduce((s, _, i) => s + (checks[`${list.id}-${i}`] ? 1 : 0), 0);
+          return (
+            <Card key={list.id} delay={li * 80}>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1 min-w-0">
+                  <input type="text" value={list.name} onChange={(e) => renameList(list.id, e.target.value)} className="bg-transparent text-lg font-display font-light outline-none w-full" />
+                  <div className="text-[10px] tracking-[0.14em] text-neutral-400 uppercase mt-0.5 font-mono">{done} / {total}</div>
+                </div>
+                <div className="flex">
+                  <IconBtn onClick={() => resetList(list.id)} title="Сброс">
+                    <Icon name="repeat" className="w-4 h-4" />
+                  </IconBtn>
+                  <IconBtn onClick={() => removeList(list.id)} title="Удалить" danger>
+                    <Icon name="trash" className="w-4 h-4" />
+                  </IconBtn>
+                </div>
+              </div>
+              <div className="space-y-1">
+                {list.items.map((item, i) => {
+                  const k = `${list.id}-${i}`;
+                  const on = !!checks[k];
+                  return (
+                    <div key={i} className="group flex items-center gap-2 py-1">
+                      <button onClick={() => toggleItem(list.id, i)} className={`w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 transition-all ${on ? 'bg-emerald-600 border-emerald-600' : 'bg-white border-neutral-300 hover:border-neutral-500'}`}>
+                        {on && <Icon name="check" className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+                      </button>
+                      <input type="text" value={item} onChange={(e) => updateItem(list.id, i, e.target.value)} className={`flex-1 bg-transparent text-sm outline-none transition-all ${on ? 'line-through text-neutral-400' : 'text-neutral-700'}`} />
+                      <button onClick={() => removeItem(list.id, i)} className="opacity-0 group-hover:opacity-100 text-neutral-300 hover:text-rose-500 transition-opacity">
+                        <Icon name="x" className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  );
+                })}
+                <button onClick={() => addItem(list.id)} className="text-xs text-neutral-400 hover:text-neutral-700 mt-2 inline-flex items-center gap-1 transition-colors">
+                  <Icon name="plus" className="w-3 h-3" /> пункт
+                </button>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 // ───────────────────────────────────────────────────────────
 // Расходы
 // ───────────────────────────────────────────────────────────
 function Expenses({ data, update, settings, ym }) {
-  const [form, setForm] = useState({ day: todayYM() === ym ? todayDay() : 1, category: '', amount: '', description: '', method: 'Карта' });
+  const [form, setForm] = useState({ day: todayYM() === ym ? todayDay() : 1, category: '', amount: '', description: '', method: 'Карта' });
 
-  // Reset day when month changes — pick today if current month, else 1st
-  useEffect(() => {
-    setForm((f) => ({ ...f, day: todayYM() === ym ? todayDay() : 1 }));
-  }, [ym]);
+  // Reset day when month changes — pick today if current month, else 1st
+  useEffect(() => {
+    setForm((f) => ({ ...f, day: todayYM() === ym ? todayDay() : 1 }));
+  }, [ym]);
 
-  const total = data.expenses.reduce((s, e) => s + (+e.amount || 0), 0);
-  const count = data.expenses.length;
-  const avg = count ? total / count : 0;
+  const total = data.expenses.reduce((s, e) => s + (+e.amount || 0), 0);
+  const count = data.expenses.length;
+  const avg = count ? total / count : 0;
 
-  const addExpense = () => {
-    if (!form.amount || !form.category) return;
-    const e = { id: uid(), day: +form.day, category: form.category, amount: +form.amount, description: form.description, method: form.method };
-    update((d) => ({ ...d, expenses: [e, ...d.expenses] }));
-    setForm({ ...form, amount: '', description: '' });
-  };
-  const removeExpense = (id) => update((d) => ({ ...d, expenses: d.expenses.filter((e) => e.id !== id) }));
+  const addExpense = () => {
+    if (!form.amount || !form.category) return;
+    const e = { id: uid(), day: +form.day, category: form.category, amount: +form.amount, description: form.description, method: form.method };
+    update((d) => ({ ...d, expenses: [e, ...d.expenses] }));
+    setForm({ ...form, amount: '', description: '' });
+  };
+  const removeExpense = (id) => update((d) => ({ ...d, expenses: d.expenses.filter((e) => e.id !== id) }));
 
-  const days = daysInMonth(ym);
-  const formDateStr = `${ym}-${String(form.day).padStart(2, '0')}`;
-  const monthMin = `${ym}-01`;
-  const monthMax = `${ym}-${String(days).padStart(2, '0')}`;
+  const days = daysInMonth(ym);
+  const formDateStr = `${ym}-${String(form.day).padStart(2, '0')}`;
+  const monthMin = `${ym}-01`;
+  const monthMax = `${ym}-${String(days).padStart(2, '0')}`;
 
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-3 gap-3 sm:gap-4">
-        <KpiCard label="Итого" value={fmtMoney(total)} accent="text-rose-700" delay={0} />
-        <KpiCard label="Транзакций" value={count} delay={60} />
-        <KpiCard label="Средний чек" value={fmtMoney(avg)} delay={120} />
-      </div>
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+        <KpiCard label="Итого" value={fmtMoney(total)} accent="text-rose-700" delay={0} />
+        <KpiCard label="Транзакций" value={count} delay={60} />
+        <KpiCard label="Средний чек" value={fmtMoney(avg)} delay={120} />
+      </div>
 
-      <Card delay={180}>
-        <SectionTitle delay={180}>Новая трата</SectionTitle>
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
-          <input
-            type="date"
-            value={formDateStr}
-            min={monthMin}
-            max={monthMax}
-            onChange={(e) => {
-              const d = +e.target.value.slice(8);
-              if (d >= 1 && d <= days) setForm({ ...form, day: d });
-            }}
-            className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors col-span-2 md:col-span-1"
-          />
-          <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors col-span-2">
-            <option value="">Категория</option>
-            {settings.categories.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
-          </select>
-          <input type="number" inputMode="numeric" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} placeholder="Сумма ₽" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors" />
-          <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Описание" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors col-span-2 md:col-span-1" />
-          <button onClick={addExpense} disabled={!form.amount || !form.category} className="px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed col-span-2 md:col-span-1">
-            Добавить
-          </button>
-        </div>
-      </Card>
+      <Card delay={180}>
+        <SectionTitle delay={180}>Новая трата</SectionTitle>
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
+          <input
+            type="date"
+            value={formDateStr}
+            min={monthMin}
+            max={monthMax}
+            onChange={(e) => {
+              const d = +e.target.value.slice(8);
+              if (d >= 1 && d <= days) setForm({ ...form, day: d });
+            }}
+            className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors col-span-2 md:col-span-1"
+          />
+          <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors col-span-2">
+            <option value="">Категория</option>
+            {settings.categories.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
+          </select>
+          <input type="number" inputMode="numeric" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} placeholder="Сумма ₽" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors" />
+          <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Описание" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors col-span-2 md:col-span-1" />
+          <button onClick={addExpense} disabled={!form.amount || !form.category} className="px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed col-span-2 md:col-span-1">
+            Добавить
+          </button>
+        </div>
+      </Card>
 
-      <Card delay={240}>
-        <SectionTitle delay={240}>История</SectionTitle>
-        {data.expenses.length === 0 ? (
-          <div className="text-center py-12 text-neutral-400 text-sm">Пока нет трат</div>
-        ) : (
-          <div className="space-y-1">
-            {data.expenses.map((e, i) => {
-              const dow = dowOfDay(ym, e.day);
-              return (
-                <div key={e.id} className="group flex items-center gap-2 sm:gap-3 py-2.5 border-b border-line-soft hover:bg-neutral-50 -mx-2 px-2 rounded-lg transition-colors animate-fade-up" style={{ animationDelay: `${Math.min(i * 20, 400)}ms` }}>
-                  <div className="text-xs text-neutral-400 font-mono w-10 flex-shrink-0">
-                    {String(e.day).padStart(2, '0')}<span className={dow >= 5 ? 'text-amber-600' : ''}>·{DOW_SHORT[dow]}</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm text-neutral-900 truncate">{e.description || '—'}</div>
-                    <div className="text-xs text-neutral-400">{e.category} · {e.method}</div>
-                  </div>
-                  <div className="font-mono text-sm font-semibold text-neutral-900 tabular-nums">{fmtMoney(e.amount)}</div>
-                  <IconBtn onClick={() => removeExpense(e.id)} title="Удалить" danger>
-                    <Icon name="x" className="w-4 h-4" />
-                  </IconBtn>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </Card>
-    </div>
-  );
+      <Card delay={240}>
+        <SectionTitle delay={240}>История</SectionTitle>
+        {data.expenses.length === 0 ? (
+          <div className="text-center py-12 text-neutral-400 text-sm">Пока нет трат</div>
+        ) : (
+          <div className="space-y-1">
+            {data.expenses.map((e, i) => {
+              const dow = dowOfDay(ym, e.day);
+              return (
+                <div key={e.id} className="group flex items-center gap-2 sm:gap-3 py-2.5 border-b border-line-soft hover:bg-neutral-50 -mx-2 px-2 rounded-lg transition-colors animate-fade-up" style={{ animationDelay: `${Math.min(i * 20, 400)}ms` }}>
+                  <div className="text-xs text-neutral-400 font-mono w-10 flex-shrink-0">
+                    {String(e.day).padStart(2, '0')}<span className={dow >= 5 ? 'text-amber-600' : ''}>·{DOW_SHORT[dow]}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm text-neutral-900 truncate">{e.description || '—'}</div>
+                    <div className="text-xs text-neutral-400">{e.category} · {e.method}</div>
+                  </div>
+                  <div className="font-mono text-sm font-semibold text-neutral-900 tabular-nums">{fmtMoney(e.amount)}</div>
+                  <IconBtn onClick={() => removeExpense(e.id)} title="Удалить" danger>
+                    <Icon name="x" className="w-4 h-4" />
+                  </IconBtn>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
 }
 
 // ───────────────────────────────────────────────────────────
 // Доходы
 // ───────────────────────────────────────────────────────────
 function Income({ data, update, settings, ym }) {
-  const [form, setForm] = useState({ day: todayYM() === ym ? todayDay() : 1, source: '', amount: '', description: '' });
+  const [form, setForm] = useState({ day: todayYM() === ym ? todayDay() : 1, source: '', amount: '', description: '' });
 
-  useEffect(() => {
-    setForm((f) => ({ ...f, day: todayYM() === ym ? todayDay() : 1 }));
-  }, [ym]);
+  useEffect(() => {
+    setForm((f) => ({ ...f, day: todayYM() === ym ? todayDay() : 1 }));
+  }, [ym]);
 
-  const total = data.income.reduce((s, e) => s + (+e.amount || 0), 0);
-  const count = data.income.length;
+  const total = data.income.reduce((s, e) => s + (+e.amount || 0), 0);
+  const count = data.income.length;
 
-  const addIncome = () => {
-    if (!form.amount || !form.source) return;
-    const e = { id: uid(), day: +form.day, source: form.source, amount: +form.amount, description: form.description };
-    update((d) => ({ ...d, income: [e, ...d.income] }));
-    setForm({ ...form, amount: '', description: '' });
-  };
-  const removeIncome = (id) => update((d) => ({ ...d, income: d.income.filter((e) => e.id !== id) }));
+  const addIncome = () => {
+    if (!form.amount || !form.source) return;
+    const e = { id: uid(), day: +form.day, source: form.source, amount: +form.amount, description: form.description };
+    update((d) => ({ ...d, income: [e, ...d.income] }));
+    setForm({ ...form, amount: '', description: '' });
+  };
+  const removeIncome = (id) => update((d) => ({ ...d, income: d.income.filter((e) => e.id !== id) }));
 
-  const days = daysInMonth(ym);
-  const formDateStr = `${ym}-${String(form.day).padStart(2, '0')}`;
-  const monthMin = `${ym}-01`;
-  const monthMax = `${ym}-${String(days).padStart(2, '0')}`;
+  const days = daysInMonth(ym);
+  const formDateStr = `${ym}-${String(form.day).padStart(2, '0')}`;
+  const monthMin = `${ym}-01`;
+  const monthMax = `${ym}-${String(days).padStart(2, '0')}`;
 
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
-        <KpiCard label="Итого" value={fmtMoney(total)} accent="text-emerald-700" delay={0} />
-        <KpiCard label="Поступлений" value={count} delay={60} />
-      </div>
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+        <KpiCard label="Итого" value={fmtMoney(total)} accent="text-emerald-700" delay={0} />
+        <KpiCard label="Поступлений" value={count} delay={60} />
+      </div>
 
-      <Card delay={120}>
-        <SectionTitle delay={120}>Новое поступление</SectionTitle>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-          <input
-            type="date"
-            value={formDateStr}
-            min={monthMin}
-            max={monthMax}
-            onChange={(e) => {
-              const d = +e.target.value.slice(8);
-              if (d >= 1 && d <= days) setForm({ ...form, day: d });
-            }}
-            className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors"
-          />
-          <select value={form.source} onChange={(e) => setForm({ ...form, source: e.target.value })} className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors">
-            <option value="">Источник</option>
-            {settings.incomeSources.map((s) => <option key={s.id} value={s.name}>{s.name}</option>)}
-          </select>
-          <input type="number" inputMode="numeric" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} placeholder="Сумма ₽" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors" />
-          <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Описание" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors" />
-          <button onClick={addIncome} disabled={!form.amount || !form.source} className="px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed col-span-2 md:col-span-1">
-            Добавить
-          </button>
-        </div>
-      </Card>
+      <Card delay={120}>
+        <SectionTitle delay={120}>Новое поступление</SectionTitle>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          <input
+            type="date"
+            value={formDateStr}
+            min={monthMin}
+            max={monthMax}
+            onChange={(e) => {
+              const d = +e.target.value.slice(8);
+              if (d >= 1 && d <= days) setForm({ ...form, day: d });
+            }}
+            className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors"
+          />
+          <select value={form.source} onChange={(e) => setForm({ ...form, source: e.target.value })} className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors">
+            <option value="">Источник</option>
+            {settings.incomeSources.map((s) => <option key={s.id} value={s.name}>{s.name}</option>)}
+          </select>
+          <input type="number" inputMode="numeric" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} placeholder="Сумма ₽" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors" />
+          <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Описание" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors" />
+          <button onClick={addIncome} disabled={!form.amount || !form.source} className="px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed col-span-2 md:col-span-1">
+            Добавить
+          </button>
+        </div>
+      </Card>
 
-      <Card delay={180}>
-        <SectionTitle delay={180}>История</SectionTitle>
-        {data.income.length === 0 ? (
-          <div className="text-center py-12 text-neutral-400 text-sm">Пока нет поступлений</div>
-        ) : (
-          <div className="space-y-1">
-            {data.income.map((e, i) => (
-              <div key={e.id} className="group flex items-center gap-3 py-2.5 border-b border-line-soft hover:bg-neutral-50 -mx-2 px-2 rounded-lg transition-colors animate-fade-up" style={{ animationDelay: `${Math.min(i * 20, 400)}ms` }}>
-                <div className="text-xs text-neutral-400 font-mono w-10 flex-shrink-0">{String(e.day).padStart(2, '0')}</div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm text-neutral-900 truncate">{e.description || '—'}</div>
-                  <div className="text-xs text-neutral-400">{e.source}</div>
-                </div>
-                <div className="font-mono text-sm font-semibold text-emerald-700 tabular-nums">+{fmtMoney(e.amount)}</div>
-                <IconBtn onClick={() => removeIncome(e.id)} title="Удалить" danger>
-                  <Icon name="x" className="w-4 h-4" />
-                </IconBtn>
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
-    </div>
-  );
+      <Card delay={180}>
+        <SectionTitle delay={180}>История</SectionTitle>
+        {data.income.length === 0 ? (
+          <div className="text-center py-12 text-neutral-400 text-sm">Пока нет поступлений</div>
+        ) : (
+          <div className="space-y-1">
+            {data.income.map((e, i) => (
+              <div key={e.id} className="group flex items-center gap-3 py-2.5 border-b border-line-soft hover:bg-neutral-50 -mx-2 px-2 rounded-lg transition-colors animate-fade-up" style={{ animationDelay: `${Math.min(i * 20, 400)}ms` }}>
+                <div className="text-xs text-neutral-400 font-mono w-10 flex-shrink-0">{String(e.day).padStart(2, '0')}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm text-neutral-900 truncate">{e.description || '—'}</div>
+                  <div className="text-xs text-neutral-400">{e.source}</div>
+                </div>
+                <div className="font-mono text-sm font-semibold text-emerald-700 tabular-nums">+{fmtMoney(e.amount)}</div>
+                <IconBtn onClick={() => removeIncome(e.id)} title="Удалить" danger>
+                  <Icon name="x" className="w-4 h-4" />
+                </IconBtn>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
 }
 
 // ───────────────────────────────────────────────────────────
 // Аналитика
 // ───────────────────────────────────────────────────────────
 function Analytics({ data, history, settings, ym, accent }) {
-  const pieColors = useMemo(() => buildPieColors(accent), [accent]);
-  const days = daysInMonth(ym);
-  const byDay = useMemo(() => Array.from({ length: days }, (_, i) => {
-    const day = i + 1;
-    const sum = data.expenses.filter((e) => e.day === day).reduce((s, e) => s + (+e.amount || 0), 0);
-    return { day, sum };
-  }), [data.expenses, days]);
+  const pieColors = useMemo(() => buildPieColors(accent), [accent]);
+  const days = daysInMonth(ym);
+  const byDay = useMemo(() => Array.from({ length: days }, (_, i) => {
+    const day = i + 1;
+    const sum = data.expenses.filter((e) => e.day === day).reduce((s, e) => s + (+e.amount || 0), 0);
+    return { day, sum };
+  }), [data.expenses, days]);
 
-  const byDow = useMemo(() => {
-    const arr = DOW_LONG.map((n) => ({ name: n, sum: 0 }));
-    data.expenses.forEach((e) => {
-      const idx = dowOfDay(ym, e.day);
-      arr[idx].sum += +e.amount || 0;
-    });
-    return arr;
-  }, [data.expenses, ym]);
+  const byDow = useMemo(() => {
+    const arr = DOW_LONG.map((n) => ({ name: n, sum: 0 }));
+    data.expenses.forEach((e) => {
+      const idx = dowOfDay(ym, e.day);
+      arr[idx].sum += +e.amount || 0;
+    });
+    return arr;
+  }, [data.expenses, ym]);
 
-  const byMethod = useMemo(() => PAYMENT_METHODS.map((m) => ({
-    name: m,
-    sum: data.expenses.filter((e) => e.method === m).reduce((s, e) => s + (+e.amount || 0), 0),
-  })).filter((m) => m.sum > 0), [data.expenses]);
+  const byMethod = useMemo(() => PAYMENT_METHODS.map((m) => ({
+    name: m,
+    sum: data.expenses.filter((e) => e.method === m).reduce((s, e) => s + (+e.amount || 0), 0),
+  })).filter((m) => m.sum > 0), [data.expenses]);
 
-  const byCategory = useMemo(() => settings.categories.map((c) => ({
-    name: c.name,
-    spent: data.expenses.filter((e) => e.category === c.name).reduce((s, e) => s + (+e.amount || 0), 0),
-    budget: c.budget,
-  })).filter((c) => c.spent > 0 || c.budget > 0).sort((a, b) => b.spent - a.spent), [data.expenses, settings.categories]);
+  const byCategory = useMemo(() => settings.categories.map((c) => ({
+    name: c.name,
+    spent: data.expenses.filter((e) => e.category === c.name).reduce((s, e) => s + (+e.amount || 0), 0),
+    budget: c.budget,
+  })).filter((c) => c.spent > 0 || c.budget > 0).sort((a, b) => b.spent - a.spent), [data.expenses, settings.categories]);
 
-  const byIncomeSource = useMemo(() => settings.incomeSources.map((s) => ({
-    name: s.name,
-    sum: data.income.filter((i) => i.source === s.name).reduce((acc, i) => acc + (+i.amount || 0), 0),
-  })).filter((s) => s.sum > 0), [data.income, settings.incomeSources]);
+  const byIncomeSource = useMemo(() => settings.incomeSources.map((s) => ({
+    name: s.name,
+    sum: data.income.filter((i) => i.source === s.name).reduce((acc, i) => acc + (+i.amount || 0), 0),
+  })).filter((s) => s.sum > 0), [data.income, settings.incomeSources]);
 
-  const trend = useMemo(() => history.map((h) => ({
-    name: ymLabel(h.ym).split(' ')[0].slice(0, 3),
-    income: h.income,
-    expense: h.expense,
-  })), [history]);
+  const trend = useMemo(() => history.map((h) => ({
+    name: ymLabel(h.ym).split(' ')[0].slice(0, 3),
+    income: h.income,
+    expense: h.expense,
+  })), [history]);
 
-  return (
-    <div className="space-y-4">
-      {trend.length > 1 && (
-        <Card>
-          <SectionTitle>Тренд по месяцам</SectionTitle>
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={trend} barCategoryGap="20%">
-              <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" vertical={false} />
-              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
-              <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="income" name="Доход" fill={accent} radius={[4, 4, 0, 0]} animationDuration={800} />
-              <Bar dataKey="expense" name="Расход" fill="#1A1A1A" radius={[4, 4, 0, 0]} animationDuration={800} />
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
-      )}
+  return (
+    <div className="space-y-4">
+      {trend.length > 1 && (
+        <Card>
+          <SectionTitle>Тренд по месяцам</SectionTitle>
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={trend} barCategoryGap="20%">
+              <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" vertical={false} />
+              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
+              <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
+              <Bar dataKey="income" name="Доход" fill={accent} radius={[4, 4, 0, 0]} animationDuration={800} />
+              <Bar dataKey="expense" name="Расход" fill="#1A1A1A" radius={[4, 4, 0, 0]} animationDuration={800} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+      )}
 
-      <Card delay={60}>
-        <SectionTitle delay={60}>Динамика по дням</SectionTitle>
-        <ResponsiveContainer width="100%" height={220}>
-          <LineChart data={byDay}>
-            <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" vertical={false} />
-            <XAxis dataKey="day" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
-            <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-            <Line type="monotone" dataKey="sum" stroke={accent} strokeWidth={2.5} dot={{ fill: accent, r: 3 }} activeDot={{ r: 5, fill: accent }} animationDuration={1000} />
-          </LineChart>
-        </ResponsiveContainer>
-      </Card>
+      <Card delay={60}>
+        <SectionTitle delay={60}>Динамика по дням</SectionTitle>
+        <ResponsiveContainer width="100%" height={220}>
+          <LineChart data={byDay}>
+            <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" vertical={false} />
+            <XAxis dataKey="day" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
+            <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
+            <Line type="monotone" dataKey="sum" stroke={accent} strokeWidth={2.5} dot={{ fill: accent, r: 3 }} activeDot={{ r: 5, fill: accent }} animationDuration={1000} />
+          </LineChart>
+        </ResponsiveContainer>
+      </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card delay={120}>
-          <SectionTitle delay={120}>По категориям</SectionTitle>
-          <ResponsiveContainer width="100%" height={Math.max(220, byCategory.length * 28)}>
-            <BarChart data={byCategory} layout="vertical" barCategoryGap="20%">
-              <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
-              <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} width={110} />
-              <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-              <Bar dataKey="spent" name="Факт" fill={accent} radius={[0, 4, 4, 0]} animationDuration={800} />
-              <Bar dataKey="budget" name="Бюджет" fill="#D4D4D4" radius={[0, 4, 4, 0]} animationDuration={800} />
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Card delay={120}>
+          <SectionTitle delay={120}>По категориям</SectionTitle>
+          <ResponsiveContainer width="100%" height={Math.max(220, byCategory.length * 28)}>
+            <BarChart data={byCategory} layout="vertical" barCategoryGap="20%">
+              <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} width={110} />
+              <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
+              <Bar dataKey="spent" name="Факт" fill={accent} radius={[0, 4, 4, 0]} animationDuration={800} />
+              <Bar dataKey="budget" name="Бюджет" fill="#D4D4D4" radius={[0, 4, 4, 0]} animationDuration={800} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
 
-        <Card delay={180}>
-          <SectionTitle delay={180}>По дням недели</SectionTitle>
-          <ResponsiveContainer width="100%" height={240}>
-            <PieChart>
-              <Pie data={byDow.filter((d) => d.sum > 0)} dataKey="sum" nameKey="name" cx="50%" cy="50%" outerRadius={90} innerRadius={50} paddingAngle={1} animationDuration={800}>
-                {byDow.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
-              </Pie>
-              <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
-            </PieChart>
-          </ResponsiveContainer>
-        </Card>
+        <Card delay={180}>
+          <SectionTitle delay={180}>По дням недели</SectionTitle>
+          <ResponsiveContainer width="100%" height={240}>
+            <PieChart>
+              <Pie data={byDow.filter((d) => d.sum > 0)} dataKey="sum" nameKey="name" cx="50%" cy="50%" outerRadius={90} innerRadius={50} paddingAngle={1} animationDuration={800}>
+                {byDow.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
+              </Pie>
+              <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
+              <Legend wrapperStyle={{ fontSize: 11 }} />
+            </PieChart>
+          </ResponsiveContainer>
+        </Card>
 
-        <Card delay={240}>
-          <SectionTitle delay={240}>Способы оплаты</SectionTitle>
-          {byMethod.length === 0 ? (
-            <div className="text-sm text-neutral-400 py-12 text-center">Нет данных</div>
-          ) : (
-            <ResponsiveContainer width="100%" height={240}>
-              <PieChart>
-                <Pie data={byMethod} dataKey="sum" nameKey="name" cx="50%" cy="50%" outerRadius={90} paddingAngle={1} animationDuration={800}>
-                  {byMethod.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
-                </Pie>
-                <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-              </PieChart>
-            </ResponsiveContainer>
-          )}
-        </Card>
+        <Card delay={240}>
+          <SectionTitle delay={240}>Способы оплаты</SectionTitle>
+          {byMethod.length === 0 ? (
+            <div className="text-sm text-neutral-400 py-12 text-center">Нет данных</div>
+          ) : (
+            <ResponsiveContainer width="100%" height={240}>
+              <PieChart>
+                <Pie data={byMethod} dataKey="sum" nameKey="name" cx="50%" cy="50%" outerRadius={90} paddingAngle={1} animationDuration={800}>
+                  {byMethod.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
+                </Pie>
+                <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
+                <Legend wrapperStyle={{ fontSize: 11 }} />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
+        </Card>
 
-        <Card delay={300}>
-          <SectionTitle delay={300}>Источники дохода</SectionTitle>
-          {byIncomeSource.length === 0 ? (
-            <div className="text-sm text-neutral-400 py-12 text-center">Нет данных</div>
-          ) : (
-            <ResponsiveContainer width="100%" height={240}>
-              <PieChart>
-                <Pie data={byIncomeSource} dataKey="sum" nameKey="name" cx="50%" cy="50%" outerRadius={90} paddingAngle={1} animationDuration={800}>
-                  {byIncomeSource.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
-                </Pie>
-                <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-              </PieChart>
-            </ResponsiveContainer>
-          )}
-        </Card>
-      </div>
-    </div>
-  );
+        <Card delay={300}>
+          <SectionTitle delay={300}>Источники дохода</SectionTitle>
+          {byIncomeSource.length === 0 ? (
+            <div className="text-sm text-neutral-400 py-12 text-center">Нет данных</div>
+          ) : (
+            <ResponsiveContainer width="100%" height={240}>
+              <PieChart>
+                <Pie data={byIncomeSource} dataKey="sum" nameKey="name" cx="50%" cy="50%" outerRadius={90} paddingAngle={1} animationDuration={800}>
+                  {byIncomeSource.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
+                </Pie>
+                <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
+                <Legend wrapperStyle={{ fontSize: 11 }} />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
+        </Card>
+      </div>
+    </div>
+  );
 }
 
 // ───────────────────────────────────────────────────────────
 // Настройки
 // ───────────────────────────────────────────────────────────
 function Settings({ settings, updateSettings, theme, setTheme }) {
-  const addCategory = () => updateSettings((s) => ({ ...s, categories: [...s.categories, { id: uid(), name: '', budget: 0 }] }));
-  const updateCategory = (id, patch) => updateSettings((s) => ({ ...s, categories: s.categories.map((c) => c.id === id ? { ...c, ...patch } : c) }));
-  const removeCategory = (id) => updateSettings((s) => ({ ...s, categories: s.categories.filter((c) => c.id !== id) }));
+  const addCategory = () => updateSettings((s) => ({ ...s, categories: [...s.categories, { id: uid(), name: '', budget: 0 }] }));
+  const updateCategory = (id, patch) => updateSettings((s) => ({ ...s, categories: s.categories.map((c) => c.id === id ? { ...c, ...patch } : c) }));
+  const removeCategory = (id) => updateSettings((s) => ({ ...s, categories: s.categories.filter((c) => c.id !== id) }));
 
-  const addSource = () => updateSettings((s) => ({ ...s, incomeSources: [...s.incomeSources, { id: uid(), name: '', plan: 0 }] }));
-  const updateSource = (id, patch) => updateSettings((s) => ({ ...s, incomeSources: s.incomeSources.map((c) => c.id === id ? { ...c, ...patch } : c) }));
-  const removeSource = (id) => updateSettings((s) => ({ ...s, incomeSources: s.incomeSources.filter((c) => c.id !== id) }));
+  const addSource = () => updateSettings((s) => ({ ...s, incomeSources: [...s.incomeSources, { id: uid(), name: '', plan: 0 }] }));
+  const updateSource = (id, patch) => updateSettings((s) => ({ ...s, incomeSources: s.incomeSources.map((c) => c.id === id ? { ...c, ...patch } : c) }));
+  const removeSource = (id) => updateSettings((s) => ({ ...s, incomeSources: s.incomeSources.filter((c) => c.id !== id) }));
 
-  const totalBudget = settings.categories.reduce((s, c) => s + (+c.budget || 0), 0);
-  const totalPlan = settings.incomeSources.reduce((s, c) => s + (+c.plan || 0), 0);
+  const totalBudget = settings.categories.reduce((s, c) => s + (+c.budget || 0), 0);
+  const totalPlan = settings.incomeSources.reduce((s, c) => s + (+c.plan || 0), 0);
 
-  return (
-    <div className="space-y-6">
-      <Card>
-        <SectionTitle>Цвет акцента</SectionTitle>
-        <div className="flex flex-wrap gap-2 sm:gap-3">
-          {Object.entries(THEMES).map(([key, t]) => {
-            const active = theme === key;
-            return (
-              <button
-                key={key}
-                onClick={() => setTheme(key)}
-                className={`group flex items-center gap-2.5 px-3 py-2 rounded-lg border transition-all duration-200 ${
-                  active ? 'border-accent bg-accent-bg' : 'border-line bg-white hover:border-neutral-300'
-                }`}
-              >
-                <span
-                  className={`w-5 h-5 rounded-full border transition-transform ${active ? 'scale-110 border-white shadow-[0_0_0_2px_rgb(var(--accent-rgb))]' : 'border-line'}`}
-                  style={{ background: t.hex }}
-                />
-                <span className={`text-sm font-medium ${active ? 'text-neutral-900' : 'text-neutral-600'}`}>{t.name}</span>
-              </button>
-            );
-          })}
-        </div>
-        <p className="text-xs text-neutral-500 mt-4">Применится сразу. Сохранится автоматически.</p>
-      </Card>
+  return (
+    <div className="space-y-6">
+      <Card>
+        <SectionTitle>Цвет акцента</SectionTitle>
+        <div className="flex flex-wrap gap-2 sm:gap-3">
+          {Object.entries(THEMES).map(([key, t]) => {
+            const active = theme === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setTheme(key)}
+                className={`group flex items-center gap-2.5 px-3 py-2 rounded-lg border transition-all duration-200 ${
+                  active ? 'border-accent bg-accent-bg' : 'border-line bg-white hover:border-neutral-300'
+                }`}
+              >
+                <span
+                  className={`w-5 h-5 rounded-full border transition-transform ${active ? 'scale-110 border-white shadow-[0_0_0_2px_rgb(var(--accent-rgb))]' : 'border-line'}`}
+                  style={{ background: t.hex }}
+                />
+                <span className={`text-sm font-medium ${active ? 'text-neutral-900' : 'text-neutral-600'}`}>{t.name}</span>
+              </button>
+            );
+          })}
+        </div>
+        <p className="text-xs text-neutral-500 mt-4">Применится сразу. Сохранится автоматически.</p>
+      </Card>
 
-      <Card>
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <SectionTitle>Категории расходов</SectionTitle>
-            <div className="font-mono text-sm text-neutral-500 mt-1">Бюджет: {fmtMoney(totalBudget)}</div>
-          </div>
-          <button onClick={addCategory} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity">
-            <Icon name="plus" className="w-3.5 h-3.5" /> Категория
-          </button>
-        </div>
-        <div className="space-y-2">
-          {settings.categories.map((c, i) => (
-            <div key={c.id} className="flex items-center gap-3 py-2 border-b border-line-soft animate-fade-up group" style={{ animationDelay: `${i * 30}ms` }}>
-              <input type="text" value={c.name} onChange={(e) => updateCategory(c.id, { name: e.target.value })} placeholder="Название" className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300" />
-              <input type="number" inputMode="numeric" value={c.budget} onChange={(e) => updateCategory(c.id, { budget: +e.target.value })} placeholder="Бюджет" className="w-32 bg-transparent text-sm font-mono text-right outline-none tabular-nums" />
-              <span className="text-xs text-neutral-400">₽</span>
-              <IconBtn onClick={() => removeCategory(c.id)} title="Удалить" danger>
-                <Icon name="x" className="w-4 h-4" />
-              </IconBtn>
-            </div>
-          ))}
-        </div>
-      </Card>
+      <Card>
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <SectionTitle>Категории расходов</SectionTitle>
+            <div className="font-mono text-sm text-neutral-500 mt-1">Бюджет: {fmtMoney(totalBudget)}</div>
+          </div>
+          <button onClick={addCategory} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity">
+            <Icon name="plus" className="w-3.5 h-3.5" /> Категория
+          </button>
+        </div>
+        <div className="space-y-2">
+          {settings.categories.map((c, i) => (
+            <div key={c.id} className="flex items-center gap-3 py-2 border-b border-line-soft animate-fade-up group" style={{ animationDelay: `${i * 30}ms` }}>
+              <input type="text" value={c.name} onChange={(e) => updateCategory(c.id, { name: e.target.value })} placeholder="Название" className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300" />
+              <input type="number" inputMode="numeric" value={c.budget} onChange={(e) => updateCategory(c.id, { budget: +e.target.value })} placeholder="Бюджет" className="w-32 bg-transparent text-sm font-mono text-right outline-none tabular-nums" />
+              <span className="text-xs text-neutral-400">₽</span>
+              <IconBtn onClick={() => removeCategory(c.id)} title="Удалить" danger>
+                <Icon name="x" className="w-4 h-4" />
+              </IconBtn>
+            </div>
+          ))}
+        </div>
+      </Card>
 
-      <Card>
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <SectionTitle>Источники дохода</SectionTitle>
-            <div className="font-mono text-sm text-neutral-500 mt-1">План: {fmtMoney(totalPlan)}</div>
-          </div>
-          <button onClick={addSource} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity">
-            <Icon name="plus" className="w-3.5 h-3.5" /> Источник
-          </button>
-        </div>
-        <div className="space-y-2">
-          {settings.incomeSources.map((s, i) => (
-            <div key={s.id} className="flex items-center gap-3 py-2 border-b border-line-soft animate-fade-up group" style={{ animationDelay: `${i * 30}ms` }}>
-              <input type="text" value={s.name} onChange={(e) => updateSource(s.id, { name: e.target.value })} placeholder="Название" className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300" />
-              <input type="number" inputMode="numeric" value={s.plan} onChange={(e) => updateSource(s.id, { plan: +e.target.value })} placeholder="План" className="w-32 bg-transparent text-sm font-mono text-right outline-none tabular-nums" />
-              <span className="text-xs text-neutral-400">₽</span>
-              <IconBtn onClick={() => removeSource(s.id)} title="Удалить" danger>
-                <Icon name="x" className="w-4 h-4" />
-              </IconBtn>
-            </div>
-          ))}
-        </div>
-      </Card>
+      <Card>
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <SectionTitle>Источники дохода</SectionTitle>
+            <div className="font-mono text-sm text-neutral-500 mt-1">План: {fmtMoney(totalPlan)}</div>
+          </div>
+          <button onClick={addSource} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity">
+            <Icon name="plus" className="w-3.5 h-3.5" /> Источник
+          </button>
+        </div>
+        <div className="space-y-2">
+          {settings.incomeSources.map((s, i) => (
+            <div key={s.id} className="flex items-center gap-3 py-2 border-b border-line-soft animate-fade-up group" style={{ animationDelay: `${i * 30}ms` }}>
+              <input type="text" value={s.name} onChange={(e) => updateSource(s.id, { name: e.target.value })} placeholder="Название" className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300" />
+              <input type="number" inputMode="numeric" value={s.plan} onChange={(e) => updateSource(s.id, { plan: +e.target.value })} placeholder="План" className="w-32 bg-transparent text-sm font-mono text-right outline-none tabular-nums" />
+              <span className="text-xs text-neutral-400">₽</span>
+              <IconBtn onClick={() => removeSource(s.id)} title="Удалить" danger>
+                <Icon name="x" className="w-4 h-4" />
+              </IconBtn>
+            </div>
+          ))}
+        </div>
+      </Card>
 
-      <Card>
-        <SectionTitle>Управление данными</SectionTitle>
-        <div className="space-y-2 text-sm text-neutral-600">
-          <p>Все данные хранятся в браузере (localStorage). Чтобы перенести на другое устройство — экспортируй и импортируй ниже.</p>
-          <div className="flex gap-2 mt-4">
-            <button
-              onClick={() => {
-                const all = {};
-                for (let i = 0; i < localStorage.length; i++) {
-                  const k = localStorage.key(i);
-                  if (k.startsWith('planner:')) all[k] = localStorage.getItem(k);
-                }
-                const blob = new Blob([JSON.stringify(all, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `planner-backup-${new Date().toISOString().slice(0,10)}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-              }}
-              className="px-3 py-2 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity"
-            >
-              Экспорт
-            </button>
-            <label className="px-3 py-2 rounded-lg bg-white border border-neutral-300 text-neutral-700 text-xs font-medium hover:bg-neutral-50 transition-colors cursor-pointer">
-              Импорт
-              <input
-                type="file" accept="application/json" className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files[0];
-                  if (!f) return;
-                  const r = new FileReader();
-                  r.onload = (ev) => {
-                    try {
-                      const data = JSON.parse(ev.target.result);
-                      Object.entries(data).forEach(([k, v]) => localStorage.setItem(k, v));
-                      window.location.reload();
-                    } catch (err) { alert('Ошибка импорта: ' + err.message); }
-                  };
-                  r.readAsText(f);
-                }}
-              />
-            </label>
-          </div>
-        </div>
-      </Card>
-    </div>
-  );
+      <Card>
+        <SectionTitle>Управление данными</SectionTitle>
+        <div className="space-y-2 text-sm text-neutral-600">
+          <p>Все данные хранятся в браузере (localStorage). Чтобы перенести на другое устройство — экспортируй и импортируй ниже.</p>
+          <div className="flex gap-2 mt-4">
+            <button
+              onClick={() => {
+                const all = {};
+                for (let i = 0; i < localStorage.length; i++) {
+                  const k = localStorage.key(i);
+                  if (k.startsWith('planner:')) all[k] = localStorage.getItem(k);
+                }
+                const blob = new Blob([JSON.stringify(all, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `planner-backup-${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="px-3 py-2 rounded-lg bg-accent text-white text-xs font-medium hover:opacity-90 transition-opacity"
+            >
+              Экспорт
+            </button>
+            <label className="px-3 py-2 rounded-lg bg-white border border-neutral-300 text-neutral-700 text-xs font-medium hover:bg-neutral-50 transition-colors cursor-pointer">
+              Импорт
+              <input
+                type="file" accept="application/json" className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files[0];
+                  if (!f) return;
+                  const r = new FileReader();
+                  r.onload = (ev) => {
+                    try {
+                      const data = JSON.parse(ev.target.result);
+                      Object.entries(data).forEach(([k, v]) => localStorage.setItem(k, v));
+                      window.location.reload();
+                    } catch (err) { alert('Ошибка импорта: ' + err.message); }
+                  };
+                  r.readAsText(f);
+                }}
+              />
+            </label>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
 }
 
 // ───────────────────────────────────────────────────────────
 // Main App
 // ───────────────────────────────────────────────────────────
 const SECTIONS = [
-  { id: 'dashboard', name: 'Дашборд', icon: 'layout' },
-  { id: 'plan-day', name: 'План дня', icon: 'calendar' },
-  { id: 'plan-week', name: 'Неделя', icon: 'file' },
-  { id: 'goals', name: 'Цели', icon: 'target' },
-  { id: 'habits', name: 'Привычки', icon: 'repeat' },
-  { id: 'checklists', name: 'Чек-листы', icon: 'list-checks' },
-  { id: 'expenses', name: 'Расходы', icon: 'wallet' },
-  { id: 'income', name: 'Доходы', icon: 'trending-up' },
-  { id: 'analytics', name: 'Аналитика', icon: 'bar-chart' },
-  { id: 'settings', name: 'Настройки', icon: 'settings' },
+  { id: 'dashboard', name: 'Дашборд', icon: 'layout' },
+  { id: 'plan-day', name: 'План дня', icon: 'calendar' },
+  { id: 'plan-week', name: 'Неделя', icon: 'file' },
+  { id: 'goals', name: 'Цели', icon: 'target' },
+  { id: 'habits', name: 'Привычки', icon: 'repeat' },
+  { id: 'checklists', name: 'Чек-листы', icon: 'list-checks' },
+  { id: 'expenses', name: 'Расходы', icon: 'wallet' },
+  { id: 'income', name: 'Доходы', icon: 'trending-up' },
+  { id: 'analytics', name: 'Аналитика', icon: 'bar-chart' },
+  { id: 'settings', name: 'Настройки', icon: 'settings' },
 ];
 
 function App() {
-  const [ym, setYm] = useState(currentYM());
-  const [section, setSection] = useState('dashboard');
-  const [data, setData] = useState(null);
-  const [prevData, setPrevData] = useState(null);
-  const [history, setHistory] = useState([]);
-  const [settings, setSettings] = useState(null);
-  const [checklists, setChecklists] = useState(null);
-  const [theme, setTheme] = useState(DEFAULT_THEME);
-  const [loading, setLoading] = useState(true);
-  const saveTimer = useRef(null);
-  const navRef = useRef(null);
+  const [ym, setYm] = useState(currentYM());
+  const [section, setSection] = useState('dashboard');
+  const [data, setData] = useState(null);
+  const [prevData, setPrevData] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [settings, setSettings] = useState(null);
+  const [checklists, setChecklists] = useState(null);
+  const [theme, setTheme] = useState(DEFAULT_THEME);
+  const [loading, setLoading] = useState(true);
+  const saveTimer = useRef(null);
+  const navRef = useRef(null);
 
-  const accentHex = (THEMES[theme] || THEMES[DEFAULT_THEME]).hex;
+  const accentHex = (THEMES[theme] || THEMES[DEFAULT_THEME]).hex;
 
-  useEffect(() => {
-    (async () => {
-      const s = await storage.get('settings');
-      setSettings(s || { categories: DEFAULT_CATEGORIES, incomeSources: DEFAULT_INCOME_SOURCES });
-      const cl = await storage.get('checklists');
-      setChecklists(cl || DEFAULT_CHECKLISTS);
-      const t = await storage.get('theme');
-      if (t && THEMES[t]) setTheme(t);
-    })();
-  }, []);
+  useEffect(() => {
+    (async () => {
+      const s = await storage.get('settings');
+      setSettings(s || { categories: DEFAULT_CATEGORIES, incomeSources: DEFAULT_INCOME_SOURCES });
+      const cl = await storage.get('checklists');
+      setChecklists(cl || DEFAULT_CHECKLISTS);
+      const t = await storage.get('theme');
+      if (t && THEMES[t]) setTheme(t);
+    })();
+  }, []);
 
-  // Apply theme CSS variables whenever it changes
-  useEffect(() => {
-    applyTheme(theme);
-    storage.set('theme', theme);
-  }, [theme]);
+  // Apply theme CSS variables whenever it changes
+  useEffect(() => {
+    applyTheme(theme);
+    storage.set('theme', theme);
+  }, [theme]);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setLoading(true);
-      const [cur, prev] = await Promise.all([
-        storage.get(`month:${ym}`),
-        storage.get(`month:${shiftYM(ym, -1)}`),
-      ]);
-      if (cancelled) return;
-      setData(cur || emptyMonth());
-      setPrevData(prev);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      const [cur, prev] = await Promise.all([
+        storage.get(`month:${ym}`),
+        storage.get(`month:${shiftYM(ym, -1)}`),
+      ]);
+      if (cancelled) return;
+      setData(cur || emptyMonth());
+      setPrevData(prev);
 
-      const months = [];
-      for (let i = 5; i >= 0; i--) {
-        const k = shiftYM(ym, -i);
-        const m = await storage.get(`month:${k}`);
-        if (m) {
-          months.push({
-            ym: k,
-            income: (m.income || []).reduce((s, e) => s + (+e.amount || 0), 0),
-            expense: (m.expenses || []).reduce((s, e) => s + (+e.amount || 0), 0),
-          });
-        } else {
-          months.push({ ym: k, income: 0, expense: 0 });
-        }
-      }
-      if (cancelled) return;
-      setHistory(months);
-      setLoading(false);
-    })();
-    return () => { cancelled = true; };
-  }, [ym]);
+      const months = [];
+      for (let i = 5; i >= 0; i--) {
+        const k = shiftYM(ym, -i);
+        const m = await storage.get(`month:${k}`);
+        if (m) {
+          months.push({
+            ym: k,
+            income: (m.income || []).reduce((s, e) => s + (+e.amount || 0), 0),
+            expense: (m.expenses || []).reduce((s, e) => s + (+e.amount || 0), 0),
+          });
+        } else {
+          months.push({ ym: k, income: 0, expense: 0 });
+        }
+      }
+      if (cancelled) return;
+      setHistory(months);
+      setLoading(false);
+    })();
+    return () => { cancelled = true; };
+  }, [ym]);
 
-  useEffect(() => {
-    if (!data) return;
-    clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(() => { storage.set(`month:${ym}`, data); }, 400);
-    return () => clearTimeout(saveTimer.current);
-  }, [data, ym]);
+  useEffect(() => {
+    if (!data) return;
+    clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => { storage.set(`month:${ym}`, data); }, 400);
+    return () => clearTimeout(saveTimer.current);
+  }, [data, ym]);
 
-  useEffect(() => { if (settings) storage.set('settings', settings); }, [settings]);
-  useEffect(() => { if (checklists) storage.set('checklists', checklists); }, [checklists]);
+  useEffect(() => { if (settings) storage.set('settings', settings); }, [settings]);
+  useEffect(() => { if (checklists) storage.set('checklists', checklists); }, [checklists]);
 
-  const update = useCallback((fn) => setData((d) => fn(d)), []);
-  const updateSettings = useCallback((fn) => setSettings((s) => fn(s)), []);
-  const updateChecklists = useCallback((fn) => setChecklists((c) => fn(c)), []);
+  const update = useCallback((fn) => setData((d) => fn(d)), []);
+  const updateSettings = useCallback((fn) => setSettings((s) => fn(s)), []);
+  const updateChecklists = useCallback((fn) => setChecklists((c) => fn(c)), []);
 
-  useEffect(() => {
-    if (!navRef.current) return;
-    const btn = navRef.current.querySelector(`[data-section="${section}"]`);
-    if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-  }, [section]);
+  useEffect(() => {
+    if (!navRef.current) return;
+    const btn = navRef.current.querySelector(`[data-section="${section}"]`);
+    if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, [section]);
 
-  if (loading || !data || !settings || !checklists) {
-    return (
-      <div className="min-h-screen bg-paper flex items-center justify-center">
-        <Icon name="loader" className="w-6 h-6 text-accent animate-spin-slow" />
-      </div>
-    );
-  }
+  if (loading || !data || !settings || !checklists) {
+    return (
+      <div className="min-h-screen bg-paper flex items-center justify-center">
+        <Icon name="loader" className="w-6 h-6 text-accent animate-spin-slow" />
+      </div>
+    );
+  }
 
-  return (
-    <div className="min-h-screen bg-paper text-neutral-900 antialiased">
-      <header className="sticky top-0 z-30 bg-paper/90 backdrop-blur-md border-b border-line">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button onClick={() => setYm(shiftYM(ym, -1))} className="p-1.5 rounded-md text-neutral-500 hover:text-accent hover:bg-accent-bg transition-colors" title="Прошлый месяц">
-              <Icon name="chevron-left" className="w-4 h-4" />
-            </button>
-            <div key={ym} className="flex items-baseline gap-2 whitespace-nowrap animate-fade-in">
-              <span className="font-display-italic text-2xl sm:text-3xl font-light tracking-tight text-neutral-900 leading-none">
-                {MONTHS_RU[parseYM(ym)[1] - 1]}
-              </span>
-              <span className="font-display text-lg sm:text-xl font-light text-neutral-400 leading-none tabular-nums">
-                {parseYM(ym)[0]}
-              </span>
-            </div>
-            <button onClick={() => setYm(shiftYM(ym, 1))} className="p-1.5 rounded-md text-neutral-500 hover:text-accent hover:bg-accent-bg transition-colors" title="Следующий месяц">
-              <Icon name="chevron-right" className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="flex items-center gap-1 sm:gap-2">
-            {ym === currentYM() && (
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-[0.14em] uppercase text-accent px-2 py-1 rounded-md bg-accent-bg">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                Сейчас
-              </span>
-            )}
-            {ym !== currentYM() && (
-              <button onClick={() => setYm(currentYM())} className="text-[10px] font-semibold tracking-[0.14em] uppercase text-neutral-500 hover:text-accent px-2 py-1 rounded-md hover:bg-accent-bg transition-colors">
-                К сегодня
-              </button>
-            )}
-          </div>
-        </div>
+  return (
+    <div className="min-h-screen bg-paper text-neutral-900 antialiased">
+      <header className="sticky top-0 z-30 bg-paper/90 backdrop-blur-md border-b border-line">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button onClick={() => setYm(shiftYM(ym, -1))} className="p-1.5 rounded-md text-neutral-500 hover:text-accent hover:bg-accent-bg transition-colors" title="Прошлый месяц">
+              <Icon name="chevron-left" className="w-4 h-4" />
+            </button>
+            <div key={ym} className="flex items-baseline gap-2 whitespace-nowrap animate-fade-in">
+              <span className="font-display-italic text-2xl sm:text-3xl font-light tracking-tight text-neutral-900 leading-none">
+                {MONTHS_RU[parseYM(ym)[1] - 1]}
+              </span>
+              <span className="font-display text-lg sm:text-xl font-light text-neutral-400 leading-none tabular-nums">
+                {parseYM(ym)[0]}
+              </span>
+            </div>
+            <button onClick={() => setYm(shiftYM(ym, 1))} className="p-1.5 rounded-md text-neutral-500 hover:text-accent hover:bg-accent-bg transition-colors" title="Следующий месяц">
+              <Icon name="chevron-right" className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="flex items-center gap-1 sm:gap-2">
+            {ym === currentYM() && (
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-[0.14em] uppercase text-accent px-2 py-1 rounded-md bg-accent-bg">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                Сейчас
+              </span>
+            )}
+            {ym !== currentYM() && (
+              <button onClick={() => setYm(currentYM())} className="text-[10px] font-semibold tracking-[0.14em] uppercase text-neutral-500 hover:text-accent px-2 py-1 rounded-md hover:bg-accent-bg transition-colors">
+                К сегодня
+              </button>
+            )}
+          </div>
+        </div>
 
-        <div className="border-t border-line-soft">
-          <div className="max-w-6xl mx-auto px-2 sm:px-6">
-            <div className="overflow-x-auto hide-scroll" ref={navRef}>
-              <div className="flex gap-0.5 py-1">
-                {SECTIONS.map((s) => {
-                  const active = section === s.id;
-                  return (
-                    <button key={s.id} data-section={s.id} onClick={() => setSection(s.id)}
-                      className={`relative flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-md transition-all duration-200 ${active ? 'text-accent' : 'text-neutral-500 hover:text-neutral-900'}`}>
-                      <Icon name={s.icon} className={`w-3.5 h-3.5 transition-colors ${active ? 'text-accent' : 'text-neutral-400'}`} />
-                      <span>{s.name}</span>
-                      {active && <span className="absolute inset-x-2 -bottom-1 h-0.5 bg-accent rounded-full animate-fade-in" />}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+        <div className="border-t border-line-soft">
+          <div className="max-w-6xl mx-auto px-2 sm:px-6">
+            <div className="overflow-x-auto hide-scroll" ref={navRef}>
+              <div className="flex gap-0.5 py-1">
+                {SECTIONS.map((s) => {
+                  const active = section === s.id;
+                  return (
+                    <button key={s.id} data-section={s.id} onClick={() => setSection(s.id)}
+                      className={`relative flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-md transition-all duration-200 ${active ? 'text-accent' : 'text-neutral-500 hover:text-neutral-900'}`}>
+                      <Icon name={s.icon} className={`w-3.5 h-3.5 transition-colors ${active ? 'text-accent' : 'text-neutral-400'}`} />
+                      <span>{s.name}</span>
+                      {active && <span className="absolute inset-x-2 -bottom-1 h-0.5 bg-accent rounded-full animate-fade-in" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24">
-        <div key={section + ym} className="animate-fade-up">
-          {section === 'dashboard' && <Dashboard data={data} prevData={prevData} settings={settings} ym={ym} accent={accentHex} />}
-          {section === 'plan-day' && <PlanDay data={data} update={update} ym={ym} />}
-          {section === 'plan-week' && <PlanWeek data={data} update={update} />}
-          {section === 'goals' && <Goals data={data} update={update} />}
-          {section === 'habits' && <Habits data={data} update={update} ym={ym} />}
-          {section === 'checklists' && <Checklists checklists={checklists} updateChecklists={updateChecklists} />}
-          {section === 'expenses' && <Expenses data={data} update={update} settings={settings} ym={ym} />}
-          {section === 'income' && <Income data={data} update={update} settings={settings} ym={ym} />}
-          {section === 'analytics' && <Analytics data={data} history={history} settings={settings} ym={ym} accent={accentHex} />}
-          {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} />}
-        </div>
-      </main>
-    </div>
-  );
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24">
+        <div key={section + ym} className="animate-fade-up">
+          {section === 'dashboard' && <Dashboard data={data} prevData={prevData} settings={settings} ym={ym} accent={accentHex} />}
+          {section === 'plan-day' && <PlanDay data={data} update={update} ym={ym} />}
+          {section === 'plan-week' && <PlanWeek data={data} update={update} />}
+          {section === 'goals' && <Goals data={data} update={update} />}
+          {section === 'habits' && <Habits data={data} update={update} ym={ym} />}
+          {section === 'checklists' && <Checklists checklists={checklists} updateChecklists={updateChecklists} />}
+          {section === 'expenses' && <Expenses data={data} update={update} settings={settings} ym={ym} />}
+          {section === 'income' && <Income data={data} update={update} settings={settings} ym={ym} />}
+          {section === 'analytics' && <Analytics data={data} history={history} settings={settings} ym={ym} accent={accentHex} />}
+          {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} />}
+        </div>
+      </main>
+    </div>
+  );
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
