@@ -40,6 +40,7 @@
 <script crossorigin src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
 <script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
 <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -243,6 +244,139 @@ const focusLast = (selector) => {
       if (typeof el.select === 'function') el.select();
     }
   }, 0);
+};
+
+// ───────────────────────────────────────────────────────────
+// Google Calendar integration
+// ───────────────────────────────────────────────────────────
+const GCAL_SCOPE = 'https://www.googleapis.com/auth/calendar';
+
+const loadGcalToken = () => {
+  try {
+    const raw = localStorage.getItem('planner:gcalToken');
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed.token || !parsed.expiry || parsed.expiry < Date.now()) return null;
+    return parsed;
+  } catch { return null; }
+};
+const saveGcalToken = (tokenObj) => localStorage.setItem('planner:gcalToken', JSON.stringify(tokenObj));
+const clearGcalToken = () => localStorage.removeItem('planner:gcalToken');
+
+function useGoogleAuth(clientId) {
+  const [token, setToken] = useState(loadGcalToken);
+  const [ready, setReady] = useState(false);
+  const tokenClientRef = useRef(null);
+
+  useEffect(() => {
+    if (!clientId) { setReady(false); return; }
+    let timer;
+    const init = () => {
+      if (!window.google?.accounts?.oauth2) {
+        timer = setTimeout(init, 200);
+        return;
+      }
+      tokenClientRef.current = window.google.accounts.oauth2.initTokenClient({
+        client_id: clientId,
+        scope: GCAL_SCOPE,
+        callback: (response) => {
+          if (response.error) {
+            console.error('OAuth error:', response);
+            alert('Ошибка входа: ' + (response.error_description || response.error));
+            return;
+          }
+          const t = {
+            token: response.access_token,
+            expiry: Date.now() + (response.expires_in - 60) * 1000,
+          };
+          saveGcalToken(t);
+          setToken(t);
+        },
+      });
+      setReady(true);
+    };
+    init();
+    return () => { if (timer) clearTimeout(timer); };
+  }, [clientId]);
+
+  const signIn = () => {
+    if (!tokenClientRef.current) {
+      alert('Google API ещё грузится, попробуй через секунду');
+      return;
+    }
+    tokenClientRef.current.requestAccessToken({ prompt: token ? '' : 'consent' });
+  };
+  const signOut = () => {
+    if (token?.token && window.google?.accounts?.oauth2) {
+      window.google.accounts.oauth2.revoke(token.token, () => {});
+    }
+    clearGcalToken();
+    setToken(null);
+  };
+  return { token, signIn, signOut, ready };
+}
+
+async function gcalFetchEvents(token, ym, day) {
+  const [y, m] = ym.split('-').map(Number);
+  const start = new Date(y, m - 1, day, 0, 0, 0);
+  const end = new Date(y, m - 1, day, 23, 59, 59);
+  const url = new URL('https://www.googleapis.com/calendar/v3/calendars/primary/events');
+  url.searchParams.set('timeMin', start.toISOString());
+  url.searchParams.set('timeMax', end.toISOString());
+  url.searchParams.set('singleEvents', 'true');
+  url.searchParams.set('orderBy', 'startTime');
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+  if (!res.ok) throw new Error('Calendar fetch failed: ' + res.status);
+  const data = await res.json();
+  return data.items || [];
+}
+
+async function gcalCreateEvent(token, task, ym, day) {
+  const [y, m] = ym.split('-').map(Number);
+  let start, end;
+  if (task.time && /^\d{1,2}:\d{2}$/.test(task.time)) {
+    const [h, mn] = task.time.split(':').map(Number);
+    start = new Date(y, m - 1, day, h, mn, 0);
+    end = new Date(start.getTime() + 60 * 60 * 1000);
+  } else {
+    // All-day
+    start = { date: `${ym}-${String(day).padStart(2, '0')}` };
+    const nextDay = new Date(y, m - 1, day + 1);
+    end = { date: `${nextDay.getFullYear()}-${String(nextDay.getMonth() + 1).padStart(2, '0')}-${String(nextDay.getDate()).padStart(2, '0')}` };
+  }
+  const event = {
+    summary: task.title || 'Задача',
+    description: task.note || undefined,
+    start: start instanceof Date ? { dateTime: start.toISOString() } : start,
+    end: end instanceof Date ? { dateTime: end.toISOString() } : end,
+  };
+  const res = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(event),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error('Calendar create failed: ' + res.status + ' ' + err);
+  }
+  return await res.json();
+}
+
+// Convert Google Calendar event to local task
+const eventToTask = (ev) => {
+  let time = '';
+  if (ev.start?.dateTime) {
+    const d = new Date(ev.start.dateTime);
+    time = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  }
+  return {
+    id: uid(),
+    title: ev.summary || '(без названия)',
+    status: null,
+    time,
+    note: ev.description || '',
+    googleEventId: ev.id,
+  };
 };
 
 // ───────────────────────────────────────────────────────────
@@ -538,10 +672,11 @@ function Dashboard({ data, prevData, settings, ym, accent }) {
 // ───────────────────────────────────────────────────────────
 // План дня
 // ───────────────────────────────────────────────────────────
-function PlanDay({ data, update, ym }) {
+function PlanDay({ data, update, ym, gcal }) {
   const days = daysInMonth(ym);
   const isCurrentMonth = ym === todayYM();
   const [activeDay, setActiveDay] = useState(isCurrentMonth ? todayDay() : 1);
+  const [syncing, setSyncing] = useState(false);
   const scrollerRef = useRef(null);
 
   useEffect(() => {
@@ -562,6 +697,44 @@ function PlanDay({ data, update, ym }) {
   };
   const removeTask = (id) => {
     update((d) => ({ ...d, dailyTasks: { ...d.dailyTasks, [activeDay]: (d.dailyTasks[activeDay] || []).filter((t) => t.id !== id) } }));
+  };
+
+  const importFromGoogle = async () => {
+    if (!gcal?.token) return;
+    setSyncing(true);
+    try {
+      const events = await gcalFetchEvents(gcal.token.token, ym, activeDay);
+      const existing = data.dailyTasks[activeDay] || [];
+      const existingIds = new Set(existing.map((t) => t.googleEventId).filter(Boolean));
+      const newTasks = events.filter((ev) => !existingIds.has(ev.id)).map(eventToTask);
+      if (newTasks.length === 0) {
+        alert('Все события уже импортированы');
+      } else {
+        update((d) => ({ ...d, dailyTasks: { ...d.dailyTasks, [activeDay]: [...existing, ...newTasks] } }));
+      }
+    } catch (e) {
+      alert('Ошибка импорта: ' + e.message);
+    }
+    setSyncing(false);
+  };
+
+  const pushToGoogle = async (taskId) => {
+    if (!gcal?.token) return;
+    const task = (data.dailyTasks[activeDay] || []).find((t) => t.id === taskId);
+    if (!task || !task.title) { alert('Сначала заполни название'); return; }
+    if (task.googleEventId) { alert('Задача уже в календаре'); return; }
+    try {
+      const ev = await gcalCreateEvent(gcal.token.token, task, ym, activeDay);
+      update((d) => ({
+        ...d,
+        dailyTasks: {
+          ...d.dailyTasks,
+          [activeDay]: (d.dailyTasks[activeDay] || []).map((t) => t.id === taskId ? { ...t, googleEventId: ev.id } : t),
+        },
+      }));
+    } catch (e) {
+      alert('Ошибка отправки: ' + e.message);
+    }
   };
 
   return (
@@ -605,9 +778,22 @@ function PlanDay({ data, update, ym }) {
               <span className="text-neutral-400">{MONTHS_RU[parseYM(ym)[1] - 1].toLowerCase()}</span>
             </div>
           </div>
-          <button onClick={addTask} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity">
-            <Icon name="plus" className="w-4 h-4" /> Задача
-          </button>
+          <div className="flex items-center gap-2">
+            {gcal?.token && (
+              <button
+                onClick={importFromGoogle}
+                disabled={syncing}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-line text-neutral-700 text-sm font-medium hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
+                title="Импортировать события из Google Calendar"
+              >
+                {syncing ? <Icon name="loader" className="w-4 h-4 animate-spin-slow" /> : <Icon name="calendar" className="w-4 h-4" />}
+                Из Google
+              </button>
+            )}
+            <button onClick={addTask} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity">
+              <Icon name="plus" className="w-4 h-4" /> Задача
+            </button>
+          </div>
         </div>
 
         {tasks.length === 0 ? (
@@ -627,6 +813,15 @@ function PlanDay({ data, update, ym }) {
                 />
                 <input type="text" value={t.time} onChange={(e) => updateTask(t.id, { time: e.target.value })} placeholder="время" className="w-16 bg-transparent text-xs text-neutral-500 outline-none text-center" />
                 <Pill value={t.status} options={STATUSES} onChange={(v) => updateTask(t.id, { status: v })} />
+                {gcal?.token && (
+                  t.googleEventId ? (
+                    <span className="text-[10px] font-bold tracking-wider text-emerald-700 px-1.5 py-1 rounded bg-emerald-50" title="В Google Calendar">G</span>
+                  ) : (
+                    <IconBtn onClick={() => pushToGoogle(t.id)} title="Отправить в Google Calendar">
+                      <Icon name="calendar" className="w-4 h-4" />
+                    </IconBtn>
+                  )
+                )}
                 <IconBtn onClick={() => removeTask(t.id)} title="Удалить" danger>
                   <Icon name="x" className="w-4 h-4" />
                 </IconBtn>
@@ -1479,7 +1674,7 @@ function Promises({ promises, updatePromises }) {
 // ───────────────────────────────────────────────────────────
 // Настройки
 // ───────────────────────────────────────────────────────────
-function Settings({ settings, updateSettings, theme, setTheme }) {
+function Settings({ settings, updateSettings, theme, setTheme, gcal }) {
   const addCategory = () => {
     updateSettings((s) => ({ ...s, categories: [...s.categories, { id: uid(), name: '', budget: 0 }] }));
     focusLast('[data-input="category-name"]');
@@ -1522,6 +1717,51 @@ function Settings({ settings, updateSettings, theme, setTheme }) {
           })}
         </div>
         <p className="text-xs text-neutral-500 mt-4">Применится сразу. Сохранится автоматически.</p>
+      </Card>
+
+      <Card>
+        <SectionTitle>Google Calendar</SectionTitle>
+        <p className="text-xs text-neutral-500 mb-4">
+          Импорт событий в План дня и обратная отправка задач в календарь. Нужен Client ID из Google Cloud Console.
+        </p>
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={settings.googleClientId || ''}
+              onChange={(e) => updateSettings((s) => ({ ...s, googleClientId: e.target.value.trim() }))}
+              placeholder="Client ID (1234-abc.apps.googleusercontent.com)"
+              className="flex-1 px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors font-mono"
+            />
+          </div>
+          <div className="flex items-center gap-3 flex-wrap">
+            {gcal.token ? (
+              <>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 px-2.5 py-1.5 rounded-md bg-emerald-50">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                  Подключено
+                </span>
+                <button
+                  onClick={gcal.signOut}
+                  className="text-xs text-neutral-500 hover:text-rose-600 px-2.5 py-1.5 rounded-md hover:bg-neutral-100 transition-colors"
+                >
+                  Отключить
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={gcal.signIn}
+                disabled={!settings.googleClientId || !gcal.ready}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                Подключить Google
+              </button>
+            )}
+          </div>
+          <p className="text-[11px] text-neutral-400 leading-relaxed">
+            Если кнопка неактивна — проверь что Client ID вставлен правильно. При входе Google запросит разрешение на чтение и запись в твой календарь. Сессия живёт ~1 час, после нужно подключиться снова.
+          </p>
+        </div>
       </Card>
 
       <Card>
@@ -1669,6 +1909,7 @@ function App() {
   const navRef = useRef(null);
 
   const accentHex = (THEMES[theme] || THEMES[DEFAULT_THEME]).hex;
+  const gcal = useGoogleAuth(settings?.googleClientId || '');
 
   useEffect(() => {
     (async () => {
@@ -1809,7 +2050,7 @@ function App() {
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24">
         <div key={section + ym} className="animate-fade-up">
           {section === 'dashboard' && <Dashboard data={data} prevData={prevData} settings={settings} ym={ym} accent={accentHex} />}
-          {section === 'plan-day' && <PlanDay data={data} update={update} ym={ym} />}
+          {section === 'plan-day' && <PlanDay data={data} update={update} ym={ym} gcal={gcal} />}
           {section === 'plan-week' && <PlanWeek data={data} update={update} />}
           {section === 'goals' && <Goals data={data} update={update} />}
           {section === 'habits' && <Habits data={data} update={update} ym={ym} />}
@@ -1818,7 +2059,7 @@ function App() {
           {section === 'expenses' && <Expenses data={data} update={update} settings={settings} ym={ym} />}
           {section === 'income' && <Income data={data} update={update} settings={settings} ym={ym} />}
           {section === 'analytics' && <Analytics data={data} history={history} settings={settings} ym={ym} accent={accentHex} />}
-          {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} />}
+          {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} gcal={gcal} />}
         </div>
       </main>
     </div>
