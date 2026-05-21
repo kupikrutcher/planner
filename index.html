@@ -1565,6 +1565,8 @@ function StatementImport({ ym, data, update, categories }) {
 // ───────────────────────────────────────────────────────────
 function Expenses({ data, update, settings, ym }) {
   const [form, setForm] = useState({ day: todayYM() === ym ? todayDay() : 1, category: '', amount: '', description: '', method: 'Карта' });
+  const [filterCat, setFilterCat] = useState('');
+  const [sortBy, setSortBy] = useState('day-desc');
 
   // Reset day when month changes — pick today if current month, else 1st
   useEffect(() => {
@@ -1574,6 +1576,29 @@ function Expenses({ data, update, settings, ym }) {
   const total = data.expenses.reduce((s, e) => s + (+e.amount || 0), 0);
   const count = data.expenses.length;
   const avg = count ? total / count : 0;
+
+  // Список категорий, реально встречающихся в тратах (плюс из настроек) — для дропдауна фильтра
+  const filterCatOptions = useMemo(() => {
+    const seen = new Set();
+    settings.categories.forEach((c) => seen.add(c.name));
+    data.expenses.forEach((e) => { if (e.category) seen.add(e.category); });
+    return Array.from(seen).sort((a, b) => a.localeCompare(b, 'ru'));
+  }, [data.expenses, settings.categories]);
+
+  const displayedExpenses = useMemo(() => {
+    let list = filterCat ? data.expenses.filter((e) => e.category === filterCat) : data.expenses;
+    const sorted = [...list];
+    const cmp = {
+      'day-desc': (a, b) => (b.day - a.day) || 0,
+      'day-asc':  (a, b) => (a.day - b.day) || 0,
+      'amount-desc': (a, b) => (+b.amount || 0) - (+a.amount || 0),
+      'amount-asc':  (a, b) => (+a.amount || 0) - (+b.amount || 0),
+    }[sortBy] || (() => 0);
+    sorted.sort(cmp);
+    return sorted;
+  }, [data.expenses, filterCat, sortBy]);
+
+  const filteredTotal = displayedExpenses.reduce((s, e) => s + (+e.amount || 0), 0);
 
   const addExpense = () => {
     if (!form.amount || !form.category) return;
@@ -1629,12 +1654,54 @@ function Expenses({ data, update, settings, ym }) {
       <StatementImport ym={ym} data={data} update={update} categories={settings.categories} />
 
       <Card delay={240}>
-        <SectionTitle delay={240}>История</SectionTitle>
+        <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
+          <SectionTitle delay={240}>История</SectionTitle>
+          {data.expenses.length > 0 && (
+            <div className="flex items-center gap-2 flex-wrap">
+              <select
+                value={filterCat}
+                onChange={(e) => setFilterCat(e.target.value)}
+                className="px-2.5 py-1.5 rounded-lg border border-line text-xs bg-white outline-none focus:border-accent transition-colors max-w-[180px]"
+                title="Фильтр по категории"
+              >
+                <option value="">Все категории</option>
+                {filterCatOptions.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-2.5 py-1.5 rounded-lg border border-line text-xs bg-white outline-none focus:border-accent transition-colors"
+                title="Сортировка"
+              >
+                <option value="day-desc">Дата ↓ (поздние сверху)</option>
+                <option value="day-asc">Дата ↑ (ранние сверху)</option>
+                <option value="amount-desc">Сумма ↓</option>
+                <option value="amount-asc">Сумма ↑</option>
+              </select>
+              {(filterCat || sortBy !== 'day-desc') && (
+                <button
+                  onClick={() => { setFilterCat(''); setSortBy('day-desc'); }}
+                  className="text-xs text-neutral-500 hover:text-accent px-2 py-1.5"
+                  title="Сбросить фильтры"
+                >
+                  Сброс
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+        {filterCat && (
+          <div className="text-xs text-neutral-500 mb-2">
+            {displayedExpenses.length} из {data.expenses.length} · <span className="font-mono">{fmtMoney(filteredTotal)}</span>
+          </div>
+        )}
         {data.expenses.length === 0 ? (
           <div className="text-center py-12 text-neutral-400 text-sm">Пока нет трат</div>
+        ) : displayedExpenses.length === 0 ? (
+          <div className="text-center py-12 text-neutral-400 text-sm">В категории «{filterCat}» ничего нет</div>
         ) : (
           <div className="space-y-1">
-            {data.expenses.map((e, i) => {
+            {displayedExpenses.map((e, i) => {
               const dow = dowOfDay(ym, e.day);
               return (
                 <div key={e.id} className="group flex items-center gap-2 sm:gap-3 py-2.5 border-b border-line-soft hover:bg-neutral-50 -mx-2 px-2 rounded-lg transition-colors animate-fade-up" style={{ animationDelay: `${Math.min(i * 20, 400)}ms` }}>
