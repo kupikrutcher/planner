@@ -39,6 +39,7 @@
 <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
 <script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+<script crossorigin src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
@@ -377,6 +378,64 @@ const eventToTask = (ev) => {
     note: ev.description || '',
     googleEventId: ev.id,
   };
+};
+
+// ───────────────────────────────────────────────────────────
+// CSV statement import helpers
+// ───────────────────────────────────────────────────────────
+// Read file, auto-detect UTF-8 vs Windows-1251 encoding
+const readFileSmart = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const buf = reader.result;
+    let text = new TextDecoder('utf-8').decode(buf);
+    // Mojibake detection — broken cyrillic looks like Ð Ñ Â or has replacement chars
+    const sample = text.slice(0, 1000);
+    if (text.includes('\uFFFD') || (/[\u00C0-\u00FF]{3,}/.test(sample) && !/[а-яА-Я]/.test(sample))) {
+      try { text = new TextDecoder('windows-1251').decode(buf); } catch (e) {}
+    }
+    resolve(text);
+  };
+  reader.onerror = reject;
+  reader.readAsArrayBuffer(file);
+});
+
+const parseAmount = (s) => {
+  if (s == null || s === '') return NaN;
+  let c = String(s).replace(/\s/g, '').replace(/\u00A0/g, '').replace(/[^\d,.\-]/g, '');
+  // if both comma and dot, assume dot is thousand sep
+  if (c.includes(',') && c.includes('.')) c = c.replace(/\./g, '').replace(',', '.');
+  else c = c.replace(',', '.');
+  const n = parseFloat(c);
+  return isNaN(n) ? NaN : n;
+};
+
+const parseStatementDate = (s) => {
+  if (!s) return null;
+  s = String(s).trim();
+  let m = s.match(/(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})/);
+  if (m) {
+    let [, d, mo, y] = m;
+    if (y.length === 2) y = '20' + y;
+    return `${y}-${mo.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+  m = s.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+  return null;
+};
+
+// Guess which columns are date / amount / description / category from header names
+const guessColumnMapping = (rows) => {
+  const map = { date: -1, amount: -1, desc: -1, cat: -1 };
+  if (!rows || !rows.length) return map;
+  const header = rows[0].map((h) => String(h || '').toLowerCase());
+  header.forEach((h, i) => {
+    if (map.date < 0 && /дата|date|операц/.test(h)) map.date = i;
+    if (map.amount < 0 && /сумма|amount|оборот|расход/.test(h)) map.amount = i;
+    if (map.desc < 0 && /описан|назначен|получател|контрагент|description|операц/.test(h)) map.desc = i;
+    if (map.cat < 0 && /категор|category/.test(h)) map.cat = i;
+  });
+  return map;
 };
 
 // ───────────────────────────────────────────────────────────
@@ -1164,6 +1223,235 @@ function Checklists({ checklists, updateChecklists }) {
 }
 
 // ───────────────────────────────────────────────────────────
+// Импорт банковской выписки (CSV)
+// ───────────────────────────────────────────────────────────
+function StatementImport({ ym, data, update, categories }) {
+  const [open, setOpen] = useState(false);
+  const [rows, setRows] = useState(null);
+  const [fileName, setFileName] = useState('');
+  const [hasHeader, setHasHeader] = useState(true);
+  const [map, setMap] = useState({ date: -1, amount: -1, desc: -1, cat: -1 });
+  const [onlyNeg, setOnlyNeg] = useState(true);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState('');
+
+  const reset = () => {
+    setRows(null); setFileName(''); setMap({ date: -1, amount: -1, desc: -1, cat: -1 });
+    setResult(null); setError('');
+  };
+
+  const handleFile = async (file) => {
+    if (!file) return;
+    setError(''); setResult(null);
+    try {
+      const text = await readFileSmart(file);
+      const parsed = Papa.parse(text.trim(), { skipEmptyLines: true });
+      if (!parsed.data || parsed.data.length < 2) {
+        setError('Файл пустой или не похож на таблицу'); return;
+      }
+      setRows(parsed.data);
+      setFileName(file.name);
+      setMap(guessColumnMapping(parsed.data));
+    } catch (e) {
+      setError('Не удалось прочитать файл: ' + e.message);
+    }
+  };
+
+  const colCount = rows ? Math.max(...rows.slice(0, 10).map((r) => r.length)) : 0;
+  const colOptions = Array.from({ length: colCount }, (_, i) => i);
+  const colLabel = (i) => {
+    if (i < 0) return '—';
+    if (hasHeader && rows && rows[0][i]) return String(rows[0][i]).slice(0, 24);
+    return `Столбец ${i + 1}`;
+  };
+
+  const parsedTx = useMemo(() => {
+    if (!rows || map.date < 0 || map.amount < 0) return [];
+    const dataRows = hasHeader ? rows.slice(1) : rows;
+    const out = [];
+    dataRows.forEach((r) => {
+      const date = parseStatementDate(r[map.date]);
+      const amount = parseAmount(r[map.amount]);
+      if (!date || isNaN(amount)) return;
+      if (onlyNeg && amount >= 0) return;
+      out.push({
+        date,
+        amount: Math.abs(amount),
+        description: (map.desc >= 0 ? String(r[map.desc] || '') : '').trim(),
+        category: (map.cat >= 0 ? String(r[map.cat] || '') : '').trim(),
+      });
+    });
+    return out;
+  }, [rows, hasHeader, map, onlyNeg]);
+
+  const totalSum = parsedTx.reduce((s, t) => s + t.amount, 0);
+
+  const doImport = async () => {
+    if (parsedTx.length === 0) return;
+    const sameTx = (a, b) => a.day === b.day && Math.round(a.amount) === Math.round(b.amount) && a.description === b.description;
+
+    const byMonth = {};
+    parsedTx.forEach((t) => {
+      const m = t.date.slice(0, 7);
+      (byMonth[m] = byMonth[m] || []).push(t);
+    });
+
+    let imported = 0, skipped = 0;
+    const monthsAffected = Object.keys(byMonth);
+
+    for (const m of monthsAffected) {
+      const toExpenses = byMonth[m].map((t) => ({
+        id: uid(),
+        day: +t.date.slice(8, 10),
+        category: t.category || 'Прочее',
+        amount: t.amount,
+        description: t.description,
+        method: 'Карта',
+      }));
+
+      if (m === ym) {
+        const existing = data.expenses;
+        const fresh = toExpenses.filter((ne) => !existing.some((e) => sameTx(e, ne)));
+        skipped += toExpenses.length - fresh.length;
+        imported += fresh.length;
+        update((d) => ({ ...d, expenses: [...fresh, ...d.expenses] }));
+      } else {
+        const md = (await storage.get(`month:${m}`)) || emptyMonth();
+        const existing = md.expenses || [];
+        const fresh = toExpenses.filter((ne) => !existing.some((e) => sameTx(e, ne)));
+        skipped += toExpenses.length - fresh.length;
+        imported += fresh.length;
+        md.expenses = [...fresh, ...existing];
+        await storage.set(`month:${m}`, md);
+      }
+    }
+
+    setResult({ imported, skipped, months: monthsAffected.length });
+    setRows(null); setFileName('');
+  };
+
+  return (
+    <Card delay={210}>
+      <button
+        onClick={() => { setOpen((o) => !o); if (open) reset(); }}
+        className="w-full flex items-center justify-between text-left"
+      >
+        <SectionTitle>Импорт выписки (CSV)</SectionTitle>
+        <Icon name={open ? 'chevron-left' : 'chevron-right'} className="w-4 h-4 text-neutral-400" />
+      </button>
+
+      {open && (
+        <div className="mt-2 animate-fade-up">
+          {result ? (
+            <div className="py-6 text-center">
+              <div className="text-3xl font-display font-light text-neutral-900 mb-1">{result.imported}</div>
+              <div className="text-sm text-neutral-600">
+                импортировано {result.months > 1 ? `в ${result.months} мес.` : ''}
+                {result.skipped > 0 && <span className="text-neutral-400"> · {result.skipped} дублей пропущено</span>}
+              </div>
+              <button onClick={reset} className="mt-4 text-xs text-accent hover:underline">Импортировать ещё</button>
+            </div>
+          ) : !rows ? (
+            <div className="py-4">
+              <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-line bg-white text-sm font-medium text-neutral-700 hover:border-accent hover:text-accent transition-colors cursor-pointer">
+                <Icon name="file" className="w-4 h-4" />
+                Выбрать CSV файл
+                <input
+                  type="file" accept=".csv,text/csv" className="hidden"
+                  onChange={(e) => handleFile(e.target.files[0])}
+                />
+              </label>
+              <p className="text-xs text-neutral-400 mt-3 leading-relaxed">
+                Выгрузи выписку из СберБанк Онлайн в формате CSV за нужный период.
+                Распознаются любые банки — столбцы укажешь вручную. Кодировка и разделитель определяются автоматически.
+              </p>
+              {error && <p className="text-xs text-rose-600 mt-2">{error}</p>}
+            </div>
+          ) : (
+            <div className="py-4 space-y-4">
+              <div className="text-xs text-neutral-500">
+                Файл: <span className="font-mono text-neutral-700">{fileName}</span> · строк: {rows.length}
+              </div>
+
+              {/* Preview */}
+              <div className="overflow-x-auto hide-scroll border border-line rounded-lg">
+                <table className="text-xs w-full">
+                  <tbody>
+                    {rows.slice(0, 4).map((r, ri) => (
+                      <tr key={ri} className={ri === 0 && hasHeader ? 'bg-neutral-50 font-medium' : ''}>
+                        {colOptions.map((ci) => (
+                          <td key={ci} className="px-2 py-1.5 border-r border-line-soft whitespace-nowrap text-neutral-600 max-w-[160px] truncate">
+                            {String(r[ci] ?? '')}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <label className="flex items-center gap-2 text-xs text-neutral-600 cursor-pointer">
+                <input type="checkbox" checked={hasHeader} onChange={(e) => setHasHeader(e.target.checked)} className="accent-current" />
+                Первая строка — заголовки
+              </label>
+
+              {/* Column mapping */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { key: 'date', label: 'Дата *' },
+                  { key: 'amount', label: 'Сумма *' },
+                  { key: 'desc', label: 'Описание' },
+                  { key: 'cat', label: 'Категория' },
+                ].map((f) => (
+                  <div key={f.key}>
+                    <div className="text-[10px] font-semibold tracking-wider text-neutral-500 uppercase mb-1">{f.label}</div>
+                    <select
+                      value={map[f.key]}
+                      onChange={(e) => setMap((m) => ({ ...m, [f.key]: +e.target.value }))}
+                      className="w-full px-2 py-1.5 rounded-lg border border-line text-xs bg-white outline-none focus:border-accent"
+                    >
+                      <option value={-1}>—</option>
+                      {colOptions.map((ci) => <option key={ci} value={ci}>{colLabel(ci)}</option>)}
+                    </select>
+                  </div>
+                ))}
+              </div>
+
+              <label className="flex items-center gap-2 text-xs text-neutral-600 cursor-pointer">
+                <input type="checkbox" checked={onlyNeg} onChange={(e) => setOnlyNeg(e.target.checked)} className="accent-current" />
+                Только расходы (отрицательные суммы)
+              </label>
+
+              {map.date < 0 || map.amount < 0 ? (
+                <p className="text-xs text-amber-700">Укажи столбцы «Дата» и «Сумма» — они обязательны.</p>
+              ) : (
+                <div className="text-xs text-neutral-600">
+                  Распознано <span className="font-semibold text-neutral-900">{parsedTx.length}</span> транзакций
+                  на <span className="font-mono">{fmtMoney(totalSum)}</span>
+                </div>
+              )}
+
+              <div className="flex gap-2">
+                <button
+                  onClick={doImport}
+                  disabled={parsedTx.length === 0}
+                  className="px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  Импортировать {parsedTx.length || ''}
+                </button>
+                <button onClick={reset} className="px-4 py-2 rounded-lg border border-line text-sm text-neutral-600 hover:bg-neutral-50 transition-colors">
+                  Отмена
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+// ───────────────────────────────────────────────────────────
 // Расходы
 // ───────────────────────────────────────────────────────────
 function Expenses({ data, update, settings, ym }) {
@@ -1228,6 +1516,8 @@ function Expenses({ data, update, settings, ym }) {
           </button>
         </div>
       </Card>
+
+      <StatementImport ym={ym} data={data} update={update} categories={settings.categories} />
 
       <Card delay={240}>
         <SectionTitle delay={240}>История</SectionTitle>
