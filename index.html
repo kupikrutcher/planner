@@ -410,30 +410,59 @@ const parseAmount = (s) => {
   return isNaN(n) ? NaN : n;
 };
 
+// Russian month-name prefixes (родительный и именительный падежи)
+const RU_MONTHS = [
+  ['янв', '01'], ['фев', '02'], ['мар', '03'], ['апр', '04'],
+  ['мая', '05'], ['май', '05'],
+  ['июн', '06'], ['июл', '07'], ['авг', '08'],
+  ['сен', '09'], ['окт', '10'], ['ноя', '11'], ['дек', '12'],
+];
+
 const parseStatementDate = (s) => {
+  if (s == null) return null;
+  s = String(s).trim().toLowerCase();
   if (!s) return null;
-  s = String(s).trim();
-  let m = s.match(/(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})/);
+  // ДД месяц(ru) ГГГГ — напр. "01 мая 2026, 13:59" или "1 мая 2026"
+  let m = s.match(/(\d{1,2})\s+([а-яё]+)\s+(\d{4})/);
+  if (m) {
+    const d = m[1].padStart(2, '0');
+    const monName = m[2];
+    const found = RU_MONTHS.find(([prefix]) => monName.startsWith(prefix));
+    if (found) return `${m[3]}-${found[1]}-${d}`;
+  }
+  // ДД.ММ.ГГГГ / ДД/ММ/ГГГГ / ДД-ММ-ГГГГ
+  m = s.match(/(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})/);
   if (m) {
     let [, d, mo, y] = m;
     if (y.length === 2) y = '20' + y;
     return `${y}-${mo.padStart(2, '0')}-${d.padStart(2, '0')}`;
   }
+  // ISO ГГГГ-ММ-ДД
   m = s.match(/(\d{4})-(\d{2})-(\d{2})/);
   if (m) return `${m[1]}-${m[2]}-${m[3]}`;
   return null;
 };
 
-// Guess which columns are date / amount / description / category from header names
+// Guess which columns are date / amount / description / category / tx-type
 const guessColumnMapping = (rows) => {
-  const map = { date: -1, amount: -1, desc: -1, cat: -1 };
+  const map = { date: -1, amount: -1, desc: -1, cat: -1, txType: -1 };
   if (!rows || !rows.length) return map;
   const header = rows[0].map((h) => String(h || '').toLowerCase());
+  // Pass 1: prefer "сумма в рублях" / "сумма в руб" над plain "сумма"
   header.forEach((h, i) => {
-    if (map.date < 0 && /дата|date|операц/.test(h)) map.date = i;
-    if (map.amount < 0 && /сумма|amount|оборот|расход/.test(h)) map.amount = i;
-    if (map.desc < 0 && /описан|назначен|получател|контрагент|description|операц/.test(h)) map.desc = i;
+    if (map.amount < 0 && /сумма.*руб/.test(h)) map.amount = i;
+  });
+  // Pass 2: основной проход
+  header.forEach((h, i) => {
+    if (map.date < 0 && /дата|date/.test(h)) map.date = i;
+    if (map.amount < 0 && /сумма|amount|оборот/.test(h)) map.amount = i;
+    if (map.txType < 0 && /тип.*операц|operation.*type|^тип$/.test(h)) map.txType = i;
     if (map.cat < 0 && /категор|category/.test(h)) map.cat = i;
+    if (map.desc < 0 && /описан|назначен|получател|контрагент|description|комментар|memo/.test(h)) map.desc = i;
+  });
+  // Pass 3: fallback — "операция" как описание, если это не "тип операции"
+  header.forEach((h, i) => {
+    if (map.desc < 0 && /операц/.test(h) && !/тип/.test(h)) map.desc = i;
   });
   return map;
 };
@@ -441,17 +470,24 @@ const guessColumnMapping = (rows) => {
 // ───────────────────────────────────────────────────────────
 // Defaults
 // ───────────────────────────────────────────────────────────
+// Категории — совпадают с СберБанк Онлайн, чтобы CSV-импорт ложился по этим именам без переименований
 const DEFAULT_CATEGORIES = [
-  { id: uid(), name: 'Еда и продукты', budget: 25000 },
-  { id: uid(), name: 'Транспорт', budget: 8000 },
-  { id: uid(), name: 'Жильё и счета', budget: 35000 },
-  { id: uid(), name: 'Одежда', budget: 5000 },
-  { id: uid(), name: 'Развлечения', budget: 7000 },
-  { id: uid(), name: 'Учёба и книги', budget: 4000 },
-  { id: uid(), name: 'Здоровье', budget: 5000 },
-  { id: uid(), name: 'Подарки', budget: 3000 },
-  { id: uid(), name: 'Путешествия', budget: 10000 },
-  { id: uid(), name: 'Прочее', budget: 5000 },
+  { id: uid(), name: 'Супермаркеты', budget: 0 },
+  { id: uid(), name: 'Кафе, рестораны, фастфуд', budget: 0 },
+  { id: uid(), name: 'Транспорт', budget: 0 },
+  { id: uid(), name: 'Такси и каршеринг', budget: 0 },
+  { id: uid(), name: 'ЖКХ, связь, интернет', budget: 0 },
+  { id: uid(), name: 'Аптеки', budget: 0 },
+  { id: uid(), name: 'Спорт и фитнес', budget: 0 },
+  { id: uid(), name: 'Хобби и развлечения', budget: 0 },
+  { id: uid(), name: 'Кино и театр', budget: 0 },
+  { id: uid(), name: 'Подписки', budget: 0 },
+  { id: uid(), name: 'Путешествия', budget: 0 },
+  { id: uid(), name: 'Бытовые услуги', budget: 0 },
+  { id: uid(), name: 'Услуги страхования', budget: 0 },
+  { id: uid(), name: 'Переводы людям', budget: 0 },
+  { id: uid(), name: 'Лотереи, казино и азартные игры', budget: 0 },
+  { id: uid(), name: 'Прочее', budget: 0 },
 ];
 const DEFAULT_INCOME_SOURCES = [
   { id: uid(), name: 'Зарплата', plan: 150000 },
@@ -1230,13 +1266,15 @@ function StatementImport({ ym, data, update, categories }) {
   const [rows, setRows] = useState(null);
   const [fileName, setFileName] = useState('');
   const [hasHeader, setHasHeader] = useState(true);
-  const [map, setMap] = useState({ date: -1, amount: -1, desc: -1, cat: -1 });
+  const [map, setMap] = useState({ date: -1, amount: -1, desc: -1, cat: -1, txType: -1 });
   const [onlyNeg, setOnlyNeg] = useState(true);
+  const [replaceAll, setReplaceAll] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
 
   const reset = () => {
-    setRows(null); setFileName(''); setMap({ date: -1, amount: -1, desc: -1, cat: -1 });
+    setRows(null); setFileName(''); setMap({ date: -1, amount: -1, desc: -1, cat: -1, txType: -1 });
+    setReplaceAll(false);
     setResult(null); setError('');
   };
 
@@ -1273,7 +1311,16 @@ function StatementImport({ ym, data, update, categories }) {
       const date = parseStatementDate(r[map.date]);
       const amount = parseAmount(r[map.amount]);
       if (!date || isNaN(amount)) return;
-      if (onlyNeg && amount >= 0) return;
+      // Фильтр "Только расходы": если есть колонка "Тип операции" — берём её,
+      // иначе fallback на знак суммы (отрицательные = расход)
+      if (onlyNeg) {
+        if (map.txType >= 0) {
+          const t = String(r[map.txType] || '').toLowerCase();
+          if (!/расход|списан|expense|debit/.test(t)) return;
+        } else if (amount >= 0) {
+          return;
+        }
+      }
       out.push({
         date,
         amount: Math.abs(amount),
@@ -1290,13 +1337,33 @@ function StatementImport({ ym, data, update, categories }) {
     if (parsedTx.length === 0) return;
     const sameTx = (a, b) => a.day === b.day && Math.round(a.amount) === Math.round(b.amount) && a.description === b.description;
 
+    let imported = 0, skipped = 0, cleared = 0;
+
+    // При replaceAll сначала чистим expenses во ВСЕХ месяцах (текущий и все остальные в storage)
+    if (replaceAll) {
+      cleared += (data.expenses || []).length;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (!k || !k.startsWith('planner:month:')) continue;
+        const monthKey = k.slice('planner:month:'.length);
+        if (monthKey === ym) continue; // текущий обновится через setData ниже
+        try {
+          const md = JSON.parse(localStorage.getItem(k));
+          if (md && Array.isArray(md.expenses) && md.expenses.length) {
+            cleared += md.expenses.length;
+            md.expenses = [];
+            localStorage.setItem(k, JSON.stringify(md));
+          }
+        } catch {}
+      }
+    }
+
     const byMonth = {};
     parsedTx.forEach((t) => {
       const m = t.date.slice(0, 7);
       (byMonth[m] = byMonth[m] || []).push(t);
     });
 
-    let imported = 0, skipped = 0;
     const monthsAffected = Object.keys(byMonth);
 
     for (const m of monthsAffected) {
@@ -1310,12 +1377,13 @@ function StatementImport({ ym, data, update, categories }) {
       }));
 
       if (m === ym) {
-        const existing = data.expenses;
+        const existing = replaceAll ? [] : data.expenses;
         const fresh = toExpenses.filter((ne) => !existing.some((e) => sameTx(e, ne)));
         skipped += toExpenses.length - fresh.length;
         imported += fresh.length;
-        update((d) => ({ ...d, expenses: [...fresh, ...d.expenses] }));
+        update((d) => ({ ...d, expenses: [...fresh, ...(replaceAll ? [] : d.expenses)] }));
       } else {
+        // expenses этого месяца уже очищены выше при replaceAll
         const md = (await storage.get(`month:${m}`)) || emptyMonth();
         const existing = md.expenses || [];
         const fresh = toExpenses.filter((ne) => !existing.some((e) => sameTx(e, ne)));
@@ -1326,7 +1394,7 @@ function StatementImport({ ym, data, update, categories }) {
       }
     }
 
-    setResult({ imported, skipped, months: monthsAffected.length });
+    setResult({ imported, skipped, cleared, months: monthsAffected.length });
     setRows(null); setFileName('');
   };
 
@@ -1348,6 +1416,7 @@ function StatementImport({ ym, data, update, categories }) {
               <div className="text-sm text-neutral-600">
                 импортировано {result.months > 1 ? `в ${result.months} мес.` : ''}
                 {result.skipped > 0 && <span className="text-neutral-400"> · {result.skipped} дублей пропущено</span>}
+                {result.cleared > 0 && <span className="text-rose-600"> · {result.cleared} удалено</span>}
               </div>
               <button onClick={reset} className="mt-4 text-xs text-accent hover:underline">Импортировать ещё</button>
             </div>
@@ -1396,12 +1465,13 @@ function StatementImport({ ym, data, update, categories }) {
               </label>
 
               {/* Column mapping */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                 {[
                   { key: 'date', label: 'Дата *' },
                   { key: 'amount', label: 'Сумма *' },
                   { key: 'desc', label: 'Описание' },
                   { key: 'cat', label: 'Категория' },
+                  { key: 'txType', label: 'Тип операции' },
                 ].map((f) => (
                   <div key={f.key}>
                     <div className="text-[10px] font-semibold tracking-wider text-neutral-500 uppercase mb-1">{f.label}</div>
@@ -1419,7 +1489,12 @@ function StatementImport({ ym, data, update, categories }) {
 
               <label className="flex items-center gap-2 text-xs text-neutral-600 cursor-pointer">
                 <input type="checkbox" checked={onlyNeg} onChange={(e) => setOnlyNeg(e.target.checked)} className="accent-current" />
-                Только расходы (отрицательные суммы)
+                Только расходы {map.txType >= 0 ? '(по колонке «Тип операции»)' : '(отрицательные суммы)'}
+              </label>
+
+              <label className="flex items-center gap-2 text-xs text-rose-700 cursor-pointer">
+                <input type="checkbox" checked={replaceAll} onChange={(e) => setReplaceAll(e.target.checked)} className="accent-current" />
+                Удалить все существующие расходы (во всех месяцах) перед импортом
               </label>
 
               {map.date < 0 || map.amount < 0 ? (
@@ -2122,7 +2197,7 @@ function Settings({ settings, updateSettings, theme, setTheme, gcal }) {
         <SectionTitle>Управление данными</SectionTitle>
         <div className="space-y-2 text-sm text-neutral-600">
           <p>Все данные хранятся в браузере (localStorage). Чтобы перенести на другое устройство — экспортируй и импортируй ниже.</p>
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 mt-4 flex-wrap">
             <button
               onClick={() => {
                 const all = {};
@@ -2161,6 +2236,61 @@ function Settings({ settings, updateSettings, theme, setTheme, gcal }) {
                 }}
               />
             </label>
+            <button
+              onClick={() => {
+                if (!confirm('Заменить текущий список категорий на Сбер-дефолтные? Это удалит твои текущие категории (но не транзакции).')) return;
+                updateSettings((s) => ({
+                  ...s,
+                  categories: [
+                    { id: uid(), name: 'Супермаркеты', budget: 0 },
+                    { id: uid(), name: 'Кафе, рестораны, фастфуд', budget: 0 },
+                    { id: uid(), name: 'Транспорт', budget: 0 },
+                    { id: uid(), name: 'Такси и каршеринг', budget: 0 },
+                    { id: uid(), name: 'ЖКХ, связь, интернет', budget: 0 },
+                    { id: uid(), name: 'Аптеки', budget: 0 },
+                    { id: uid(), name: 'Спорт и фитнес', budget: 0 },
+                    { id: uid(), name: 'Хобби и развлечения', budget: 0 },
+                    { id: uid(), name: 'Кино и театр', budget: 0 },
+                    { id: uid(), name: 'Подписки', budget: 0 },
+                    { id: uid(), name: 'Путешествия', budget: 0 },
+                    { id: uid(), name: 'Бытовые услуги', budget: 0 },
+                    { id: uid(), name: 'Услуги страхования', budget: 0 },
+                    { id: uid(), name: 'Переводы людям', budget: 0 },
+                    { id: uid(), name: 'Лотереи, казино и азартные игры', budget: 0 },
+                    { id: uid(), name: 'Прочее', budget: 0 },
+                  ],
+                }));
+              }}
+              className="px-3 py-2 rounded-lg bg-white border border-neutral-300 text-neutral-700 text-xs font-medium hover:bg-neutral-50 transition-colors"
+            >
+              Сбросить категории (Сбер)
+            </button>
+            <button
+              onClick={async () => {
+                if (!confirm('Удалить ВСЕ внесённые расходы во всех месяцах? Это действие нельзя отменить.')) return;
+                let removed = 0;
+                const monthKeys = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                  const k = localStorage.key(i);
+                  if (k && k.startsWith('planner:month:')) monthKeys.push(k);
+                }
+                for (const k of monthKeys) {
+                  try {
+                    const md = JSON.parse(localStorage.getItem(k));
+                    if (md && Array.isArray(md.expenses)) {
+                      removed += md.expenses.length;
+                      md.expenses = [];
+                      localStorage.setItem(k, JSON.stringify(md));
+                    }
+                  } catch {}
+                }
+                alert(`Удалено расходов: ${removed}. Страница сейчас перезагрузится.`);
+                window.location.reload();
+              }}
+              className="px-3 py-2 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium hover:bg-rose-100 transition-colors"
+            >
+              Удалить все расходы
+            </button>
           </div>
         </div>
       </Card>
