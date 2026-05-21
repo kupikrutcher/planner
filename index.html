@@ -1269,6 +1269,7 @@ function StatementImport({ ym, data, update, categories }) {
   const [map, setMap] = useState({ date: -1, amount: -1, desc: -1, cat: -1, txType: -1 });
   const [onlyNeg, setOnlyNeg] = useState(true);
   const [replaceAll, setReplaceAll] = useState(false);
+  const [excludeWords, setExcludeWords] = useState('Захар');
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
 
@@ -1303,10 +1304,16 @@ function StatementImport({ ym, data, update, categories }) {
     return `Столбец ${i + 1}`;
   };
 
+  // Список слов-исключений (case-insensitive substring match по описанию)
+  const excludeList = useMemo(() => (
+    excludeWords.split(',').map((w) => w.trim().toLowerCase()).filter(Boolean)
+  ), [excludeWords]);
+
   const parsedTx = useMemo(() => {
-    if (!rows || map.date < 0 || map.amount < 0) return [];
+    if (!rows || map.date < 0 || map.amount < 0) return { tx: [], excluded: 0 };
     const dataRows = hasHeader ? rows.slice(1) : rows;
     const out = [];
+    let excluded = 0;
     dataRows.forEach((r) => {
       const date = parseStatementDate(r[map.date]);
       const amount = parseAmount(r[map.amount]);
@@ -1321,20 +1328,29 @@ function StatementImport({ ym, data, update, categories }) {
           return;
         }
       }
+      const description = (map.desc >= 0 ? String(r[map.desc] || '') : '').trim();
+      // Фильтр по словам-исключениям в описании
+      if (excludeList.length) {
+        const descLower = description.toLowerCase();
+        if (excludeList.some((w) => descLower.includes(w))) { excluded++; return; }
+      }
       out.push({
         date,
         amount: Math.abs(amount),
-        description: (map.desc >= 0 ? String(r[map.desc] || '') : '').trim(),
+        description,
         category: (map.cat >= 0 ? String(r[map.cat] || '') : '').trim(),
       });
     });
-    return out;
-  }, [rows, hasHeader, map, onlyNeg]);
+    return { tx: out, excluded };
+  }, [rows, hasHeader, map, onlyNeg, excludeList]);
 
-  const totalSum = parsedTx.reduce((s, t) => s + t.amount, 0);
+  const parsedTxList = parsedTx.tx;
+  const excludedCount = parsedTx.excluded;
+
+  const totalSum = parsedTxList.reduce((s, t) => s + t.amount, 0);
 
   const doImport = async () => {
-    if (parsedTx.length === 0) return;
+    if (parsedTxList.length === 0) return;
     const sameTx = (a, b) => a.day === b.day && Math.round(a.amount) === Math.round(b.amount) && a.description === b.description;
 
     let imported = 0, skipped = 0, cleared = 0;
@@ -1359,7 +1375,7 @@ function StatementImport({ ym, data, update, categories }) {
     }
 
     const byMonth = {};
-    parsedTx.forEach((t) => {
+    parsedTxList.forEach((t) => {
       const m = t.date.slice(0, 7);
       (byMonth[m] = byMonth[m] || []).push(t);
     });
@@ -1394,7 +1410,7 @@ function StatementImport({ ym, data, update, categories }) {
       }
     }
 
-    setResult({ imported, skipped, cleared, months: monthsAffected.length });
+    setResult({ imported, skipped, cleared, excluded: excludedCount, months: monthsAffected.length });
     setRows(null); setFileName('');
   };
 
@@ -1416,6 +1432,7 @@ function StatementImport({ ym, data, update, categories }) {
               <div className="text-sm text-neutral-600">
                 импортировано {result.months > 1 ? `в ${result.months} мес.` : ''}
                 {result.skipped > 0 && <span className="text-neutral-400"> · {result.skipped} дублей пропущено</span>}
+                {result.excluded > 0 && <span className="text-neutral-400"> · {result.excluded} исключено по словам</span>}
                 {result.cleared > 0 && <span className="text-rose-600"> · {result.cleared} удалено</span>}
               </div>
               <button onClick={reset} className="mt-4 text-xs text-accent hover:underline">Импортировать ещё</button>
@@ -1497,22 +1514,39 @@ function StatementImport({ ym, data, update, categories }) {
                 Удалить все существующие расходы (во всех месяцах) перед импортом
               </label>
 
+              <div>
+                <div className="text-[10px] font-semibold tracking-wider text-neutral-500 uppercase mb-1">
+                  Игнорировать описания со словами (через запятую)
+                </div>
+                <input
+                  type="text"
+                  value={excludeWords}
+                  onChange={(e) => setExcludeWords(e.target.value)}
+                  placeholder="Захар, перевод себе"
+                  className="w-full px-3 py-1.5 rounded-lg border border-line text-xs bg-white outline-none focus:border-accent"
+                />
+                <p className="text-[11px] text-neutral-400 mt-1">
+                  Регистр не важен, совпадение по подстроке. Полезно для переводов себе.
+                </p>
+              </div>
+
               {map.date < 0 || map.amount < 0 ? (
                 <p className="text-xs text-amber-700">Укажи столбцы «Дата» и «Сумма» — они обязательны.</p>
               ) : (
                 <div className="text-xs text-neutral-600">
-                  Распознано <span className="font-semibold text-neutral-900">{parsedTx.length}</span> транзакций
+                  Распознано <span className="font-semibold text-neutral-900">{parsedTxList.length}</span> транзакций
                   на <span className="font-mono">{fmtMoney(totalSum)}</span>
+                  {excludedCount > 0 && <span className="text-neutral-400"> · {excludedCount} исключено по словам</span>}
                 </div>
               )}
 
               <div className="flex gap-2">
                 <button
                   onClick={doImport}
-                  disabled={parsedTx.length === 0}
+                  disabled={parsedTxList.length === 0}
                   className="px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  Импортировать {parsedTx.length || ''}
+                  Импортировать {parsedTxList.length || ''}
                 </button>
                 <button onClick={reset} className="px-4 py-2 rounded-lg border border-line text-sm text-neutral-600 hover:bg-neutral-50 transition-colors">
                   Отмена
