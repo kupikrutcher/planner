@@ -658,6 +658,7 @@ const buildPieColors = (accent) => [accent, '#1A1A1A', '#525252', '#737373', '#A
 // Dashboard
 // ───────────────────────────────────────────────────────────
 function Dashboard({ data, prevData, settings, ym, accent }) {
+  const [showAllCats, setShowAllCats] = useState(false);
   const pieColors = useMemo(() => buildPieColors(accent), [accent]);
   const totalExpense = useMemo(() => data.expenses.reduce((s, e) => s + (+e.amount || 0), 0), [data.expenses]);
   const totalIncome = useMemo(() => data.income.reduce((s, e) => s + (+e.amount || 0), 0), [data.income]);
@@ -717,10 +718,21 @@ function Dashboard({ data, prevData, settings, ym, accent }) {
         </Card>
 
         <Card delay={420}>
-          <SectionTitle delay={420}>Топ категорий</SectionTitle>
+          <div className="flex items-center justify-between mb-3">
+            <SectionTitle delay={420}>Топ категорий</SectionTitle>
+            {byCategory.length > 6 && (
+              <button
+                onClick={() => setShowAllCats((v) => !v)}
+                className="text-xs text-neutral-500 hover:text-accent transition-colors px-2 py-1"
+                title={showAllCats ? 'Свернуть' : 'Показать все категории'}
+              >
+                {showAllCats ? 'Свернуть' : `Все (${byCategory.length})`}
+              </button>
+            )}
+          </div>
           <div className="space-y-3">
-            {byCategory.slice(0, 6).map((c, i) => (
-              <div key={c.name} className="animate-fade-up" style={{ animationDelay: `${480 + i * 50}ms` }}>
+            {(showAllCats ? byCategory : byCategory.slice(0, 6)).map((c, i) => (
+              <div key={c.name} className="animate-fade-up" style={{ animationDelay: `${Math.min(480 + i * 50, 900)}ms` }}>
                 <div className="flex items-center justify-between text-sm mb-1.5">
                   <span className="text-neutral-700">{c.name}</span>
                   <span className="font-mono text-neutral-900 tabular-nums">{fmtMoney(c.spent)}</span>
