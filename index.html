@@ -329,6 +329,8 @@ async function gcalFetchRange(token, startISO, endISO) {
   const data = await res.json();
   return data.items || [];
 }
+
+async function gcalFetchEvents(token, ym, day) {
   const [y, m] = ym.split('-').map(Number);
   const start = new Date(y, m - 1, day, 0, 0, 0);
   const end = new Date(y, m - 1, day, 23, 59, 59);
