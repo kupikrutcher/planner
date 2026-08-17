@@ -40,6 +40,7 @@
 <script crossorigin src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
 <script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
 <script crossorigin src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+<script crossorigin src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
@@ -394,7 +395,7 @@ const eventToTask = (ev) => {
 };
 
 // ───────────────────────────────────────────────────────────
-// CSV statement import helpers
+// CSV / Excel statement import helpers
 // ───────────────────────────────────────────────────────────
 // Read file, auto-detect UTF-8 vs Windows-1251 encoding
 const readFileSmart = (file) => new Promise((resolve, reject) => {
@@ -412,6 +413,31 @@ const readFileSmart = (file) => new Promise((resolve, reject) => {
   reader.onerror = reject;
   reader.readAsArrayBuffer(file);
 });
+
+// Read an .xlsx/.xls file into an array-of-arrays (same shape Papa.parse gives us for CSV)
+const readXlsxRows = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const wb = XLSX.read(reader.result, { type: 'array', cellDates: true });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: '' });
+      resolve(rows.filter((r) => r.some((c) => String(c ?? '').trim() !== '')));
+    } catch (e) { reject(e); }
+  };
+  reader.onerror = reject;
+  reader.readAsArrayBuffer(file);
+});
+
+const isXlsxFile = (file) => /\.xlsx?$/i.test(file.name || '');
+
+// Unified entry point: parses .csv, .xlsx or .xls into rows (array-of-arrays)
+const parseStatementFile = async (file) => {
+  if (isXlsxFile(file)) return await readXlsxRows(file);
+  const text = await readFileSmart(file);
+  const parsed = Papa.parse(text.trim(), { skipEmptyLines: true });
+  return parsed.data;
+};
 
 const parseAmount = (s) => {
   if (s == null || s === '') return NaN;
@@ -446,7 +472,7 @@ const guessColumnMapping = (rows) => {
     if (map.date < 0 && /дата|date|операц/.test(h)) map.date = i;
     if (map.amount < 0 && /сумма|amount|оборот|расход/.test(h)) map.amount = i;
     if (map.desc < 0 && /описан|назначен|получател|контрагент|description|операц/.test(h)) map.desc = i;
-    if (map.cat < 0 && /категор|category/.test(h)) map.cat = i;
+    if (map.cat < 0 && /категор|источник|category|source/.test(h)) map.cat = i;
   });
   return map;
 };
@@ -1474,15 +1500,16 @@ function Checklists({ checklists, updateChecklists }) {
 }
 
 // ───────────────────────────────────────────────────────────
-// Импорт банковской выписки (CSV)
+// Импорт выписки (Excel / CSV) — для расходов и доходов
 // ───────────────────────────────────────────────────────────
-function StatementImport({ ym, data, update, categories }) {
+function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
+  const isIncome = kind === 'income';
   const [open, setOpen] = useState(false);
   const [rows, setRows] = useState(null);
   const [fileName, setFileName] = useState('');
   const [hasHeader, setHasHeader] = useState(true);
   const [map, setMap] = useState({ date: -1, amount: -1, desc: -1, cat: -1 });
-  const [onlyNeg, setOnlyNeg] = useState(true);
+  const [onlyNeg, setOnlyNeg] = useState(!isIncome);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
 
@@ -1495,14 +1522,13 @@ function StatementImport({ ym, data, update, categories }) {
     if (!file) return;
     setError(''); setResult(null);
     try {
-      const text = await readFileSmart(file);
-      const parsed = Papa.parse(text.trim(), { skipEmptyLines: true });
-      if (!parsed.data || parsed.data.length < 2) {
+      const parsedRows = await parseStatementFile(file);
+      if (!parsedRows || parsedRows.length < 2) {
         setError('Файл пустой или не похож на таблицу'); return;
       }
-      setRows(parsed.data);
+      setRows(parsedRows);
       setFileName(file.name);
-      setMap(guessColumnMapping(parsed.data));
+      setMap(guessColumnMapping(parsedRows));
     } catch (e) {
       setError('Не удалось прочитать файл: ' + e.message);
     }
@@ -1524,7 +1550,7 @@ function StatementImport({ ym, data, update, categories }) {
       const date = parseStatementDate(r[map.date]);
       const amount = parseAmount(r[map.amount]);
       if (!date || isNaN(amount)) return;
-      if (onlyNeg && amount >= 0) return;
+      if (onlyNeg && (isIncome ? amount <= 0 : amount >= 0)) return;
       out.push({
         date,
         amount: Math.abs(amount),
@@ -1536,6 +1562,9 @@ function StatementImport({ ym, data, update, categories }) {
   }, [rows, hasHeader, map, onlyNeg]);
 
   const totalSum = parsedTx.reduce((s, t) => s + t.amount, 0);
+
+  const arrKey = isIncome ? 'income' : 'expenses';
+  const fallbackLabel = isIncome ? 'Прочее' : 'Прочее';
 
   const doImport = async () => {
     if (parsedTx.length === 0) return;
@@ -1551,28 +1580,34 @@ function StatementImport({ ym, data, update, categories }) {
     const monthsAffected = Object.keys(byMonth);
 
     for (const m of monthsAffected) {
-      const toExpenses = byMonth[m].map((t) => ({
+      const toRecords = byMonth[m].map((t) => isIncome ? {
         id: uid(),
         day: +t.date.slice(8, 10),
-        category: t.category || 'Прочее',
+        source: t.category || fallbackLabel,
+        amount: t.amount,
+        description: t.description,
+      } : {
+        id: uid(),
+        day: +t.date.slice(8, 10),
+        category: t.category || fallbackLabel,
         amount: t.amount,
         description: t.description,
         method: 'Карта',
-      }));
+      });
 
       if (m === ym) {
-        const existing = data.expenses;
-        const fresh = toExpenses.filter((ne) => !existing.some((e) => sameTx(e, ne)));
-        skipped += toExpenses.length - fresh.length;
+        const existing = data[arrKey];
+        const fresh = toRecords.filter((ne) => !existing.some((e) => sameTx(e, ne)));
+        skipped += toRecords.length - fresh.length;
         imported += fresh.length;
-        update((d) => ({ ...d, expenses: [...fresh, ...d.expenses] }));
+        update((d) => ({ ...d, [arrKey]: [...fresh, ...d[arrKey]] }));
       } else {
         const md = (await storage.get(`month:${m}`)) || emptyMonth();
-        const existing = md.expenses || [];
-        const fresh = toExpenses.filter((ne) => !existing.some((e) => sameTx(e, ne)));
-        skipped += toExpenses.length - fresh.length;
+        const existing = md[arrKey] || [];
+        const fresh = toRecords.filter((ne) => !existing.some((e) => sameTx(e, ne)));
+        skipped += toRecords.length - fresh.length;
         imported += fresh.length;
-        md.expenses = [...fresh, ...existing];
+        md[arrKey] = [...fresh, ...existing];
         await storage.set(`month:${m}`, md);
       }
     }
@@ -1587,7 +1622,7 @@ function StatementImport({ ym, data, update, categories }) {
         onClick={() => { setOpen((o) => !o); if (open) reset(); }}
         className="w-full flex items-center justify-between text-left"
       >
-        <SectionTitle>Импорт выписки (CSV)</SectionTitle>
+        <SectionTitle>Импорт выписки (Excel · CSV)</SectionTitle>
         <Icon name={open ? 'chevron-left' : 'chevron-right'} className="w-4 h-4 text-neutral-400" />
       </button>
 
@@ -1606,15 +1641,17 @@ function StatementImport({ ym, data, update, categories }) {
             <div className="py-4">
               <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-line bg-white text-sm font-medium text-neutral-700 hover:border-accent hover:text-accent transition-colors cursor-pointer">
                 <Icon name="file" className="w-4 h-4" />
-                Выбрать CSV файл
+                Выбрать файл (.xlsx, .csv)
                 <input
-                  type="file" accept=".csv,text/csv" className="hidden"
+                  type="file"
+                  accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
+                  className="hidden"
                   onChange={(e) => handleFile(e.target.files[0])}
                 />
               </label>
               <p className="text-xs text-neutral-400 mt-3 leading-relaxed">
-                Выгрузи выписку из СберБанк Онлайн в формате CSV за нужный период.
-                Распознаются любые банки — столбцы укажешь вручную. Кодировка и разделитель определяются автоматически.
+                Выгрузи выписку из банка в формате Excel (.xlsx) или CSV за нужный период.
+                Распознаются любые банки — столбцы укажешь вручную. Кодировка и разделитель CSV определяются автоматически.
               </p>
               {error && <p className="text-xs text-rose-600 mt-2">{error}</p>}
             </div>
@@ -1652,7 +1689,7 @@ function StatementImport({ ym, data, update, categories }) {
                   { key: 'date', label: 'Дата *' },
                   { key: 'amount', label: 'Сумма *' },
                   { key: 'desc', label: 'Описание' },
-                  { key: 'cat', label: 'Категория' },
+                  { key: 'cat', label: isIncome ? 'Источник' : 'Категория' },
                 ].map((f) => (
                   <div key={f.key}>
                     <div className="text-[10px] font-semibold tracking-wider text-neutral-500 uppercase mb-1">{f.label}</div>
@@ -1670,7 +1707,7 @@ function StatementImport({ ym, data, update, categories }) {
 
               <label className="flex items-center gap-2 text-xs text-neutral-600 cursor-pointer">
                 <input type="checkbox" checked={onlyNeg} onChange={(e) => setOnlyNeg(e.target.checked)} className="accent-current" />
-                Только расходы (отрицательные суммы)
+                {isIncome ? 'Только поступления (положительные суммы)' : 'Только расходы (отрицательные суммы)'}
               </label>
 
               {map.date < 0 || map.amount < 0 ? (
@@ -1863,6 +1900,8 @@ function Income({ data, update, settings, ym }) {
           </button>
         </div>
       </Card>
+
+      <StatementImport ym={ym} data={data} update={update} categories={settings.incomeSources} kind="income" />
 
       <Card delay={180}>
         <SectionTitle delay={180}>История</SectionTitle>
