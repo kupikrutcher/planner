@@ -478,27 +478,18 @@ const parseStatementDate = (s) => {
   return null;
 };
 
-// Guess which columns are date / amount / description / category / type from header names
+// Guess which columns are date / amount / description / category from header names
 const guessColumnMapping = (rows) => {
-  const map = { date: -1, amount: -1, desc: -1, cat: -1, type: -1 };
+  const map = { date: -1, amount: -1, desc: -1, cat: -1 };
   if (!rows || !rows.length) return map;
   const header = rows[0].map((h) => String(h || '').toLowerCase());
   header.forEach((h, i) => {
-    if (map.type < 0 && /тип\s*операц|type/.test(h)) map.type = i;
-    else if (map.date < 0 && /дата|date/.test(h)) map.date = i;
+    if (map.date < 0 && /дата|date/.test(h)) map.date = i;
     else if (map.amount < 0 && /сумма|amount|оборот|расход/.test(h)) map.amount = i;
     else if (map.desc < 0 && /описан|назначен|получател|контрагент|description|^операция$/.test(h)) map.desc = i;
     else if (map.cat < 0 && /категор|источник|category|source/.test(h)) map.cat = i;
   });
   return map;
-};
-
-// Read a "тип операции" style cell and say whether it looks like an expense or income row
-const detectDirection = (s) => {
-  const t = String(s || '').toLowerCase();
-  if (/расход|списан|purchase|expense|debit|outcome/.test(t)) return 'expense';
-  if (/доход|пополнен|зачисл|income|credit|deposit/.test(t)) return 'income';
-  return null;
 };
 
 // ───────────────────────────────────────────────────────────
@@ -1532,13 +1523,12 @@ function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
   const [rows, setRows] = useState(null);
   const [fileName, setFileName] = useState('');
   const [hasHeader, setHasHeader] = useState(true);
-  const [map, setMap] = useState({ date: -1, amount: -1, desc: -1, cat: -1, type: -1 });
-  const [onlyNeg, setOnlyNeg] = useState(!isIncome);
+  const [map, setMap] = useState({ date: -1, amount: -1, desc: -1, cat: -1 });
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
 
   const reset = () => {
-    setRows(null); setFileName(''); setMap({ date: -1, amount: -1, desc: -1, cat: -1, type: -1 });
+    setRows(null); setFileName(''); setMap({ date: -1, amount: -1, desc: -1, cat: -1 });
     setResult(null); setError('');
   };
 
@@ -1574,14 +1564,6 @@ function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
       const date = parseStatementDate(r[map.date]);
       const amount = parseAmount(r[map.amount]);
       if (!date || isNaN(amount)) return;
-      const dir = map.type >= 0 ? detectDirection(r[map.type]) : null;
-      if (dir) {
-        // Reliable direction column present — trust it, ignore sign entirely
-        if ((isIncome && dir !== 'income') || (!isIncome && dir !== 'expense')) return;
-      } else if (onlyNeg && (isIncome ? amount <= 0 : amount >= 0)) {
-        // No direction column — fall back to sign-based filtering
-        return;
-      }
       out.push({
         date,
         amount: Math.abs(amount),
@@ -1590,7 +1572,7 @@ function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
       });
     });
     return out;
-  }, [rows, hasHeader, map, onlyNeg]);
+  }, [rows, hasHeader, map]);
 
   const totalSum = parsedTx.reduce((s, t) => s + t.amount, 0);
 
@@ -1721,7 +1703,6 @@ function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
                   { key: 'amount', label: 'Сумма *' },
                   { key: 'desc', label: 'Описание' },
                   { key: 'cat', label: isIncome ? 'Источник' : 'Категория' },
-                  { key: 'type', label: 'Тип операции' },
                 ].map((f) => (
                   <div key={f.key}>
                     <div className="text-[10px] font-semibold tracking-wider text-neutral-500 uppercase mb-1">{f.label}</div>
@@ -1736,12 +1717,6 @@ function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
                   </div>
                 ))}
               </div>
-
-              <label className="flex items-center gap-2 text-xs text-neutral-600 cursor-pointer">
-                <input type="checkbox" checked={onlyNeg} onChange={(e) => setOnlyNeg(e.target.checked)} className="accent-current" />
-                {isIncome ? 'Только поступления (положительные суммы)' : 'Только расходы (отрицательные суммы)'}
-                {map.type >= 0 && <span className="text-neutral-400"> — не используется, направление берётся из столбца «Тип операции»</span>}
-              </label>
 
               {map.date < 0 || map.amount < 0 ? (
                 <p className="text-xs text-amber-700">Укажи столбцы «Дата» и «Сумма» — они обязательны.</p>
