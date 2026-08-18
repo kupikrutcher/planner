@@ -911,7 +911,7 @@ function CalendarWidget({ gcal }) {
         <div className="flex gap-1">
           {[7, 14, 30].map((n) => (
             <button key={n} onClick={() => { setDays(n); fetch14(n); }}
-              className={`text-xs px-2.5 py-1 rounded-md transition-colors ${days === n ? 'bg-accent-bg text-accent font-medium' : 'text-neutral-400 hover:text-neutral-700'}`}>
+              className={`text-xs px-2.5 py-1 rounded-md transition-colors ${days === n ? 'bg-accent/10 text-accent font-medium' : 'text-neutral-400 hover:text-neutral-700'}`}>
               {n} дней
             </button>
           ))}
@@ -1512,8 +1512,8 @@ function Habits({ data, update, ym }) {
                             on
                               ? 'bg-accent border-accent'
                               : isToday
-                                ? 'bg-accent-bg border-accent/50 hover:border-accent/70'
-                                : 'bg-card border-line hover:border-accent/40 hover:bg-accent-bg'
+                                ? 'bg-accent/10 border-accent/50 hover:border-accent/70'
+                                : 'bg-card border-line hover:border-accent/40 hover:bg-accent/10'
                           } ${isToday ? 'ring-1 ring-accent/40 ring-offset-1 ring-offset-card' : ''}`}
                         />
                       );
@@ -2162,7 +2162,7 @@ function Promises({ promises, updatePromises }) {
               key={f.id}
               onClick={() => setFilter(f.id)}
               className={`text-xs px-2.5 py-1.5 rounded-md transition-colors ${
-                filter === f.id ? 'bg-accent-bg text-accent font-medium' : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
+                filter === f.id ? 'bg-accent/10 text-accent font-medium' : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
               }`}
             >
               {f.name} <span className="font-mono text-[10px] opacity-60">{f.count}</span>
@@ -2312,7 +2312,7 @@ function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gc
                 key={key}
                 onClick={() => setTheme(key)}
                 className={`group flex items-center gap-2.5 px-3 py-2 rounded-lg border transition-all duration-200 ${
-                  active ? 'border-accent bg-accent-bg' : 'border-line bg-card hover:border-neutral-300'
+                  active ? 'border-accent bg-accent/10' : 'border-line bg-card hover:border-neutral-300'
                 }`}
               >
                 <span
@@ -2619,7 +2619,7 @@ function App() {
       <header className="sticky top-0 z-30 bg-paper/90 backdrop-blur-md border-b border-line">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button onClick={() => setYm(shiftYM(ym, -1))} className="p-1.5 rounded-md text-neutral-500 hover:text-accent hover:bg-accent-bg transition-colors" title="Прошлый месяц">
+            <button onClick={() => setYm(shiftYM(ym, -1))} className="p-1.5 rounded-md text-neutral-500 hover:text-accent hover:bg-accent/10 transition-colors" title="Прошлый месяц">
               <Icon name="chevron-left" className="w-4 h-4" />
             </button>
             <div key={ym} className="flex items-baseline gap-2 whitespace-nowrap animate-fade-in">
@@ -2630,19 +2630,19 @@ function App() {
                 {parseYM(ym)[0]}
               </span>
             </div>
-            <button onClick={() => setYm(shiftYM(ym, 1))} className="p-1.5 rounded-md text-neutral-500 hover:text-accent hover:bg-accent-bg transition-colors" title="Следующий месяц">
+            <button onClick={() => setYm(shiftYM(ym, 1))} className="p-1.5 rounded-md text-neutral-500 hover:text-accent hover:bg-accent/10 transition-colors" title="Следующий месяц">
               <Icon name="chevron-right" className="w-4 h-4" />
             </button>
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
             {ym === currentYM() && (
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-[0.14em] uppercase text-accent px-2 py-1 rounded-md bg-accent-bg">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-[0.14em] uppercase text-accent px-2 py-1 rounded-md bg-accent/10">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                 Сейчас
               </span>
             )}
             {ym !== currentYM() && (
-              <button onClick={() => setYm(currentYM())} className="text-[10px] font-semibold tracking-[0.14em] uppercase text-neutral-500 hover:text-accent px-2 py-1 rounded-md hover:bg-accent-bg transition-colors">
+              <button onClick={() => setYm(currentYM())} className="text-[10px] font-semibold tracking-[0.14em] uppercase text-neutral-500 hover:text-accent px-2 py-1 rounded-md hover:bg-accent/10 transition-colors">
                 К сегодня
               </button>
             )}
