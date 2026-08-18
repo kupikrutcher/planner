@@ -1423,6 +1423,7 @@ function Goals({ data, update }) {
 function Habits({ data, update, ym }) {
   const days = daysInMonth(ym);
   const dayArr = Array.from({ length: days }, (_, i) => i + 1);
+  const todayCol = todayYM() === ym ? todayDay() : null;
 
   const toggle = (habitId, day) => {
     const key = `${habitId}-${day}`;
@@ -1464,9 +1465,18 @@ function Habits({ data, update, ym }) {
                 <div className="w-40 flex-shrink-0 text-[10px] font-semibold tracking-[0.14em] text-neutral-500 uppercase pr-3">Привычка</div>
                 {dayArr.map((d) => {
                   const dow = dowOfDay(ym, d);
+                  const isToday = d === todayCol;
                   return (
-                    <div key={d} className={`w-6 h-6 flex flex-col items-center justify-center text-[10px] font-medium ${dow >= 5 ? 'text-amber-600' : 'text-neutral-400'}`}>
-                      {d}
+                    <div key={d} className="w-6 h-6 flex items-center justify-center">
+                      <span
+                        className={`w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-semibold transition-colors ${
+                          isToday
+                            ? 'bg-accent text-white'
+                            : dow >= 5 ? 'text-amber-600' : 'text-neutral-400'
+                        }`}
+                      >
+                        {d}
+                      </span>
                     </div>
                   );
                 })}
@@ -1493,12 +1503,18 @@ function Habits({ data, update, ym }) {
                     </div>
                     {dayArr.map((d) => {
                       const on = !!data.habitChecks[`${h.id}-${d}`];
+                      const isToday = d === todayCol;
                       return (
                         <button
                           key={d} onClick={() => toggle(h.id, d)}
+                          title={isToday ? 'Сегодня' : undefined}
                           className={`w-6 h-6 rounded-md border transition-all duration-150 ${
-                            on ? 'bg-accent border-accent' : 'bg-card border-line hover:border-accent/40 hover:bg-accent-bg'
-                          }`}
+                            on
+                              ? 'bg-accent border-accent'
+                              : isToday
+                                ? 'bg-accent-bg border-accent/50 hover:border-accent/70'
+                                : 'bg-card border-line hover:border-accent/40 hover:bg-accent-bg'
+                          } ${isToday ? 'ring-1 ring-accent/40 ring-offset-1 ring-offset-card' : ''}`}
                         />
                       );
                     })}
