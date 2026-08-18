@@ -11,6 +11,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
+    darkMode: ['selector', '[data-theme="dark"]'],
     theme: {
       extend: {
         colors: {
@@ -19,10 +20,28 @@
             soft: 'var(--accent-soft)',
             bg: 'var(--accent-bg)',
           },
-          paper: '#FAFAFA',
-          'paper-soft': '#F5F5F5',
-          line: '#E8E8E8',
-          'line-soft': '#F2F2F2',
+          paper: 'var(--paper)',
+          'paper-soft': 'var(--paper-soft)',
+          line: 'var(--line)',
+          'line-soft': 'var(--line-soft)',
+          card: 'var(--card)',
+          neutral: {
+            50: 'var(--n-50)', 100: 'var(--n-100)', 200: 'var(--n-200)',
+            300: 'var(--n-300)', 400: 'var(--n-400)', 500: 'var(--n-500)',
+            600: 'var(--n-600)', 700: 'var(--n-700)', 800: 'var(--n-800)', 900: 'var(--n-900)',
+          },
+          rose: {
+            50: 'var(--rose-50)', 100: 'var(--rose-100)', 500: 'var(--rose-500)',
+            600: 'var(--rose-600)', 700: 'var(--rose-700)', 950: 'var(--rose-950)',
+          },
+          emerald: {
+            50: 'var(--emerald-50)', 100: 'var(--emerald-100)',
+            600: 'var(--emerald-600)', 700: 'var(--emerald-700)',
+          },
+          amber: {
+            50: 'var(--amber-50)', 100: 'var(--amber-100)', 200: 'var(--amber-200)',
+            600: 'var(--amber-600)', 700: 'var(--amber-700)',
+          },
         },
         fontFamily: {
           display: ['Fraunces', 'Georgia', 'serif'],
@@ -54,13 +73,67 @@
     --muted: #78716C;
     --line: #E8E8E8;
     --line-soft: #F2F2F2;
+    --card: #FFFFFF;
     /* accent as rgb channels for opacity variants */
     --accent-rgb: 168 91 61;
     --accent-soft: #F4E5DA;
     --accent-bg: #FBF2EA;
+
+    /* neutral scale (matches Tailwind defaults exactly — light mode = zero visual change) */
+    --n-50: #FAFAFA; --n-100: #F5F5F5; --n-200: #E5E5E5; --n-300: #D4D4D4; --n-400: #A3A3A3;
+    --n-500: #737373; --n-600: #525252; --n-700: #404040; --n-800: #262626; --n-900: #171717;
+
+    /* status colors (match Tailwind defaults in light mode) */
+    --rose-50: #FFF1F2; --rose-100: #FFE4E6; --rose-500: #F43F5E; --rose-600: #E11D48; --rose-700: #BE123C; --rose-950: #4C0519;
+    --emerald-50: #ECFDF5; --emerald-100: #D1FAE5; --emerald-600: #059669; --emerald-700: #047857;
+    --amber-50: #FFFBEB; --amber-100: #FEF3C7; --amber-200: #FDE68A; --amber-600: #D97706; --amber-700: #B45309;
+
+    /* chart-specific tokens */
+    --chart-grid: #F0F0F0;
+    --chart-tick: #6B6B6B;
+    --chart-tooltip-bg: #FFFFFF;
+    --chart-mono-a: #1A1A1A;
+    --chart-mono-b: #525252;
+    --chart-mono-c: #737373;
+    --chart-mono-d: #A3A3A3;
+    --chart-mono-e: #C2C2C2;
+    --chart-mono-f: #D4D4D4;
+    --chart-mono-g: #E5E5E5;
+  }
+
+  :root { color-scheme: light; }
+  [data-theme="dark"] { color-scheme: dark; }
+
+  [data-theme="dark"] {
+    --paper: #121212;
+    --paper-soft: #181818;
+    --ink: #F2F2F2;
+    --muted: #9A948C;
+    --line: #2A2A2A;
+    --line-soft: #232323;
+    --card: #1C1C1C;
+
+    --n-50: #1E1E1E; --n-100: #262626; --n-200: #333333; --n-300: #454545; --n-400: #6E6E6E;
+    --n-500: #8C8C8C; --n-600: #A8A8A8; --n-700: #C6C6C6; --n-800: #E0E0E0; --n-900: #F2F2F2;
+
+    --rose-50: #3A1219; --rose-100: #4C0519; --rose-500: #FB7185; --rose-600: #FB7185; --rose-700: #FDA4AF; --rose-950: #FFF1F2;
+    --emerald-50: #0F2A20; --emerald-100: #113828; --emerald-600: #34D399; --emerald-700: #6EE7B7;
+    --amber-50: #2B2008; --amber-100: #3A2B0A; --amber-200: #7C5A0F; --amber-600: #FBBF24; --amber-700: #FCD34D;
+
+    --chart-grid: #2A2A2A;
+    --chart-tick: #8C8C8C;
+    --chart-tooltip-bg: #1C1C1C;
+    --chart-mono-a: #E5E5E5;
+    --chart-mono-b: #C2C2C2;
+    --chart-mono-c: #A3A3A3;
+    --chart-mono-d: #8C8C8C;
+    --chart-mono-e: #6E6E6E;
+    --chart-mono-f: #525252;
+    --chart-mono-g: #333333;
   }
   
-  html, body { background: var(--paper); }
+  html, body { background: var(--paper); transition: background-color 0.25s ease; }
+  body { color: var(--ink); }
   * { font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
   .font-display { font-family: 'Fraunces', Georgia, serif; font-feature-settings: 'ss01' on; font-variation-settings: 'opsz' 96; }
   .font-display-italic { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-feature-settings: 'ss01' on; font-variation-settings: 'opsz' 96; }
@@ -166,6 +239,8 @@ const ICONS = {
   'file': '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
   'loader': '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>',
   'feather': '<path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/>',
+  'sun': '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
+  'moon': '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>',
 };
 
 const Icon = ({ name, className = '', strokeWidth = 2 }) => (
@@ -264,10 +339,16 @@ const loadGcalToken = () => {
 };
 const saveGcalToken = (tokenObj) => localStorage.setItem('planner:gcalToken', JSON.stringify(tokenObj));
 const clearGcalToken = () => localStorage.removeItem('planner:gcalToken');
+// Separate from the token itself: remembers that the user granted access before,
+// even after the short-lived access token has expired or the tab was closed.
+const wasEverConnected = () => localStorage.getItem('planner:gcalConnected') === '1';
+const markConnected = () => localStorage.setItem('planner:gcalConnected', '1');
+const clearConnectedFlag = () => localStorage.removeItem('planner:gcalConnected');
 
 function useGoogleAuth(clientId) {
   const [token, setToken] = useState(loadGcalToken);
   const [ready, setReady] = useState(false);
+  const [needsReconnect, setNeedsReconnect] = useState(false);
   const tokenClientRef = useRef(null);
 
   useEffect(() => {
@@ -283,8 +364,12 @@ function useGoogleAuth(clientId) {
         scope: GCAL_SCOPE,
         callback: (response) => {
           if (response.error) {
-            console.error('OAuth error:', response);
-            alert('Ошибка входа: ' + (response.error_description || response.error));
+            // Silent renewal failed (e.g. interaction_required) — don't alert on
+            // auto-attempts, just flag that the user needs to click "Войти" again.
+            setNeedsReconnect(true);
+            if (response.error !== 'interaction_required' && response.error !== 'access_denied') {
+              console.error('OAuth error:', response);
+            }
             return;
           }
           const t = {
@@ -292,10 +377,18 @@ function useGoogleAuth(clientId) {
             expiry: Date.now() + (response.expires_in - 60) * 1000,
           };
           saveGcalToken(t);
+          markConnected();
+          setNeedsReconnect(false);
           setToken(t);
         },
       });
       setReady(true);
+      // If the user connected before but the access token isn't valid right now
+      // (expired, or the tab was just reopened), try a silent renewal first —
+      // no popup, no re-consent — before falling back to asking the user to click "Войти".
+      if (!loadGcalToken() && wasEverConnected()) {
+        tokenClientRef.current.requestAccessToken({ prompt: '' });
+      }
     };
     init();
     return () => { if (timer) clearTimeout(timer); };
@@ -313,9 +406,11 @@ function useGoogleAuth(clientId) {
       window.google.accounts.oauth2.revoke(token.token, () => {});
     }
     clearGcalToken();
+    clearConnectedFlag();
+    setNeedsReconnect(false);
     setToken(null);
   };
-  return { token, signIn, signOut, ready };
+  return { token, signIn, signOut, ready, needsReconnect };
 }
 
 async function gcalFetchRange(token, startISO, endISO) {
@@ -567,7 +662,7 @@ const statusColor = (s) => {
   if (s === 'В работе') return 'text-amber-700 bg-amber-50 border-amber-100';
   if (s === 'Отложено') return 'text-neutral-500 bg-neutral-100 border-line';
   if (s === 'Отменено') return 'text-rose-700 bg-rose-50 border-rose-100';
-  return 'text-neutral-400 bg-white border-line';
+  return 'text-neutral-400 bg-card border-line';
 };
 const priorityColor = (p) => {
   if (p === 'Высокий') return 'text-rose-700';
@@ -588,7 +683,7 @@ const SectionTitle = ({ children, delay = 0 }) => (
 
 const Card = ({ children, className = '', delay = 0 }) => (
   <div
-    className={`bg-white border border-line rounded-2xl p-6 animate-fade-up ${className}`}
+    className={`bg-card border border-line rounded-2xl p-6 animate-fade-up ${className}`}
     style={{ animationDelay: `${delay}ms` }}
   >{children}</div>
 );
@@ -598,7 +693,7 @@ const KpiCard = ({ label, value, sublabel, delta, accent, delay = 0, prefix = ''
   const isNegative = delta != null && delta < 0;
   return (
     <div
-      className="bg-white border border-line rounded-2xl p-5 sm:p-6 animate-fade-up transition-all duration-300 hover:border-neutral-300 hover:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)]"
+      className="bg-card border border-line rounded-2xl p-5 sm:p-6 animate-fade-up transition-all duration-300 hover:border-neutral-300 hover:shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)]"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="text-[10px] font-semibold tracking-[0.18em] text-neutral-500 uppercase mb-3">
@@ -648,7 +743,7 @@ const IconBtn = ({ onClick, children, title, danger = false }) => (
   >{children}</button>
 );
 
-const TOOLTIP_STYLE = { background: 'white', border: '1px solid #E8E8E8', borderRadius: 8, fontSize: 12, fontFamily: 'inherit' };
+const TOOLTIP_STYLE = { background: 'var(--chart-tooltip-bg)', border: '1px solid var(--line)', borderRadius: 8, fontSize: 12, fontFamily: 'inherit', color: 'var(--ink)' };
 
 const THEMES = {
   terracotta: { name: 'Терракота', rgb: '168 91 61',   hex: '#A85B3D', soft: '#F4E5DA', bg: '#FBF2EA' },
@@ -670,7 +765,7 @@ const applyTheme = (key) => {
 };
 
 // Build per-chart palette around current accent
-const buildPieColors = (accent) => [accent, '#1A1A1A', '#525252', '#737373', '#A3A3A3', '#C2C2C2', '#D4D4D4', '#E5E5E5'];
+const buildPieColors = (accent) => [accent, 'var(--chart-mono-a)', 'var(--chart-mono-b)', 'var(--chart-mono-c)', 'var(--chart-mono-d)', 'var(--chart-mono-e)', 'var(--chart-mono-f)', 'var(--chart-mono-g)'];
 
 // ───────────────────────────────────────────────────────────
 // Google Calendar widget (used on Dashboard)
@@ -739,8 +834,14 @@ function CalendarWidget({ gcal }) {
 
   if (!gcal?.token) return (
     <div className="py-12 text-center space-y-2">
-      <div className="text-sm text-neutral-500">Google Calendar не подключён</div>
-      <div className="text-xs text-neutral-400">Настройки → Google Calendar → Подключить</div>
+      <div className="text-sm text-neutral-500">
+        {gcal?.needsReconnect ? 'Сессия Google Calendar истекла' : 'Google Calendar не подключён'}
+      </div>
+      <div className="text-xs text-neutral-400">
+        {gcal?.needsReconnect
+          ? 'Настройки → Google Calendar → Войти заново'
+          : 'Настройки → Google Calendar → Подключить'}
+      </div>
     </div>
   );
 
@@ -866,7 +967,6 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
   const totalExpense = useMemo(() => periodExpenses.reduce((s, e) => s + (+e.amount || 0), 0), [periodExpenses]);
   const totalIncome  = useMemo(() => periodIncome.reduce((s, e) => s + (+e.amount || 0), 0), [periodIncome]);
   const balance = totalIncome - totalExpense;
-  const totalBudget = useMemo(() => settings.categories.reduce((s, c) => s + (+c.budget || 0), 0), [settings.categories]);
 
   // Comparison: vs prev month (month mode) or vs prev 7 days (week mode)
   const cmpExpense = weekFilter
@@ -933,7 +1033,7 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
               key={p.id}
               onClick={() => setPeriod(p.id)}
               className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                period === p.id ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'
+                period === p.id ? 'bg-card text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'
               }`}
             >
               {p.label}
@@ -942,14 +1042,10 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        <KpiCard label="Доход"   value={fmtMoney(totalIncome)}  accent="text-emerald-700" delta={delta(totalIncome,  cmpIncome)}  sublabel={cmpLabel} delay={0} />
-        <KpiCard label="Расход"  value={fmtMoney(totalExpense)} accent="text-rose-700"    delta={delta(totalExpense, cmpExpense)} sublabel={cmpLabel} delay={60} />
-        <KpiCard label="Баланс"  value={fmtMoney(balance)}                                delta={delta(balance, cmpBalance)}     sublabel={cmpLabel} delay={120} />
-        <KpiCard label="Бюджет"  value={fmtMoney((weekFilter ? Math.round(totalBudget / 30 * 7) : totalBudget) - totalExpense)}
-                 sublabel={`из ${fmtMoney(weekFilter ? Math.round(totalBudget / 30 * 7) : totalBudget)}`} delay={180} />
-        <KpiCard label="Цели"    value={`${goalsDone}/${goalsTotal || 0}`} sublabel="выполнено" delay={240} />
-        <KpiCard label="Привычки" value={fmtPct(habitProgress)} sublabel="среднее" delay={300} />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <KpiCard label="Расход"  value={fmtMoney(totalExpense)} accent="text-rose-700"    delta={delta(totalExpense, cmpExpense)} sublabel={cmpLabel} delay={0} />
+        <KpiCard label="Цели"    value={`${goalsDone}/${goalsTotal || 0}`} sublabel="выполнено" delay={60} />
+        <KpiCard label="Привычки" value={fmtPct(habitProgress)} sublabel="среднее" delay={120} />
       </div>
 
       {/* Google Calendar — full width */}
@@ -982,9 +1078,9 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
         <SectionTitle delay={540}>Динамика расходов по дням</SectionTitle>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart data={lineData}>
-            <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" vertical={false} />
-            <XAxis dataKey="day" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
+            <CartesianGrid strokeDasharray="0" stroke="var(--chart-grid)" vertical={false} />
+            <XAxis dataKey="day" tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
             <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
             <Line type="monotone" dataKey="sum" stroke={accent} strokeWidth={2.5} dot={{ fill: accent, r: 3 }} activeDot={{ r: 5, fill: accent }} animationDuration={800} />
           </LineChart>
@@ -1001,16 +1097,16 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
               { name: 'Расход', current: totalExpense, prev: cmpExpense },
               { name: 'Баланс', current: balance,      prev: cmpBalance },
             ]} barCategoryGap="30%">
-              <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" vertical={false} />
-              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
+              <CartesianGrid strokeDasharray="0" stroke="var(--chart-grid)" vertical={false} />
+              <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
               <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
               <Legend wrapperStyle={{ fontSize: 12 }}
                 formatter={(v) => v === 'current'
                   ? (weekFilter ? `${weekFilter.start}–${weekFilter.end} ${MONTHS_RU[m - 1].slice(0,3)}` : ymLabel(ym))
                   : (weekFilter ? `пред. 7 дней` : ymLabel(shiftYM(ym, -1)))}
               />
-              <Bar dataKey="prev"    fill="#D4D4D4" radius={[4, 4, 0, 0]} animationDuration={800} />
+              <Bar dataKey="prev"    fill="var(--chart-mono-f)" radius={[4, 4, 0, 0]} animationDuration={800} />
               <Bar dataKey="current" fill={accent}  radius={[4, 4, 0, 0]} animationDuration={800} />
             </BarChart>
           </ResponsiveContainer>
@@ -1103,14 +1199,14 @@ function PlanDay({ data, update, ym, gcal }) {
                 key={d} data-day={d}
                 onClick={() => setActiveDay(d)}
                 className={`flex-shrink-0 w-12 h-16 rounded-xl border flex flex-col items-center justify-center gap-0.5 transition-all duration-200 ${
-                  isActive ? 'bg-accent border-accent text-white shadow-md scale-105' : 'bg-white border-line text-neutral-700 hover:border-neutral-400'
+                  isActive ? 'bg-accent border-accent text-white shadow-md scale-105' : 'bg-card border-line text-neutral-700 hover:border-neutral-400'
                 }`}
               >
                 <span className={`text-[10px] font-medium ${isActive ? 'text-white/70' : isWeekend ? 'text-neutral-500 italic' : 'text-neutral-400'}`}>
                   {DOW_SHORT[dow]}
                 </span>
                 <span className="text-lg font-display font-light tabular-nums">{d}</span>
-                {hasTasks && <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-white' : 'bg-accent'}`} />}
+                {hasTasks && <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-card' : 'bg-accent'}`} />}
                 {isToday && !isActive && <span className="absolute mt-12 w-1 h-1 rounded-full bg-accent" />}
               </button>
             );
@@ -1300,11 +1396,11 @@ function Goals({ data, update }) {
                   </IconBtn>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                  <select value={g.priority || ''} onChange={(e) => updateGoal(g.id, { priority: e.target.value || null })} className={`text-xs px-2.5 py-1 rounded-md border outline-none bg-white border-line cursor-pointer ${priorityColor(g.priority)}`}>
+                  <select value={g.priority || ''} onChange={(e) => updateGoal(g.id, { priority: e.target.value || null })} className={`text-xs px-2.5 py-1 rounded-md border outline-none bg-card border-line cursor-pointer ${priorityColor(g.priority)}`}>
                     <option value="">Приоритет</option>
                     {PRIORITIES.map((p) => <option key={p} value={p}>{p}</option>)}
                   </select>
-                  <input type="date" value={g.deadline} onChange={(e) => updateGoal(g.id, { deadline: e.target.value })} className="text-xs px-2.5 py-1 rounded-md border border-line outline-none text-neutral-700 bg-white" />
+                  <input type="date" value={g.deadline} onChange={(e) => updateGoal(g.id, { deadline: e.target.value })} className="text-xs px-2.5 py-1 rounded-md border border-line outline-none text-neutral-700 bg-card" />
                   <Pill value={g.status} options={STATUSES} onChange={(v) => updateGoal(g.id, { status: v })} />
                   <div className="flex items-center gap-2 ml-auto">
                     <span className="text-xs text-neutral-500">{Math.round(g.progress * 100)}%</span>
@@ -1401,7 +1497,7 @@ function Habits({ data, update, ym }) {
                         <button
                           key={d} onClick={() => toggle(h.id, d)}
                           className={`w-6 h-6 rounded-md border transition-all duration-150 ${
-                            on ? 'bg-accent border-accent' : 'bg-white border-line hover:border-accent/40 hover:bg-accent-bg'
+                            on ? 'bg-accent border-accent' : 'bg-card border-line hover:border-accent/40 hover:bg-accent-bg'
                           }`}
                         />
                       );
@@ -1485,7 +1581,7 @@ function Checklists({ checklists, updateChecklists }) {
                   const on = !!item.done;
                   return (
                     <div key={i} className="group flex items-center gap-2 py-1">
-                      <button onClick={() => toggleItem(list.id, i)} className={`w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 transition-all ${on ? 'bg-emerald-600 border-emerald-600' : 'bg-white border-neutral-300 hover:border-neutral-500'}`}>
+                      <button onClick={() => toggleItem(list.id, i)} className={`w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 transition-all ${on ? 'bg-emerald-600 border-emerald-600' : 'bg-card border-neutral-300 hover:border-neutral-500'}`}>
                         {on && <Icon name="check" className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
                       </button>
                       <input
@@ -1652,7 +1748,7 @@ function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
             </div>
           ) : !rows ? (
             <div className="py-4">
-              <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-line bg-white text-sm font-medium text-neutral-700 hover:border-accent hover:text-accent transition-colors cursor-pointer">
+              <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-line bg-card text-sm font-medium text-neutral-700 hover:border-accent hover:text-accent transition-colors cursor-pointer">
                 <Icon name="file" className="w-4 h-4" />
                 Выбрать файл (.xlsx, .csv)
                 <input
@@ -1709,7 +1805,7 @@ function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
                     <select
                       value={map[f.key]}
                       onChange={(e) => setMap((m) => ({ ...m, [f.key]: +e.target.value }))}
-                      className="w-full px-2 py-1.5 rounded-lg border border-line text-xs bg-white outline-none focus:border-accent"
+                      className="w-full px-2 py-1.5 rounded-lg border border-line text-xs bg-card outline-none focus:border-accent"
                     >
                       <option value={-1}>—</option>
                       {colOptions.map((ci) => <option key={ci} value={ci}>{colLabel(ci)}</option>)}
@@ -1799,14 +1895,14 @@ function Expenses({ data, update, settings, ym }) {
               const d = +e.target.value.slice(8);
               if (d >= 1 && d <= days) setForm({ ...form, day: d });
             }}
-            className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors col-span-2 md:col-span-1"
+            className="px-3 py-2 rounded-lg border border-line text-sm bg-card outline-none focus:border-accent transition-colors col-span-2 md:col-span-1"
           />
-          <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors col-span-2">
+          <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="px-3 py-2 rounded-lg border border-line text-sm bg-card outline-none focus:border-accent transition-colors col-span-2">
             <option value="">Категория</option>
             {settings.categories.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
           </select>
-          <input type="number" inputMode="numeric" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} placeholder="Сумма ₽" data-input="expense-amount" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors" />
-          <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Описание" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors col-span-2 md:col-span-1" />
+          <input type="number" inputMode="numeric" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} placeholder="Сумма ₽" data-input="expense-amount" className="px-3 py-2 rounded-lg border border-line text-sm bg-card outline-none focus:border-accent transition-colors" />
+          <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Описание" className="px-3 py-2 rounded-lg border border-line text-sm bg-card outline-none focus:border-accent transition-colors col-span-2 md:col-span-1" />
           <button onClick={addExpense} disabled={!form.amount || !form.category} className="px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed col-span-2 md:col-span-1">
             Добавить
           </button>
@@ -1847,97 +1943,6 @@ function Expenses({ data, update, settings, ym }) {
 }
 
 // ───────────────────────────────────────────────────────────
-// Доходы
-// ───────────────────────────────────────────────────────────
-function Income({ data, update, settings, ym }) {
-  const [form, setForm] = useState({ day: todayYM() === ym ? todayDay() : 1, source: '', amount: '', description: '' });
-
-  useEffect(() => {
-    setForm((f) => ({ ...f, day: todayYM() === ym ? todayDay() : 1 }));
-  }, [ym]);
-
-  const total = data.income.reduce((s, e) => s + (+e.amount || 0), 0);
-  const count = data.income.length;
-
-  const addIncome = () => {
-    if (!form.amount || !form.source) return;
-    const e = { id: uid(), day: +form.day, source: form.source, amount: +form.amount, description: form.description };
-    update((d) => ({ ...d, income: [e, ...d.income] }));
-    setForm({ ...form, amount: '', description: '' });
-    focusLast('[data-input="income-amount"]');
-  };
-  const removeIncome = (id) => update((d) => ({ ...d, income: d.income.filter((e) => e.id !== id) }));
-
-  const days = daysInMonth(ym);
-  const formDateStr = `${ym}-${String(form.day).padStart(2, '0')}`;
-  const monthMin = `${ym}-01`;
-  const monthMax = `${ym}-${String(days).padStart(2, '0')}`;
-
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
-        <KpiCard label="Итого" value={fmtMoney(total)} accent="text-emerald-700" delay={0} />
-        <KpiCard label="Поступлений" value={count} delay={60} />
-      </div>
-
-      <Card delay={120}>
-        <SectionTitle delay={120}>Новое поступление</SectionTitle>
-        <div
-          className="grid grid-cols-2 md:grid-cols-5 gap-2"
-          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addIncome(); } }}
-        >
-          <input
-            type="date"
-            value={formDateStr}
-            min={monthMin}
-            max={monthMax}
-            onChange={(e) => {
-              const d = +e.target.value.slice(8);
-              if (d >= 1 && d <= days) setForm({ ...form, day: d });
-            }}
-            className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors"
-          />
-          <select value={form.source} onChange={(e) => setForm({ ...form, source: e.target.value })} className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors">
-            <option value="">Источник</option>
-            {settings.incomeSources.map((s) => <option key={s.id} value={s.name}>{s.name}</option>)}
-          </select>
-          <input type="number" inputMode="numeric" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} placeholder="Сумма ₽" data-input="income-amount" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors" />
-          <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Описание" className="px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors" />
-          <button onClick={addIncome} disabled={!form.amount || !form.source} className="px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed col-span-2 md:col-span-1">
-            Добавить
-          </button>
-        </div>
-      </Card>
-
-      <StatementImport ym={ym} data={data} update={update} categories={settings.incomeSources} kind="income" />
-
-      <Card delay={180}>
-        <SectionTitle delay={180}>История</SectionTitle>
-        {data.income.length === 0 ? (
-          <div className="text-center py-12 text-neutral-400 text-sm">Пока нет поступлений</div>
-        ) : (
-          <div className="space-y-1">
-            {data.income.map((e, i) => (
-              <div key={e.id} className="group flex items-center gap-3 py-2.5 border-b border-line-soft hover:bg-neutral-50 -mx-2 px-2 rounded-lg transition-colors animate-fade-up" style={{ animationDelay: `${Math.min(i * 20, 400)}ms` }}>
-                <div className="text-xs text-neutral-400 font-mono w-10 flex-shrink-0">{String(e.day).padStart(2, '0')}</div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm text-neutral-900 truncate">{e.description || '—'}</div>
-                  <div className="text-xs text-neutral-400">{e.source}</div>
-                </div>
-                <div className="font-mono text-sm font-semibold text-emerald-700 tabular-nums">+{fmtMoney(e.amount)}</div>
-                <IconBtn onClick={() => removeIncome(e.id)} title="Удалить" danger>
-                  <Icon name="x" className="w-4 h-4" />
-                </IconBtn>
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
-    </div>
-  );
-}
-
-// ───────────────────────────────────────────────────────────
 // Аналитика
 // ───────────────────────────────────────────────────────────
 function Analytics({ data, history, settings, ym, accent }) {
@@ -1957,11 +1962,6 @@ function Analytics({ data, history, settings, ym, accent }) {
     });
     return arr;
   }, [data.expenses, ym]);
-
-  const byMethod = useMemo(() => PAYMENT_METHODS.map((m) => ({
-    name: m,
-    sum: data.expenses.filter((e) => e.method === m).reduce((s, e) => s + (+e.amount || 0), 0),
-  })).filter((m) => m.sum > 0), [data.expenses]);
 
   const byCategory = useMemo(() => settings.categories.map((c) => ({
     name: c.name,
@@ -1987,13 +1987,13 @@ function Analytics({ data, history, settings, ym, accent }) {
           <SectionTitle>Тренд по месяцам</SectionTitle>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={trend} barCategoryGap="20%">
-              <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" vertical={false} />
-              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
+              <CartesianGrid strokeDasharray="0" stroke="var(--chart-grid)" vertical={false} />
+              <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
               <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="income" name="Доход" fill={accent} radius={[4, 4, 0, 0]} animationDuration={800} />
-              <Bar dataKey="expense" name="Расход" fill="#1A1A1A" radius={[4, 4, 0, 0]} animationDuration={800} />
+              <Bar dataKey="expense" name="Расход" fill="var(--chart-mono-a)" radius={[4, 4, 0, 0]} animationDuration={800} />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -2003,9 +2003,9 @@ function Analytics({ data, history, settings, ym, accent }) {
         <SectionTitle delay={60}>Динамика по дням</SectionTitle>
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={byDay}>
-            <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" vertical={false} />
-            <XAxis dataKey="day" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
+            <CartesianGrid strokeDasharray="0" stroke="var(--chart-grid)" vertical={false} />
+            <XAxis dataKey="day" tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
             <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
             <Line type="monotone" dataKey="sum" stroke={accent} strokeWidth={2.5} dot={{ fill: accent, r: 3 }} activeDot={{ r: 5, fill: accent }} animationDuration={1000} />
           </LineChart>
@@ -2017,12 +2017,12 @@ function Analytics({ data, history, settings, ym, accent }) {
           <SectionTitle delay={120}>По категориям</SectionTitle>
           <ResponsiveContainer width="100%" height={Math.max(220, byCategory.length * 28)}>
             <BarChart data={byCategory} layout="vertical" barCategoryGap="20%">
-              <CartesianGrid strokeDasharray="0" stroke="#F0F0F0" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
-              <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#6B6B6B' }} axisLine={false} tickLine={false} width={110} />
+              <CartesianGrid strokeDasharray="0" stroke="var(--chart-grid)" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} width={110} />
               <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
               <Bar dataKey="spent" name="Факт" fill={accent} radius={[0, 4, 4, 0]} animationDuration={800} />
-              <Bar dataKey="budget" name="Бюджет" fill="#D4D4D4" radius={[0, 4, 4, 0]} animationDuration={800} />
+              <Bar dataKey="budget" name="Бюджет" fill="var(--chart-mono-f)" radius={[0, 4, 4, 0]} animationDuration={800} />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -2041,24 +2041,7 @@ function Analytics({ data, history, settings, ym, accent }) {
         </Card>
 
         <Card delay={240}>
-          <SectionTitle delay={240}>Способы оплаты</SectionTitle>
-          {byMethod.length === 0 ? (
-            <div className="text-sm text-neutral-400 py-12 text-center">Нет данных</div>
-          ) : (
-            <ResponsiveContainer width="100%" height={240}>
-              <PieChart>
-                <Pie data={byMethod} dataKey="sum" nameKey="name" cx="50%" cy="50%" outerRadius={90} paddingAngle={1} animationDuration={800}>
-                  {byMethod.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
-                </Pie>
-                <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-              </PieChart>
-            </ResponsiveContainer>
-          )}
-        </Card>
-
-        <Card delay={300}>
-          <SectionTitle delay={300}>Источники дохода</SectionTitle>
+          <SectionTitle delay={240}>Источники дохода</SectionTitle>
           {byIncomeSource.length === 0 ? (
             <div className="text-sm text-neutral-400 py-12 text-center">Нет данных</div>
           ) : (
@@ -2091,7 +2074,7 @@ const PROMISE_STATUS_LIST = [PROMISE_STATUS.ACTIVE, PROMISE_STATUS.KEPT, PROMISE
 const promiseStatusColor = (s) => {
   if (s === PROMISE_STATUS.KEPT) return 'text-emerald-700 bg-emerald-50 border-emerald-100';
   if (s === PROMISE_STATUS.BROKEN) return 'text-rose-700 bg-rose-50 border-rose-100';
-  return 'text-neutral-600 bg-white border-neutral-300';
+  return 'text-neutral-600 bg-card border-neutral-300';
 };
 
 function Promises({ promises, updatePromises }) {
@@ -2262,7 +2245,7 @@ function Promises({ promises, updatePromises }) {
 // ───────────────────────────────────────────────────────────
 // Настройки
 // ───────────────────────────────────────────────────────────
-function Settings({ settings, updateSettings, theme, setTheme, gcal }) {
+function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gcal }) {
   const addCategory = () => {
     updateSettings((s) => ({ ...s, categories: [...s.categories, { id: uid(), name: '', budget: 0 }] }));
     focusLast('[data-input="category-name"]');
@@ -2283,6 +2266,27 @@ function Settings({ settings, updateSettings, theme, setTheme, gcal }) {
   return (
     <div className="space-y-6">
       <Card>
+        <SectionTitle>Оформление</SectionTitle>
+        <div className="inline-flex rounded-lg border border-line bg-card p-1 gap-1">
+          {[
+            { key: 'light', label: 'Светлая', icon: 'sun' },
+            { key: 'dark', label: 'Тёмная', icon: 'moon' },
+          ].map((opt) => (
+            <button
+              key={opt.key}
+              onClick={() => setMode(opt.key)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                mode === opt.key ? 'bg-accent text-white' : 'text-neutral-600 hover:text-neutral-900'
+              }`}
+            >
+              <Icon name={opt.icon} className="w-3.5 h-3.5" />
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
         <SectionTitle>Цвет акцента</SectionTitle>
         <div className="flex flex-wrap gap-2 sm:gap-3">
           {Object.entries(THEMES).map(([key, t]) => {
@@ -2292,7 +2296,7 @@ function Settings({ settings, updateSettings, theme, setTheme, gcal }) {
                 key={key}
                 onClick={() => setTheme(key)}
                 className={`group flex items-center gap-2.5 px-3 py-2 rounded-lg border transition-all duration-200 ${
-                  active ? 'border-accent bg-accent-bg' : 'border-line bg-white hover:border-neutral-300'
+                  active ? 'border-accent bg-accent-bg' : 'border-line bg-card hover:border-neutral-300'
                 }`}
               >
                 <span
@@ -2319,7 +2323,7 @@ function Settings({ settings, updateSettings, theme, setTheme, gcal }) {
               value={settings.googleClientId || ''}
               onChange={(e) => updateSettings((s) => ({ ...s, googleClientId: e.target.value.trim() }))}
               placeholder="Client ID (1234-abc.apps.googleusercontent.com)"
-              className="flex-1 px-3 py-2 rounded-lg border border-line text-sm bg-white outline-none focus:border-accent transition-colors font-mono"
+              className="flex-1 px-3 py-2 rounded-lg border border-line text-sm bg-card outline-none focus:border-accent transition-colors font-mono"
             />
           </div>
           <div className="flex items-center gap-3 flex-wrap">
@@ -2342,12 +2346,13 @@ function Settings({ settings, updateSettings, theme, setTheme, gcal }) {
                 disabled={!settings.googleClientId || !gcal.ready}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                Подключить Google
+                {gcal.needsReconnect ? 'Войти заново' : 'Подключить Google'}
               </button>
             )}
           </div>
           <p className="text-[11px] text-neutral-400 leading-relaxed">
-            Если кнопка неактивна — проверь что Client ID вставлен правильно. При входе Google запросит разрешение на чтение и запись в твой календарь. Сессия живёт ~1 час, после нужно подключиться снова.
+            Если кнопка неактивна — проверь что Client ID вставлен правильно. При входе Google запросит разрешение на чтение и запись в твой календарь.
+            Токен доступа обновляется автоматически в фоне при открытии страницы — заново нажимать «Подключить» обычно не требуется, если только доступ явно не был отозван.
           </p>
         </div>
       </Card>
@@ -2440,7 +2445,7 @@ function Settings({ settings, updateSettings, theme, setTheme, gcal }) {
             >
               Экспорт
             </button>
-            <label className="px-3 py-2 rounded-lg bg-white border border-neutral-300 text-neutral-700 text-xs font-medium hover:bg-neutral-50 transition-colors cursor-pointer">
+            <label className="px-3 py-2 rounded-lg bg-card border border-neutral-300 text-neutral-700 text-xs font-medium hover:bg-neutral-50 transition-colors cursor-pointer">
               Импорт
               <input
                 type="file" accept="application/json" className="hidden"
@@ -2478,7 +2483,6 @@ const SECTIONS = [
   { id: 'promises', name: 'Обещания', icon: 'feather' },
   { id: 'checklists', name: 'Чек-листы', icon: 'list-checks' },
   { id: 'expenses', name: 'Расходы', icon: 'wallet' },
-  { id: 'income', name: 'Доходы', icon: 'trending-up' },
   { id: 'analytics', name: 'Аналитика', icon: 'bar-chart' },
   { id: 'settings', name: 'Настройки', icon: 'settings' },
 ];
@@ -2493,6 +2497,7 @@ function App() {
   const [checklists, setChecklists] = useState(null);
   const [promises, setPromises] = useState(null);
   const [theme, setTheme] = useState(DEFAULT_THEME);
+  const [mode, setMode] = useState('light');
   const [loading, setLoading] = useState(true);
   const navRef = useRef(null);
 
@@ -2509,8 +2514,22 @@ function App() {
       setPromises(Array.isArray(pr) ? pr : []);
       const t = await storage.get('theme');
       if (t && THEMES[t]) setTheme(t);
+      const m = await storage.get('colorMode');
+      if (m === 'light' || m === 'dark') {
+        setMode(m);
+      } else if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+        setMode('dark');
+      }
     })();
   }, []);
+
+  // Apply light/dark mode to the document whenever it changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', mode);
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) metaTheme.setAttribute('content', mode === 'dark' ? '#121212' : '#FAFAFA');
+    storage.set('colorMode', mode);
+  }, [mode]);
 
   // Apply theme CSS variables whenever it changes
   useEffect(() => {
@@ -2645,9 +2664,8 @@ function App() {
           {section === 'promises' && <Promises promises={promises} updatePromises={updatePromises} />}
           {section === 'checklists' && <Checklists checklists={checklists} updateChecklists={updateChecklists} />}
           {section === 'expenses' && <Expenses data={data} update={update} settings={settings} ym={ym} />}
-          {section === 'income' && <Income data={data} update={update} settings={settings} ym={ym} />}
           {section === 'analytics' && <Analytics data={data} history={history} settings={settings} ym={ym} accent={accentHex} />}
-          {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} gcal={gcal} />}
+          {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} mode={mode} setMode={setMode} gcal={gcal} />}
         </div>
       </main>
     </div>
