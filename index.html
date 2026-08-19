@@ -205,6 +205,14 @@
     background-size: 14px; padding-right: 1.75rem;
   }
 
+  /* Keyboard-focus ring — many controls set outline-none for a cleaner look,
+     so this restores a visible, accent-colored indicator for keyboard users. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent-rgb));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
@@ -639,12 +647,6 @@ const DEFAULT_CATEGORIES = [
   { id: uid(), name: 'Путешествия', budget: 10000 },
   { id: uid(), name: 'Прочее', budget: 5000 },
 ];
-const DEFAULT_INCOME_SOURCES = [
-  { id: uid(), name: 'Зарплата', plan: 150000 },
-  { id: uid(), name: 'Подработка', plan: 20000 },
-  { id: uid(), name: 'Инвестиции', plan: 5000 },
-  { id: uid(), name: 'Прочее', plan: 0 },
-];
 const DEFAULT_HABITS = () => [
   { id: uid(), name: 'Вода 2 л' },
   { id: uid(), name: 'Зарядка 15 мин' },
@@ -691,7 +693,7 @@ const PRIORITIES = ['Высокий', 'Средний', 'Низкий'];
 
 const emptyMonth = () => ({
   goals: [], habits: DEFAULT_HABITS(), habitChecks: {},
-  dailyTasks: {}, weeklyTasks: {}, expenses: [], income: [],
+  dailyTasks: {}, weeklyTasks: {}, expenses: [],
 });
 
 const statusColor = (s) => {
@@ -753,7 +755,7 @@ const SectionTitle = ({ children, delay = 0 }) => (
 
 const Card = ({ children, className = '', delay = 0 }) => (
   <div
-    className={`bg-card border border-line rounded-2xl p-6 animate-fade-up transition-all duration-300 ease-apple hover:border-neutral-300 hover:shadow-apple-lg ${className}`}
+    className={`bg-card border border-line rounded-2xl p-6 shadow-apple-sm animate-fade-up transition-all duration-300 ease-apple hover:border-neutral-300 hover:-translate-y-1 hover:shadow-apple-lg ${className}`}
     style={{ animationDelay: `${delay}ms` }}
   >{children}</div>
 );
@@ -764,13 +766,19 @@ const KpiCard = ({ label, value, format = (n) => String(Math.round(n)), sublabel
   const isNumeric = typeof value === 'number' && !isNaN(value);
   return (
     <div
-      className="bg-card border border-line rounded-2xl p-5 sm:p-6 animate-fade-up transition-all duration-300 ease-apple hover:border-neutral-300 hover:-translate-y-[1px] hover:shadow-apple-lg"
+      className="bg-card border border-line rounded-2xl p-5 sm:p-6 shadow-apple-sm animate-fade-up transition-all duration-300 ease-apple hover:border-neutral-300 hover:-translate-y-1 hover:shadow-apple-lg"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="text-[10px] font-semibold tracking-[0.18em] text-neutral-500 uppercase mb-3">
         {label}
       </div>
-      <div className={`text-3xl sm:text-4xl lg:text-[42px] font-display font-light tracking-tight leading-none tabular-nums ${accent || 'text-neutral-900'}`}>
+      <div
+        className={`text-3xl sm:text-4xl lg:text-[42px] font-display font-semibold tracking-tight leading-none tabular-nums ${accent || ''}`}
+        style={accent ? undefined : {
+          backgroundImage: 'linear-gradient(180deg, var(--ink) 0%, var(--muted) 200%)',
+          WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
+        }}
+      >
         {isNumeric ? <AnimatedNumber value={value} format={format} /> : value}
       </div>
       {sublabel && (
@@ -798,7 +806,7 @@ const Pill = ({ value, options, onChange, className = '' }) => (
   <select
     value={value || ''}
     onChange={(e) => onChange(e.target.value || null)}
-    className={`text-xs font-medium px-2.5 py-1 rounded-md border outline-none cursor-pointer transition-colors ${statusColor(value)} ${className}`}
+    className={`text-xs font-medium px-3 py-1 rounded-full border outline-none cursor-pointer transition-colors ${statusColor(value)} ${className}`}
   >
     <option value="">—</option>
     {options.map((o) => <option key={o} value={o}>{o}</option>)}
@@ -808,7 +816,7 @@ const Pill = ({ value, options, onChange, className = '' }) => (
 const IconBtn = ({ onClick, children, title, danger = false }) => (
   <button
     onClick={onClick} title={title}
-    className={`p-1.5 rounded-md transition-all active:scale-90 ${
+    className={`p-1.5 rounded-full transition-all duration-200 ease-apple active:scale-90 ${
       danger ? 'text-neutral-400 hover:text-rose-600 hover:bg-rose-50' : 'text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100'
     }`}
   >{children}</button>
@@ -1066,13 +1074,13 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
       {/* Period toggle */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="text-xl font-display font-light text-neutral-500">{rangeLabel}</div>
-        <div className="flex gap-1 p-1 rounded-lg bg-neutral-100">
+        <div className="flex gap-1 p-1 rounded-full bg-neutral-100">
           {[{ id: 'month', label: 'Месяц' }, { id: 'week', label: '7 дней' }].map((p) => (
             <button
               key={p.id}
               onClick={() => setPeriod(p.id)}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                period === p.id ? 'bg-card text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 ease-apple ${
+                period === p.id ? 'bg-card text-neutral-900 shadow-apple-sm' : 'text-neutral-500 hover:text-neutral-700'
               }`}
             >
               {p.label}
@@ -1191,7 +1199,6 @@ function PlanDay({ data, update, ym, gcal }) {
         <div className="flex gap-1.5 px-4 sm:px-0 pb-1">
           {Array.from({ length: days }, (_, i) => i + 1).map((d) => {
             const dow = dowOfDay(ym, d);
-            const isWeekend = dow >= 5;
             const isToday = isCurrentMonth && d === todayDay();
             const isActive = d === activeDay;
             const hasTasks = (data.dailyTasks[d] || []).length > 0;
@@ -1203,7 +1210,7 @@ function PlanDay({ data, update, ym, gcal }) {
                   isActive ? 'bg-accent border-accent text-white shadow-md scale-105' : 'bg-card border-line text-neutral-700 hover:border-neutral-400'
                 }`}
               >
-                <span className={`text-[10px] font-medium ${isActive ? 'text-white/70' : isWeekend ? 'text-neutral-500 italic' : 'text-neutral-400'}`}>
+                <span className={`text-[10px] font-medium ${isActive ? 'text-white/70' : 'text-neutral-400'}`}>
                   {DOW_SHORT[dow]}
                 </span>
                 <span className="text-lg font-display font-light tabular-nums">{d}</span>
@@ -1397,7 +1404,7 @@ function Goals({ data, update }) {
                   </IconBtn>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                  <select value={g.priority || ''} onChange={(e) => updateGoal(g.id, { priority: e.target.value || null })} className={`text-xs px-2.5 py-1 rounded-md border outline-none bg-card border-line cursor-pointer ${priorityColor(g.priority)}`}>
+                  <select value={g.priority || ''} onChange={(e) => updateGoal(g.id, { priority: e.target.value || null })} className={`text-xs px-3 py-1 rounded-full border outline-none bg-card border-line cursor-pointer ${priorityColor(g.priority)}`}>
                     <option value="">Приоритет</option>
                     {PRIORITIES.map((p) => <option key={p} value={p}>{p}</option>)}
                   </select>
@@ -1465,15 +1472,12 @@ function Habits({ data, update, ym }) {
               <div className="flex items-center gap-1 mb-2">
                 <div className="w-40 flex-shrink-0 text-[10px] font-semibold tracking-[0.14em] text-neutral-500 uppercase pr-3">Привычка</div>
                 {dayArr.map((d) => {
-                  const dow = dowOfDay(ym, d);
                   const isToday = d === todayCol;
                   return (
                     <div key={d} className="w-6 h-6 flex items-center justify-center">
                       <span
                         className={`w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-semibold transition-colors ${
-                          isToday
-                            ? 'bg-accent text-white'
-                            : dow >= 5 ? 'text-amber-600' : 'text-neutral-400'
+                          isToday ? 'bg-accent text-white' : 'text-neutral-400'
                         }`}
                       >
                         {d}
@@ -1622,10 +1626,9 @@ function Checklists({ checklists, updateChecklists }) {
 }
 
 // ───────────────────────────────────────────────────────────
-// Импорт выписки (Excel / CSV) — для расходов и доходов
+// Импорт выписки (Excel / CSV)
 // ───────────────────────────────────────────────────────────
-function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
-  const isIncome = kind === 'income';
+function StatementImport({ ym, data, update, categories }) {
   const [open, setOpen] = useState(false);
   const [rows, setRows] = useState(null);
   const [fileName, setFileName] = useState('');
@@ -1683,9 +1686,6 @@ function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
 
   const totalSum = parsedTx.reduce((s, t) => s + t.amount, 0);
 
-  const arrKey = isIncome ? 'income' : 'expenses';
-  const fallbackLabel = isIncome ? 'Прочее' : 'Прочее';
-
   const doImport = async () => {
     if (parsedTx.length === 0) return;
     const sameTx = (a, b) => a.day === b.day && Math.round(a.amount) === Math.round(b.amount) && a.description === b.description;
@@ -1700,34 +1700,28 @@ function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
     const monthsAffected = Object.keys(byMonth);
 
     for (const m of monthsAffected) {
-      const toRecords = byMonth[m].map((t) => isIncome ? {
+      const toRecords = byMonth[m].map((t) => ({
         id: uid(),
         day: +t.date.slice(8, 10),
-        source: t.category || fallbackLabel,
-        amount: t.amount,
-        description: t.description,
-      } : {
-        id: uid(),
-        day: +t.date.slice(8, 10),
-        category: t.category || fallbackLabel,
+        category: t.category || 'Прочее',
         amount: t.amount,
         description: t.description,
         method: 'Карта',
-      });
+      }));
 
       if (m === ym) {
-        const existing = data[arrKey];
+        const existing = data.expenses;
         const fresh = toRecords.filter((ne) => !existing.some((e) => sameTx(e, ne)));
         skipped += toRecords.length - fresh.length;
         imported += fresh.length;
-        update((d) => ({ ...d, [arrKey]: [...fresh, ...d[arrKey]] }));
+        update((d) => ({ ...d, expenses: [...fresh, ...d.expenses] }));
       } else {
         const md = (await storage.get(`month:${m}`)) || emptyMonth();
-        const existing = md[arrKey] || [];
+        const existing = md.expenses || [];
         const fresh = toRecords.filter((ne) => !existing.some((e) => sameTx(e, ne)));
         skipped += toRecords.length - fresh.length;
         imported += fresh.length;
-        md[arrKey] = [...fresh, ...existing];
+        md.expenses = [...fresh, ...existing];
         await storage.set(`month:${m}`, md);
       }
     }
@@ -1809,7 +1803,7 @@ function StatementImport({ ym, data, update, categories, kind = 'expense' }) {
                   { key: 'date', label: 'Дата *' },
                   { key: 'amount', label: 'Сумма *' },
                   { key: 'desc', label: 'Описание' },
-                  { key: 'cat', label: isIncome ? 'Источник' : 'Категория' },
+                  { key: 'cat', label: 'Категория' },
                 ].map((f) => (
                   <div key={f.key}>
                     <div className="text-[10px] font-semibold tracking-wider text-neutral-500 uppercase mb-1">{f.label}</div>
@@ -1886,7 +1880,7 @@ function Expenses({ data, update, settings, ym }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-3 gap-3 sm:gap-4">
-        <KpiCard label="Итого" value={total} format={fmtMoney} accent="text-rose-700" delay={0} />
+        <KpiCard label="Итого" value={total} format={fmtMoney} delay={0} />
         <KpiCard label="Транзакций" value={count} delay={60} />
         <KpiCard label="Средний чек" value={avg} format={fmtMoney} delay={120} />
       </div>
@@ -1933,7 +1927,7 @@ function Expenses({ data, update, settings, ym }) {
               return (
                 <div key={e.id} className="group flex items-center gap-2 sm:gap-3 py-2.5 border-b border-line-soft hover:bg-neutral-50 -mx-2 px-2 rounded-lg transition-colors animate-fade-up" style={{ animationDelay: `${Math.min(i * 20, 400)}ms` }}>
                   <div className="text-xs text-neutral-400 font-mono w-10 flex-shrink-0">
-                    {String(e.day).padStart(2, '0')}<span className={dow >= 5 ? 'text-amber-600' : ''}>·{DOW_SHORT[dow]}</span>
+                    {String(e.day).padStart(2, '0')}·{DOW_SHORT[dow]}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm text-neutral-900 truncate">{e.description || '—'}</div>
@@ -1957,7 +1951,6 @@ function Expenses({ data, update, settings, ym }) {
 // Аналитика
 // ───────────────────────────────────────────────────────────
 function Analytics({ data, history, settings, ym, accent }) {
-  const pieColors = useMemo(() => buildPieColors(accent), [accent]);
   const days = daysInMonth(ym);
   const byDay = useMemo(() => Array.from({ length: days }, (_, i) => {
     const day = i + 1;
@@ -1980,14 +1973,8 @@ function Analytics({ data, history, settings, ym, accent }) {
     budget: c.budget,
   })).filter((c) => c.spent > 0 || c.budget > 0).sort((a, b) => b.spent - a.spent), [data.expenses, settings.categories]);
 
-  const byIncomeSource = useMemo(() => settings.incomeSources.map((s) => ({
-    name: s.name,
-    sum: data.income.filter((i) => i.source === s.name).reduce((acc, i) => acc + (+i.amount || 0), 0),
-  })).filter((s) => s.sum > 0), [data.income, settings.incomeSources]);
-
   const trend = useMemo(() => history.map((h) => ({
     name: ymLabel(h.ym).split(' ')[0].slice(0, 3),
-    income: h.income,
     expense: h.expense,
   })), [history]);
 
@@ -1997,14 +1984,12 @@ function Analytics({ data, history, settings, ym, accent }) {
         <Card>
           <SectionTitle>Тренд по месяцам</SectionTitle>
           <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={trend} barCategoryGap="20%">
+            <BarChart data={trend} barCategoryGap="30%">
               <CartesianGrid strokeDasharray="0" stroke="var(--chart-grid)" vertical={false} />
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
               <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="income" name="Доход" fill={accent} radius={[4, 4, 0, 0]} animationDuration={800} />
-              <Bar dataKey="expense" name="Расход" fill="var(--chart-mono-a)" radius={[4, 4, 0, 0]} animationDuration={800} />
+              <Bar dataKey="expense" name="Расход" fill={accent} radius={[4, 4, 0, 0]} animationDuration={800} />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -2041,31 +2026,14 @@ function Analytics({ data, history, settings, ym, accent }) {
         <Card delay={180}>
           <SectionTitle delay={180}>По дням недели</SectionTitle>
           <ResponsiveContainer width="100%" height={240}>
-            <PieChart>
-              <Pie data={byDow.filter((d) => d.sum > 0)} dataKey="sum" nameKey="name" cx="50%" cy="50%" outerRadius={90} innerRadius={50} paddingAngle={1} animationDuration={800}>
-                {byDow.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
-              </Pie>
+            <BarChart data={byDow} barCategoryGap="30%">
+              <CartesianGrid strokeDasharray="0" stroke="var(--chart-grid)" vertical={false} />
+              <XAxis dataKey="name" tickFormatter={(n) => n.slice(0, 2)} tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
               <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
-            </PieChart>
+              <Bar dataKey="sum" name="Расход" fill={accent} radius={[4, 4, 0, 0]} animationDuration={800} />
+            </BarChart>
           </ResponsiveContainer>
-        </Card>
-
-        <Card delay={240}>
-          <SectionTitle delay={240}>Источники дохода</SectionTitle>
-          {byIncomeSource.length === 0 ? (
-            <div className="text-sm text-neutral-400 py-12 text-center">Нет данных</div>
-          ) : (
-            <ResponsiveContainer width="100%" height={240}>
-              <PieChart>
-                <Pie data={byIncomeSource} dataKey="sum" nameKey="name" cx="50%" cy="50%" outerRadius={90} paddingAngle={1} animationDuration={800}>
-                  {byIncomeSource.map((_, i) => <Cell key={i} fill={pieColors[i % pieColors.length]} />)}
-                </Pie>
-                <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-              </PieChart>
-            </ResponsiveContainer>
-          )}
         </Card>
       </div>
     </div>
@@ -2225,7 +2193,7 @@ function Promises({ promises, updatePromises }) {
                     <select
                       value={p.status || ''}
                       onChange={(e) => updateP(p.id, { status: e.target.value || null })}
-                      className={`text-xs font-medium px-2.5 py-1 rounded-md border outline-none cursor-pointer transition-colors ml-auto ${promiseStatusColor(p.status)}`}
+                      className={`text-xs font-medium px-3 py-1 rounded-full border outline-none cursor-pointer transition-colors ml-auto ${promiseStatusColor(p.status)}`}
                     >
                       {PROMISE_STATUS_LIST.map((s) => <option key={s} value={s}>{s}</option>)}
                     </select>
@@ -2264,21 +2232,13 @@ function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gc
   const updateCategory = (id, patch) => updateSettings((s) => ({ ...s, categories: s.categories.map((c) => c.id === id ? { ...c, ...patch } : c) }));
   const removeCategory = (id) => updateSettings((s) => ({ ...s, categories: s.categories.filter((c) => c.id !== id) }));
 
-  const addSource = () => {
-    updateSettings((s) => ({ ...s, incomeSources: [...s.incomeSources, { id: uid(), name: '', plan: 0 }] }));
-    focusLast('[data-input="source-name"]');
-  };
-  const updateSource = (id, patch) => updateSettings((s) => ({ ...s, incomeSources: s.incomeSources.map((c) => c.id === id ? { ...c, ...patch } : c) }));
-  const removeSource = (id) => updateSettings((s) => ({ ...s, incomeSources: s.incomeSources.filter((c) => c.id !== id) }));
-
   const totalBudget = settings.categories.reduce((s, c) => s + (+c.budget || 0), 0);
-  const totalPlan = settings.incomeSources.reduce((s, c) => s + (+c.plan || 0), 0);
 
   return (
     <div className="space-y-6">
       <Card>
         <SectionTitle>Оформление</SectionTitle>
-        <div className="inline-flex rounded-lg border border-line bg-card p-1 gap-1">
+        <div className="inline-flex rounded-full border border-line bg-paper-soft p-1 gap-1">
           {[
             { key: 'light', label: 'Светлая', icon: 'sun' },
             { key: 'dark', label: 'Тёмная', icon: 'moon' },
@@ -2286,8 +2246,8 @@ function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gc
             <button
               key={opt.key}
               onClick={() => setMode(opt.key)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                mode === opt.key ? 'bg-accent text-white' : 'text-neutral-600 hover:text-neutral-900'
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ease-apple ${
+                mode === opt.key ? 'bg-accent text-white shadow-apple-sm' : 'text-neutral-600 hover:text-neutral-900'
               }`}
             >
               <Icon name={opt.icon} className="w-3.5 h-3.5" />
@@ -2401,38 +2361,6 @@ function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gc
       </Card>
 
       <Card>
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <SectionTitle>Источники дохода</SectionTitle>
-            <div className="font-mono text-sm text-neutral-500 mt-1">План: {fmtMoney(totalPlan)}</div>
-          </div>
-          <button onClick={addSource} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent text-white text-xs font-medium transition-all duration-300 ease-apple hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(var(--accent-rgb)/0.45)] active:scale-[0.97] active:translate-y-0">
-            <Icon name="plus" className="w-3.5 h-3.5" /> Источник
-          </button>
-        </div>
-        <div className="space-y-2">
-          {settings.incomeSources.map((s, i) => (
-            <div key={s.id} className="flex items-center gap-3 py-2 border-b border-line-soft animate-fade-up group" style={{ animationDelay: `${i * 30}ms` }}>
-              <input
-                type="text"
-                value={s.name}
-                onChange={(e) => updateSource(s.id, { name: e.target.value })}
-                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addSource(); } }}
-                data-input="source-name"
-                placeholder="Название"
-                className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300"
-              />
-              <input type="number" inputMode="numeric" value={s.plan} onChange={(e) => updateSource(s.id, { plan: +e.target.value })} placeholder="План" className="w-32 bg-transparent text-sm font-mono text-right outline-none tabular-nums" />
-              <span className="text-xs text-neutral-400">₽</span>
-              <IconBtn onClick={() => removeSource(s.id)} title="Удалить" danger>
-                <Icon name="x" className="w-4 h-4" />
-              </IconBtn>
-            </div>
-          ))}
-        </div>
-      </Card>
-
-      <Card>
         <SectionTitle>Управление данными</SectionTitle>
         <div className="space-y-2 text-sm text-neutral-600">
           <p>Все данные хранятся в браузере (localStorage). Чтобы перенести на другое устройство — экспортируй и импортируй ниже.</p>
@@ -2519,7 +2447,7 @@ function App() {
   useEffect(() => {
     (async () => {
       const s = await storage.get('settings');
-      setSettings(s || { categories: DEFAULT_CATEGORIES, incomeSources: DEFAULT_INCOME_SOURCES });
+      setSettings(s || { categories: DEFAULT_CATEGORIES });
       const cl = await storage.get('checklists');
       setChecklists(cl ? migrateChecklists(cl) : DEFAULT_CHECKLISTS);
       const pr = await storage.get('promises');
@@ -2568,11 +2496,10 @@ function App() {
         if (m) {
           months.push({
             ym: k,
-            income: (m.income || []).reduce((s, e) => s + (+e.amount || 0), 0),
             expense: (m.expenses || []).reduce((s, e) => s + (+e.amount || 0), 0),
           });
         } else {
-          months.push({ ym: k, income: 0, expense: 0 });
+          months.push({ ym: k, expense: 0 });
         }
       }
       if (cancelled) return;
