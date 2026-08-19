@@ -1014,10 +1014,6 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
     weekFilter ? data.expenses.filter((e) => e.day >= weekFilter.start && e.day <= weekFilter.end) : data.expenses,
   [data.expenses, weekFilter]);
 
-  const periodIncome = useMemo(() =>
-    weekFilter ? data.income.filter((e) => e.day >= weekFilter.start && e.day <= weekFilter.end) : data.income,
-  [data.income, weekFilter]);
-
   // Previous 7-day window (for week comparison): days before the current week in same month
   const prevWeekExpenses = useMemo(() => {
     if (!weekFilter) return null;
@@ -1027,26 +1023,12 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
     return data.expenses.filter((e) => e.day >= prevStart && e.day <= prevEnd);
   }, [data.expenses, weekFilter]);
 
-  const prevWeekIncome = useMemo(() => {
-    if (!weekFilter) return null;
-    const prevEnd = weekFilter.start - 1;
-    if (prevEnd < 1) return [];
-    const prevStart = Math.max(1, prevEnd - 6);
-    return data.income.filter((e) => e.day >= prevStart && e.day <= prevEnd);
-  }, [data.income, weekFilter]);
-
   const totalExpense = useMemo(() => periodExpenses.reduce((s, e) => s + (+e.amount || 0), 0), [periodExpenses]);
-  const totalIncome  = useMemo(() => periodIncome.reduce((s, e) => s + (+e.amount || 0), 0), [periodIncome]);
-  const balance = totalIncome - totalExpense;
 
   // Comparison: vs prev month (month mode) or vs prev 7 days (week mode)
   const cmpExpense = weekFilter
     ? (prevWeekExpenses || []).reduce((s, e) => s + (+e.amount || 0), 0)
     : (prevData?.expenses || []).reduce((s, e) => s + (+e.amount || 0), 0);
-  const cmpIncome = weekFilter
-    ? (prevWeekIncome || []).reduce((s, e) => s + (+e.amount || 0), 0)
-    : (prevData?.income || []).reduce((s, e) => s + (+e.amount || 0), 0);
-  const cmpBalance = cmpIncome - cmpExpense;
   const cmpLabel = weekFilter ? 'к пред. 7 дням' : 'к прошл. месяцу';
 
   const delta = (cur, prev) => (prev ? (cur - prev) / Math.abs(prev) : null);
@@ -1072,20 +1054,6 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
 
   const goalsDone = data.goals.filter((g) => g.status === 'Готово').length;
   const goalsTotal = data.goals.length;
-
-  const pieColors = useMemo(() => buildPieColors(accent), [accent]);
-  const pieData = byCategory.filter((c) => c.spent > 0).slice(0, 8);
-
-  // Chart data
-  const lineData = useMemo(() => {
-    const startD = weekFilter ? weekFilter.start : 1;
-    const endD = weekFilter ? weekFilter.end : daysInMonth(ym);
-    return Array.from({ length: endD - startD + 1 }, (_, i) => {
-      const day = startD + i;
-      const sum = data.expenses.filter((e) => e.day === day).reduce((s, e) => s + (+e.amount || 0), 0);
-      return { day, sum };
-    });
-  }, [data.expenses, ym, weekFilter]);
 
   // Range label for week mode
   const [y, m] = parseYM(ym);
@@ -1114,75 +1082,37 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-        <KpiCard label="Расход"  value={totalExpense} format={fmtMoney} accent="text-rose-700"    delta={delta(totalExpense, cmpExpense)} sublabel={cmpLabel} delay={0} />
+        <KpiCard label="Расход"  value={totalExpense} format={fmtMoney} delta={delta(totalExpense, cmpExpense)} sublabel={cmpLabel} delay={0} />
         <KpiCard label="Цели"    value={goalsDone} format={(v) => `${Math.round(v)}/${goalsTotal || 0}`} sublabel="выполнено" delay={60} />
         <KpiCard label="Привычки" value={habitProgress} format={fmtPct} sublabel="среднее" delay={120} />
       </div>
 
-      {/* Google Calendar — full width */}
-      <Card delay={360}>
-        <SectionTitle delay={360}>Предстоящие события</SectionTitle>
-        <CalendarWidget gcal={gcal} />
-      </Card>
-
-      <Card delay={420}>
-        <SectionTitle delay={420}>Топ категорий</SectionTitle>
-          <div className="space-y-3">
-            {byCategory.slice(0, 6).map((c, i) => (
-              <div key={c.name} className="animate-fade-up" style={{ animationDelay: `${480 + i * 50}ms` }}>
-                <div className="flex items-center justify-between text-sm mb-1.5">
-                  <span className="text-neutral-700">{c.name}</span>
-                  <span className="font-mono text-neutral-900 tabular-nums">{fmtMoney(c.spent)}</span>
-                </div>
-                <div className="h-1 bg-neutral-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all duration-700"
-                    style={{ width: `${Math.min(c.pct, 1) * 100}%`, background: c.pct > 1 ? '#9F1239' : c.pct > 0.8 ? '#A16207' : accent }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+        <Card delay={360}>
+          <SectionTitle delay={360}>Предстоящие события</SectionTitle>
+          <CalendarWidget gcal={gcal} />
         </Card>
 
-      <Card delay={540}>
-        <SectionTitle delay={540}>Динамика расходов по дням</SectionTitle>
-        <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={lineData}>
-            <CartesianGrid strokeDasharray="0" stroke="var(--chart-grid)" vertical={false} />
-            <XAxis dataKey="day" tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
-            <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-            <Line type="monotone" dataKey="sum" stroke={accent} strokeWidth={2.5} dot={{ fill: accent, r: 3 }} activeDot={{ r: 5, fill: accent }} animationDuration={800} />
-          </LineChart>
-        </ResponsiveContainer>
-      </Card>
-
-      {/* Comparison bar chart — month mode: vs prev month, week mode: vs prev 7 days */}
-      {(period === 'month' ? (prevData && (totalExpense > 0 || cmpExpense > 0)) : (weekFilter?.start > 7)) && (
-        <Card delay={600}>
-          <SectionTitle delay={600}>{weekFilter ? 'Эта неделя vs предыдущие 7 дней' : 'Сравнение с прошлым месяцем'}</SectionTitle>
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={[
-              { name: 'Доход',  current: totalIncome,  prev: cmpIncome },
-              { name: 'Расход', current: totalExpense, prev: cmpExpense },
-              { name: 'Баланс', current: balance,      prev: cmpBalance },
-            ]} barCategoryGap="30%">
-              <CartesianGrid strokeDasharray="0" stroke="var(--chart-grid)" vertical={false} />
-              <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: 'var(--chart-tick)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}к`} />
-              <Tooltip formatter={(v) => fmtMoney(v)} contentStyle={TOOLTIP_STYLE} />
-              <Legend wrapperStyle={{ fontSize: 12 }}
-                formatter={(v) => v === 'current'
-                  ? (weekFilter ? `${weekFilter.start}–${weekFilter.end} ${MONTHS_RU[m - 1].slice(0,3)}` : ymLabel(ym))
-                  : (weekFilter ? `пред. 7 дней` : ymLabel(shiftYM(ym, -1)))}
-              />
-              <Bar dataKey="prev"    fill="var(--chart-mono-f)" radius={[4, 4, 0, 0]} animationDuration={800} />
-              <Bar dataKey="current" fill={accent}  radius={[4, 4, 0, 0]} animationDuration={800} />
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
-      )}
+        <Card delay={420}>
+          <SectionTitle delay={420}>Топ категорий</SectionTitle>
+            <div className="space-y-3">
+              {byCategory.slice(0, 6).map((c, i) => (
+                <div key={c.name} className="animate-fade-up" style={{ animationDelay: `${480 + i * 50}ms` }}>
+                  <div className="flex items-center justify-between text-sm mb-1.5">
+                    <span className="text-neutral-700">{c.name}</span>
+                    <span className="font-mono text-neutral-900 tabular-nums">{fmtMoney(c.spent)}</span>
+                  </div>
+                  <div className="h-1 bg-neutral-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-700"
+                      style={{ width: `${Math.min(c.pct, 1) * 100}%`, background: c.pct > 1 ? '#9F1239' : c.pct > 0.8 ? '#A16207' : accent }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+      </div>
     </div>
   );
 }
