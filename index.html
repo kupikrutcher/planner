@@ -213,6 +213,19 @@
     border-radius: 4px;
   }
 
+  /* ── Живой фон: изолинии рельефа ─────────────────────────────────────── */
+  #bg-contour {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+    opacity: 0; transition: opacity 0.8s ease;
+  }
+  #bg-contour.ready { opacity: 1; }
+  #bg-contour canvas { display: block; width: 100%; height: 100%; }
+  #root { position: relative; z-index: 1; }
+  /* оболочка приложения непрозрачна и перекрыла бы холст — снимаем её фон,
+     фон страницы остаётся на body, карточки остаются непрозрачными */
+  html[data-bg="on"] #root > div { background: transparent; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
@@ -1195,8 +1208,10 @@ function PlanDay({ data, update, ym, gcal }) {
 
   return (
     <div className="space-y-6">
-      <div className="overflow-x-auto -mx-4 sm:mx-0 hide-scroll" ref={scrollerRef}>
-        <div className="flex gap-1.5 px-4 sm:px-0 pb-1">
+      {/* pt-2/pb-2 и боковые отступы — запас под scale-105 активного дня,
+          иначе overflow-x-auto срезает плитку сверху и по краям */}
+      <div className="overflow-x-auto -mx-4 sm:-mx-2 hide-scroll" ref={scrollerRef}>
+        <div className="flex gap-1.5 px-4 sm:px-2 pt-2 pb-2">
           {Array.from({ length: days }, (_, i) => i + 1).map((d) => {
             const dow = dowOfDay(ym, d);
             const isToday = isCurrentMonth && d === todayDay();
@@ -1206,16 +1221,18 @@ function PlanDay({ data, update, ym, gcal }) {
               <button
                 key={d} data-day={d}
                 onClick={() => setActiveDay(d)}
-                className={`flex-shrink-0 w-12 h-16 rounded-xl border flex flex-col items-center justify-center gap-0.5 transition-all duration-200 ${
-                  isActive ? 'bg-accent border-accent text-white shadow-md scale-105' : 'bg-card border-line text-neutral-700 hover:border-neutral-400'
+                className={`relative flex-shrink-0 w-12 h-16 rounded-xl border flex flex-col items-center justify-center gap-0.5 transition-all duration-300 ease-apple ${
+                  isActive ? 'bg-accent border-accent text-white scale-105' : 'bg-card border-line text-neutral-700 hover:border-neutral-400'
                 }`}
               >
                 <span className={`text-[10px] font-medium ${isActive ? 'text-white/70' : 'text-neutral-400'}`}>
                   {DOW_SHORT[dow]}
                 </span>
                 <span className="text-lg font-display font-light tabular-nums">{d}</span>
-                {hasTasks && <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-card' : 'bg-accent'}`} />}
-                {isToday && !isActive && <span className="absolute mt-12 w-1 h-1 rounded-full bg-accent" />}
+                {hasTasks && <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-white/70' : 'bg-accent'}`} />}
+                {isToday && !isActive && (
+                  <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent" />
+                )}
               </button>
             );
           })}
@@ -2224,7 +2241,7 @@ function Promises({ promises, updatePromises }) {
 // ───────────────────────────────────────────────────────────
 // Настройки
 // ───────────────────────────────────────────────────────────
-function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gcal }) {
+function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gcal, bg, setBg }) {
   const addCategory = () => {
     updateSettings((s) => ({ ...s, categories: [...s.categories, { id: uid(), name: '', budget: 0 }] }));
     focusLast('[data-input="category-name"]');
@@ -2256,6 +2273,8 @@ function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gc
           ))}
         </div>
       </Card>
+
+      <BgSettings bg={bg} setBg={setBg} />
 
       <Card>
         <SectionTitle>Цвет акцента</SectionTitle>
@@ -2413,6 +2432,141 @@ function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gc
 // ───────────────────────────────────────────────────────────
 // Main App
 // ───────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────
+// Живой фон — изолинии рельефа на canvas
+// Поле — сумма трёх синусов; фаза медленно плывёт, линии перерисовываются
+// 15 раз в секунду (глазу хватает, батарее — тоже). Цвет берётся из акцента.
+// ───────────────────────────────────────────────────────────
+const DEFAULT_BG = { on: true, strength: 1, speed: 1 };
+
+const drawContour = (canvas, phase, strength, dark) => {
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const w = window.innerWidth, h = window.innerHeight;
+  const accent = (getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb') || '168 91 61').trim().split(/\s+/).join(',');
+  ctx.clearRect(0, 0, w, h);
+  ctx.lineWidth = 1;
+  const base = (dark ? 0.16 : 0.13) * strength;
+  const cx = w * 0.32, cy = h * 0.42;
+  const step = Math.max(26, Math.min(w, h) / 16);
+  for (let k = 1; k <= 22; k++) {
+    const r = k * step;
+    ctx.beginPath();
+    for (let a = 0; a <= 361; a += 3) {
+      const t = a * Math.PI / 180;
+      const wob = Math.sin(3 * t + phase + k * 0.35) * step * 0.42
+                + Math.sin(5 * t - phase * 0.6 + k * 0.18) * step * 0.24
+                + Math.cos(2 * t + phase * 0.4) * step * 0.3;
+      const rr = r + wob;
+      const x = cx + rr * Math.cos(t) * 1.35;
+      const y = cy + rr * Math.sin(t);
+      if (a === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = `rgba(${accent},${(base * (1 - k / 30)).toFixed(3)})`;
+    ctx.stroke();
+  }
+};
+
+function ContourBackground({ config, mode }) {
+  const holderRef = useRef(null);
+  const canvasRef = useRef(null);
+  const phaseRef = useRef(0);
+  const dark = mode === 'dark';
+
+  const redraw = useCallback(() => {
+    if (canvasRef.current) drawContour(canvasRef.current, phaseRef.current, config.strength, dark);
+  }, [config.strength, dark]);
+
+  const resize = useCallback(() => {
+    const c = canvasRef.current;
+    if (!c) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    c.width = Math.floor(window.innerWidth * dpr);
+    c.height = Math.floor(window.innerHeight * dpr);
+    c.getContext('2d')?.setTransform(dpr, 0, 0, dpr, 0, 0);
+    redraw();
+  }, [redraw]);
+
+  useEffect(() => {
+    if (!config.on) return;
+    resize();
+    holderRef.current?.classList.add('ready');
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, [config.on, resize]);
+
+  useEffect(() => { if (config.on) redraw(); }, [config.on, redraw]);
+
+  // Анимация. Вкладка скрыта — кадры не считаем.
+  useEffect(() => {
+    if (!config.on) return;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    const id = setInterval(() => {
+      if (document.hidden) return;
+      phaseRef.current += 0.006 * config.speed;
+      redraw();
+    }, 66);
+    return () => clearInterval(id);
+  }, [config.on, config.speed, redraw]);
+
+  if (!config.on) return null;
+  return (
+    <div id="bg-contour" ref={holderRef} aria-hidden="true">
+      <canvas ref={canvasRef} />
+    </div>
+  );
+}
+
+function BgSettings({ bg, setBg }) {
+  const patch = (p) => setBg((b) => ({ ...b, ...p }));
+  return (
+    <Card>
+      <div className="flex items-center justify-between gap-3">
+        <SectionTitle>Живой фон</SectionTitle>
+        <div className="inline-flex rounded-full border border-line bg-paper-soft p-1 gap-1 mb-4">
+          {[{ k: true, label: 'Вкл' }, { k: false, label: 'Выкл' }].map((o) => (
+            <button
+              key={String(o.k)}
+              onClick={() => patch({ on: o.k })}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ease-apple ${
+                bg.on === o.k ? 'bg-accent text-white shadow-apple-sm' : 'text-neutral-600 hover:text-neutral-900'
+              }`}
+            >{o.label}</button>
+          ))}
+        </div>
+      </div>
+
+      {bg.on ? (
+        <div className="grid sm:grid-cols-2 gap-4">
+          {[
+            { key: 'strength', label: 'Сила', min: 0.3, max: 1.6, step: 0.05, fmt: (v) => `${Math.round(v * 100)}%` },
+            { key: 'speed', label: 'Скорость', min: 0.3, max: 2.5, step: 0.1, fmt: (v) => `×${v.toFixed(1)}` },
+          ].map((s) => (
+            <label key={s.key} className="block">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[10px] font-semibold tracking-[0.18em] text-neutral-500 uppercase">{s.label}</span>
+                <span className="font-mono text-[11px] text-neutral-400">{s.fmt(bg[s.key])}</span>
+              </div>
+              <input
+                type="range" min={s.min} max={s.max} step={s.step} value={bg[s.key]}
+                onChange={(e) => patch({ [s.key]: +e.target.value })}
+                className="w-full"
+              />
+            </label>
+          ))}
+          <p className="text-[11px] text-neutral-400 leading-relaxed sm:col-span-2">
+            Горизонтали рельефа в цвете акцента. Перерисовка 15 кадров в секунду, на скрытой вкладке останавливается.
+            При системной настройке «уменьшить движение» рисунок замирает.
+          </p>
+        </div>
+      ) : (
+        <p className="text-xs text-neutral-500">Фон выключен — планер как раньше, холст не создаётся.</p>
+      )}
+    </Card>
+  );
+}
+
 const SECTIONS = [
   { id: 'dashboard', name: 'Дашборд', icon: 'layout' },
   { id: 'plan-day', name: 'План дня', icon: 'calendar' },
@@ -2437,6 +2591,7 @@ function App() {
   const [promises, setPromises] = useState(null);
   const [theme, setTheme] = useState(DEFAULT_THEME);
   const [mode, setMode] = useState('light');
+  const [bg, setBg] = useState(DEFAULT_BG);
   const [navIndicator, setNavIndicator] = useState({ left: 0, width: 0, ready: false });
   const [loading, setLoading] = useState(true);
   const navRef = useRef(null);
@@ -2460,8 +2615,18 @@ function App() {
       } else if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
         setMode('dark');
       }
+      const b = await storage.get('bg');
+      if (b) setBg({ ...DEFAULT_BG, ...b });
     })();
   }, []);
+
+  // Живой фон: снимаем непрозрачную подложку оболочки, когда холст включён
+  useEffect(() => {
+    const root = document.documentElement;
+    if (bg.on) root.setAttribute('data-bg', 'on'); else root.removeAttribute('data-bg');
+  }, [bg.on]);
+
+  useEffect(() => { storage.set('bg', bg); }, [bg]);
 
   // Apply light/dark mode to the document whenever it changes
   useEffect(() => {
@@ -2554,6 +2719,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-paper text-neutral-900 antialiased">
+      <ContourBackground config={bg} mode={mode} />
       <div className="grain-overlay" aria-hidden="true" />
       <header className="sticky top-0 z-30 bg-paper/80 border-b border-line" style={{ backdropFilter: 'blur(20px) saturate(180%)', WebkitBackdropFilter: 'blur(20px) saturate(180%)' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
@@ -2636,7 +2802,7 @@ function App() {
           {section === 'checklists' && <Checklists checklists={checklists} updateChecklists={updateChecklists} />}
           {section === 'expenses' && <Expenses data={data} update={update} settings={settings} ym={ym} />}
           {section === 'analytics' && <Analytics data={data} history={history} settings={settings} ym={ym} accent={accentHex} />}
-          {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} mode={mode} setMode={setMode} gcal={gcal} />}
+          {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} mode={mode} setMode={setMode} gcal={gcal} bg={bg} setBg={setBg} />}
         </div>
       </main>
     </div>
