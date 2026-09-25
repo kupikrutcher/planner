@@ -2241,7 +2241,7 @@ function Promises({ promises, updatePromises }) {
 // ───────────────────────────────────────────────────────────
 // Настройки
 // ───────────────────────────────────────────────────────────
-function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gcal }) {
+function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gcal, bgAnimate, setBgAnimate }) {
   return (
     <div className="space-y-6">
       <Card>
@@ -2263,6 +2263,21 @@ function Settings({ settings, updateSettings, theme, setTheme, mode, setMode, gc
             </button>
           ))}
         </div>
+      </Card>
+
+      <Card>
+        <div className="flex items-center justify-between gap-3">
+          <SectionTitle>Анимация фона</SectionTitle>
+          <button
+            onClick={() => setBgAnimate(!bgAnimate)}
+            className={`mb-4 px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ease-apple ${
+              bgAnimate ? 'border border-line text-neutral-700 hover:border-accent hover:text-accent' : 'bg-accent text-white shadow-apple-sm'
+            }`}
+          >
+            {bgAnimate ? 'Отключить анимации' : 'Включить анимации'}
+          </button>
+        </div>
+        <p className="text-xs text-neutral-500">{bgAnimate ? 'Фон плавно движется.' : 'Анимация выключена — фон остаётся, но не двигается.'}</p>
       </Card>
 
       <Card>
@@ -2457,7 +2472,7 @@ function ContourBackground({ config, mode }) {
 
   // Анимация. Вкладка скрыта — кадры не считаем.
   useEffect(() => {
-    if (!config.on) return;
+    if (!config.on || !config.animate) return;
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
     const id = setInterval(() => {
       if (document.hidden) return;
@@ -2465,7 +2480,7 @@ function ContourBackground({ config, mode }) {
       redraw();
     }, 66);
     return () => clearInterval(id);
-  }, [config.on, config.speed, redraw]);
+  }, [config.on, config.animate, config.speed, redraw]);
 
   if (!config.on) return null;
   return (
@@ -2555,7 +2570,8 @@ function App() {
   const [promises, setPromises] = useState(null);
   const [theme, setTheme] = useState(DEFAULT_THEME);
   const [mode, setMode] = useState('light');
-  const bg = DEFAULT_BG;
+  const [bgAnimate, setBgAnimate] = useState(true);
+  const bg = useMemo(() => ({ ...DEFAULT_BG, animate: bgAnimate }), [bgAnimate]);
   const [navIndicator, setNavIndicator] = useState({ left: 0, width: 0, ready: false });
   const [loading, setLoading] = useState(true);
   const navRef = useRef(null);
@@ -2579,6 +2595,8 @@ function App() {
       } else if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
         setMode('dark');
       }
+      const an = await storage.get('bgAnimate');
+      if (an === false) setBgAnimate(false);
     })();
   }, []);
 
@@ -2588,6 +2606,8 @@ function App() {
     if (bg.on) root.setAttribute('data-bg', 'on'); else root.removeAttribute('data-bg');
   }, [bg.on]);
 
+
+  useEffect(() => { storage.set('bgAnimate', bgAnimate); }, [bgAnimate]);
 
   // Apply light/dark mode to the document whenever it changes
   useEffect(() => {
@@ -2759,7 +2779,7 @@ function App() {
           {section === 'plan-week' && <PlanWeek data={data} update={update} />}
           {section === 'goals' && <Goals data={data} update={update} />}
           {section === 'habits' && <Habits data={data} update={update} ym={ym} />}
-          {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} mode={mode} setMode={setMode} gcal={gcal} />}
+          {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} mode={mode} setMode={setMode} gcal={gcal} bgAnimate={bgAnimate} setBgAnimate={setBgAnimate} />}
         </div>
       </main>
     </div>
