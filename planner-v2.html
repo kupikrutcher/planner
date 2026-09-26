@@ -815,6 +815,13 @@ const KpiCard = ({ label, value, format = (n) => String(Math.round(n)), sublabel
   );
 };
 
+const TaskCheck = ({ done, onChange }) => (
+  <button onClick={() => onChange(done ? null : 'Готово')} title={done ? 'Снять отметку' : 'Выполнено'}
+    className={`mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 transition-all ${done ? 'bg-accent border-accent' : 'bg-card border-neutral-300 hover:border-accent'}`}>
+    {done && <Icon name="check" className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+  </button>
+);
+
 const Pill = ({ value, options, onChange, className = '' }) => (
   <select
     value={value || ''}
@@ -1100,6 +1107,11 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
 
   return (
     <div className="space-y-6">
+      <Card delay={0}>
+        <SectionTitle delay={0}>Задачи на сегодня</SectionTitle>
+        <DayTasksPie data={data} ym={ym} accent={accent} />
+      </Card>
+
       {/* Period toggle */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="text-xl font-display font-light text-neutral-500">{rangeLabel}</div>
@@ -1123,17 +1135,10 @@ function Dashboard({ data, prevData, settings, ym, accent, gcal }) {
         <KpiCard label="Привычки" value={habitProgress} format={fmtPct} sublabel="среднее" delay={120} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-        <Card delay={360}>
-          <SectionTitle delay={360}>Предстоящие события</SectionTitle>
-          <CalendarWidget gcal={gcal} />
-        </Card>
-
-        <Card delay={420}>
-          <SectionTitle delay={420}>Задачи на сегодня</SectionTitle>
-          <DayTasksPie data={data} ym={ym} accent={accent} />
-        </Card>
-      </div>
+      <Card delay={360}>
+        <SectionTitle delay={360}>Предстоящие события</SectionTitle>
+        <CalendarWidget gcal={gcal} />
+      </Card>
     </div>
   );
 }
@@ -1274,6 +1279,7 @@ function PlanDay({ data, update, ym, gcal }) {
           <div className="space-y-2">
             {tasks.map((t, i) => (
               <div key={t.id} className="group flex items-start gap-2 sm:gap-3 p-3 rounded-xl border border-line hover:border-neutral-300 transition-colors animate-fade-up" style={{ animationDelay: `${i * 40}ms` }}>
+                <TaskCheck done={t.status === 'Готово'} onChange={(v) => updateTask(t.id, { status: v })} />
                 <input
                   type="text"
                   value={t.title}
@@ -1281,10 +1287,9 @@ function PlanDay({ data, update, ym, gcal }) {
                   onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTask(); } }}
                   data-input="day-task"
                   placeholder="Что нужно сделать"
-                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300 min-w-0"
+                  className={`flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300 min-w-0 ${t.status === 'Готово' ? 'line-through text-neutral-400' : ''}`}
                 />
                 <input type="text" value={t.time} onChange={(e) => updateTask(t.id, { time: e.target.value })} placeholder="время" className="w-16 bg-transparent text-xs text-neutral-500 outline-none text-center" />
-                <Pill value={t.status} options={STATUSES} onChange={(v) => updateTask(t.id, { status: v })} />
                 {gcal?.token && (
                   t.googleEventId ? (
                     <span className="text-[10px] font-bold tracking-wider text-emerald-700 px-1.5 py-1 rounded bg-emerald-50" title="В Google Calendar">G</span>
@@ -1309,7 +1314,9 @@ function PlanDay({ data, update, ym, gcal }) {
 // ───────────────────────────────────────────────────────────
 // План недели
 // ───────────────────────────────────────────────────────────
-function PlanWeek({ data, update }) {
+function PlanWeek({ data, update, ym }) {
+  const last = daysInMonth(ym);
+  const monthGen = MONTHS_GEN[parseYM(ym)[1] - 1];
   const addTask = (week) => {
     const t = { id: uid(), category: '', title: '', deadline: '', status: null, note: '' };
     update((d) => ({ ...d, weeklyTasks: { ...d.weeklyTasks, [week]: [...(d.weeklyTasks[week] || []), t] } }));
@@ -1324,12 +1331,15 @@ function PlanWeek({ data, update }) {
 
   return (
     <div className="space-y-6">
-      {[1, 2, 3, 4, 5].map((w, idx) => {
+      {/* Неделя w = дни 7(w-1)+1 … 7w; ключи 1–5 прежние, старые задачи на своих местах */}
+      {[1, 2, 3, 4, 5].filter((w) => 7 * (w - 1) < last || (data.weeklyTasks[w] || []).length).map((w, idx) => {
         const tasks = data.weeklyTasks[w] || [];
+        const from = 7 * (w - 1) + 1, to = Math.min(7 * w, last);
+        const range = w === 5 ? (from >= last ? `${last}` : `${from}–${last}`) : `${from}–${to}`;
         return (
           <Card key={w} delay={idx * 80}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-2xl font-display font-light">Неделя {w}</h3>
+              <h3 className="text-2xl font-display font-light">{range} {monthGen}</h3>
               <button onClick={() => addTask(w)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent text-white text-xs font-medium transition-all duration-300 ease-apple hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(var(--accent-rgb)/0.45)] active:scale-[0.97] active:translate-y-0">
                 <Icon name="plus" className="w-3.5 h-3.5" /> Задача
               </button>
@@ -1340,6 +1350,7 @@ function PlanWeek({ data, update }) {
               <div className="space-y-2">
                 {tasks.map((t, i) => (
                   <div key={t.id} className="group flex items-start gap-2 sm:gap-3 p-3 rounded-xl border border-line hover:border-neutral-300 animate-fade-up" style={{ animationDelay: `${i * 30}ms` }}>
+                    <TaskCheck done={t.status === 'Готово'} onChange={(v) => updateTask(w, t.id, { status: v })} />
                     <input
                       type="text"
                       value={t.title}
@@ -1347,10 +1358,9 @@ function PlanWeek({ data, update }) {
                       onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTask(w); } }}
                       data-input={`week-task-${w}`}
                       placeholder="Задача недели"
-                      className="flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300 min-w-0"
+                      className={`flex-1 bg-transparent text-sm outline-none placeholder:text-neutral-300 min-w-0 ${t.status === 'Готово' ? 'line-through text-neutral-400' : ''}`}
                     />
                     <input type="date" value={t.deadline} onChange={(e) => updateTask(w, t.id, { deadline: e.target.value })} className="bg-transparent text-xs text-neutral-500 outline-none" />
-                    <Pill value={t.status} options={STATUSES} onChange={(v) => updateTask(w, t.id, { status: v })} />
                     <IconBtn onClick={() => removeTask(w, t.id)} title="Удалить" danger>
                       <Icon name="x" className="w-4 h-4" />
                     </IconBtn>
@@ -2568,8 +2578,17 @@ function App() {
   const [settings, setSettings] = useState(null);
   const [checklists, setChecklists] = useState(null);
   const [promises, setPromises] = useState(null);
-  const [theme, setTheme] = useState(DEFAULT_THEME);
-  const [mode, setMode] = useState('light');
+  // Читаем синхронно: эффекты ниже сохраняют theme/mode сразу после первого рендера
+  const [theme, setTheme] = useState(() => {
+    try { const t = JSON.parse(localStorage.getItem('planner:theme')); return THEMES[t] ? t : DEFAULT_THEME; } catch { return DEFAULT_THEME; }
+  });
+  const [mode, setMode] = useState(() => {
+    try {
+      const m = JSON.parse(localStorage.getItem('planner:colorMode'));
+      if (m === 'light' || m === 'dark') return m;
+    } catch {}
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
   const [bgAnimate, setBgAnimate] = useState(true);
   const bg = useMemo(() => ({ ...DEFAULT_BG, animate: bgAnimate }), [bgAnimate]);
   const [navIndicator, setNavIndicator] = useState({ left: 0, width: 0, ready: false });
@@ -2587,14 +2606,6 @@ function App() {
       setChecklists(cl ? migrateChecklists(cl) : DEFAULT_CHECKLISTS);
       const pr = await storage.get('promises');
       setPromises(Array.isArray(pr) ? pr : []);
-      const t = await storage.get('theme');
-      if (t && THEMES[t]) setTheme(t);
-      const m = await storage.get('colorMode');
-      if (m === 'light' || m === 'dark') {
-        setMode(m);
-      } else if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
-        setMode('dark');
-      }
       const an = await storage.get('bgAnimate');
       if (an === false) setBgAnimate(false);
     })();
@@ -2776,7 +2787,7 @@ function App() {
         <div key={section + ym} className="animate-fade-up">
           {section === 'dashboard' && <Dashboard data={data} prevData={prevData} settings={settings} ym={ym} accent={accentHex} gcal={gcal} />}
           {section === 'plan-day' && <PlanDay data={data} update={update} ym={ym} gcal={gcal} />}
-          {section === 'plan-week' && <PlanWeek data={data} update={update} />}
+          {section === 'plan-week' && <PlanWeek data={data} update={update} ym={ym} />}
           {section === 'goals' && <Goals data={data} update={update} />}
           {section === 'habits' && <Habits data={data} update={update} ym={ym} />}
           {section === 'settings' && <Settings settings={settings} updateSettings={updateSettings} theme={theme} setTheme={setTheme} mode={mode} setMode={setMode} gcal={gcal} bgAnimate={bgAnimate} setBgAnimate={setBgAnimate} />}
